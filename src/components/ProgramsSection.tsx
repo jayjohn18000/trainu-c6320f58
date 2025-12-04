@@ -27,7 +27,7 @@ const ProgramsSection = ({ programs }: ProgramsSectionProps) => {
           {programs.map((program, index) => (
             <div
               key={program.id}
-              className={`relative group rounded-2xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-glow ${
+              className={`relative group rounded-2xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-glow flex flex-col h-full ${
                 program.isFeatured
                   ? "bg-gradient-card border-2 border-primary/30 shadow-glow"
                   : "bg-card border border-card-border hover:border-primary/20"
@@ -43,7 +43,7 @@ const ProgramsSection = ({ programs }: ProgramsSectionProps) => {
               )}
 
               {/* Program Content */}
-              <div className="pt-2">
+              <div className="pt-2 flex flex-col flex-1">
                 <h3 className="text-xl md:text-2xl font-bold text-foreground mb-2">
                   {program.name}
                 </h3>
@@ -62,7 +62,7 @@ const ProgramsSection = ({ programs }: ProgramsSectionProps) => {
                 </div>
 
                 {/* Features */}
-                <ul className="space-y-3 mb-8">
+                <ul className="space-y-3 flex-1">
                   {program.bulletPoints.map((point, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
@@ -74,7 +74,7 @@ const ProgramsSection = ({ programs }: ProgramsSectionProps) => {
                 {/* CTA Button - Full Width */}
                 <a
                   href="#contact"
-                  className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl font-semibold transition-all duration-300 ${
+                  className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl font-semibold transition-all duration-300 mt-8 ${
                     program.isFeatured
                       ? "bg-gradient-primary text-primary-foreground shadow-button hover:shadow-glow hover:scale-[1.02]"
                       : "bg-accent text-foreground border border-border hover:border-primary/30 hover:bg-accent/80"
