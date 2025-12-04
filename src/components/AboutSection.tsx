@@ -1,44 +1,65 @@
 import { TrainerProfile } from "@/types/TrainerProfile";
-import { Instagram, Youtube, Mail, MapPin } from "lucide-react";
+import { Instagram, Youtube, Mail, MapPin, Users, Award, Star } from "lucide-react";
 
 interface AboutSectionProps {
   trainer: TrainerProfile;
 }
 
-const galleryLabels = [
-  "Training Day",
-  "Strength in Action",
-  "Client Results"
-];
-
 const AboutSection = ({ trainer }: AboutSectionProps) => {
+  // Use the third gallery image (Strength in Action)
+  const heroImage = trainer.galleryImageUrls[2] || trainer.galleryImageUrls[0];
+
   return (
     <section id="about" className="py-20 md:py-32 bg-background-elevated">
       <div className="container">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-          {/* Image Gallery - Redesigned */}
-          <div className="order-2 lg:order-1">
-            <div className="grid grid-cols-3 gap-3">
-              {trainer.galleryImageUrls.slice(0, 3).map((url, index) => (
-                <div
-                  key={index}
-                  className="relative overflow-hidden rounded-2xl aspect-[4/5] group"
-                >
-                  <img
-                    src={url}
-                    alt={`${trainer.fullName} - ${galleryLabels[index]}`}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  {/* Overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
-                  {/* Label */}
-                  <div className="absolute bottom-3 left-3 right-3">
-                    <span className="text-xs font-medium text-foreground/80 bg-background/50 backdrop-blur-sm px-2 py-1 rounded-md">
-                      {galleryLabels[index]}
-                    </span>
-                  </div>
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* Single Hero Image with Floating Stats */}
+          <div className="order-2 lg:order-1 relative">
+            <div className="relative overflow-hidden rounded-2xl aspect-[4/5]">
+              <img
+                src={heroImage}
+                alt={`${trainer.fullName} - Strength in Action`}
+                className="w-full h-full object-cover brightness-110"
+              />
+              {/* Subtle gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
+            </div>
+
+            {/* Floating Stats Cards */}
+            <div className="absolute -bottom-4 -right-4 md:bottom-8 md:-right-8 bg-card/90 backdrop-blur-md border border-border rounded-xl p-4 shadow-xl">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                  <Users className="w-5 h-5 text-primary" />
                 </div>
-              ))}
+                <div>
+                  <p className="text-xl font-bold text-foreground">200+</p>
+                  <p className="text-xs text-foreground/60">Clients Transformed</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="absolute top-4 -left-4 md:top-8 md:-left-8 bg-card/90 backdrop-blur-md border border-border rounded-xl p-4 shadow-xl">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                  <Star className="w-5 h-5 text-primary fill-primary" />
+                </div>
+                <div>
+                  <p className="text-xl font-bold text-foreground">5.0</p>
+                  <p className="text-xs text-foreground/60">Client Rating</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="absolute top-1/2 -right-4 md:-right-8 -translate-y-1/2 bg-card/90 backdrop-blur-md border border-border rounded-xl p-4 shadow-xl">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                  <Award className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xl font-bold text-foreground">5+</p>
+                  <p className="text-xs text-foreground/60">Years Experience</p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -59,22 +80,6 @@ const AboutSection = ({ trainer }: AboutSectionProps) => {
               <p className="text-lg text-foreground/70 leading-relaxed max-w-xl">
                 {trainer.aboutMe}
               </p>
-            </div>
-
-            {/* Stats Cards */}
-            <div className="grid grid-cols-3 gap-3 mb-8">
-              <div className="bg-card rounded-xl p-4 border border-card-border text-center">
-                <p className="text-2xl font-bold text-primary mb-1">200+</p>
-                <p className="text-xs text-foreground/60">Clients</p>
-              </div>
-              <div className="bg-card rounded-xl p-4 border border-card-border text-center">
-                <p className="text-2xl font-bold text-foreground mb-1">5+</p>
-                <p className="text-xs text-foreground/60">Years</p>
-              </div>
-              <div className="bg-card rounded-xl p-4 border border-card-border text-center">
-                <p className="text-2xl font-bold text-foreground mb-1">5.0</p>
-                <p className="text-xs text-foreground/60">Rating</p>
-              </div>
             </div>
 
             {/* Connect Section */}

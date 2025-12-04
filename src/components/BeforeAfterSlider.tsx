@@ -53,24 +53,23 @@ const BeforeAfterSlider = ({
       onTouchMove={handleTouchMove}
       onTouchEnd={handleMouseUp}
     >
-      {/* After Image (full width background) */}
+      {/* After Image (full width background) - stationary */}
       <img
         src={afterImage}
         alt="After"
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover object-top"
         draggable={false}
       />
 
-      {/* Before Image (clipped) */}
+      {/* Before Image (clipped) - stationary, same positioning */}
       <div
         className="absolute inset-0 overflow-hidden"
-        style={{ width: `${sliderPosition}%` }}
+        style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
       >
         <img
           src={beforeImage}
           alt="Before"
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ width: containerRef.current?.offsetWidth || "100%" }}
+          className="absolute inset-0 w-full h-full object-cover object-top"
           draggable={false}
         />
       </div>
