@@ -7,15 +7,25 @@ const Home = () => {
     <Layout>
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
-        {/* Background Effects */}
-        <div className="absolute inset-0 bg-hero-gradient" />
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-primary/5 blur-3xl pointer-events-none" />
+        {/* Video Background */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="/videos/hero-bg.mp4" type="video/mp4" />
+        </video>
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-background/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/50" />
 
         <div className="container relative z-10 text-center py-20">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-accent border border-border rounded-full px-4 py-2 mb-8 animate-fade-up">
+          <div className="inline-flex items-center gap-2 bg-accent/90 backdrop-blur-sm border border-border rounded-full px-4 py-2 mb-8 animate-fade-up">
             <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm text-foreground-muted">TrainU Website Factory</span>
+            <span className="text-sm font-medium text-foreground">TrainU Website Factory</span>
           </div>
 
           {/* Main Headline */}
@@ -30,7 +40,7 @@ const Home = () => {
 
           {/* Subheadline */}
           <p
-            className="text-lg md:text-xl text-foreground-muted max-w-2xl mx-auto mb-10 animate-fade-up"
+            className="text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto mb-10 animate-fade-up"
             style={{ animationDelay: "0.2s" }}
           >
             A clean, modular template system that creates stunning personal trainer websites from simple JSON data.
@@ -61,7 +71,7 @@ const Home = () => {
               How It Works
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">Data-Driven Templates</h2>
-            <p className="text-lg text-foreground-muted max-w-2xl mx-auto">
+            <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
               Each trainer website is generated from a simple JSON file. No coding required.
             </p>
           </div>
@@ -73,7 +83,7 @@ const Home = () => {
                 <Zap className="w-7 h-7 text-primary" />
               </div>
               <h3 className="text-xl font-bold text-foreground mb-3">Instant Generation</h3>
-              <p className="text-foreground-muted">
+              <p className="text-foreground/70">
                 Add a JSON file with trainer data and the website is instantly available at /trainers/[slug].
               </p>
             </div>
@@ -84,7 +94,7 @@ const Home = () => {
                 <Users className="w-7 h-7 text-primary" />
               </div>
               <h3 className="text-xl font-bold text-foreground mb-3">Fully Customizable</h3>
-              <p className="text-foreground-muted">
+              <p className="text-foreground/70">
                 Override colors, images, programs, and content. Each trainer can have their own brand.
               </p>
             </div>
@@ -95,7 +105,7 @@ const Home = () => {
                 <Globe className="w-7 h-7 text-primary" />
               </div>
               <h3 className="text-xl font-bold text-foreground mb-3">Scale Infinitely</h3>
-              <p className="text-foreground-muted">
+              <p className="text-foreground/70">
                 Built to be duplicated hundreds of times. Clean, modular, and maintainable code.
               </p>
             </div>
