@@ -20,18 +20,18 @@ const CTASection = ({ trainer }: CTASectionProps) => {
 
           {/* Headline */}
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
-            Ready to Transform?
+            Ready to Look Like a Pro?
           </h2>
 
           {/* Subheadline */}
-          <p className="text-lg md:text-xl text-foreground-muted mb-10">
-            Take the first step toward your strongest self. Book a free consultation and let's build your roadmap together.
+          <p className="text-lg md:text-xl text-foreground/70 mb-10 max-w-xl mx-auto">
+            One consultation. A clear roadmap. A stronger, more confident you.
           </p>
 
           {/* Primary CTA */}
           <a
             href={trainer.primaryCTALink}
-            className="group inline-flex items-center justify-center gap-3 bg-gradient-primary text-primary-foreground px-10 py-5 rounded-xl font-semibold text-lg shadow-button hover:shadow-glow transition-all duration-300 mb-10"
+            className="group inline-flex items-center justify-center gap-3 bg-gradient-primary text-primary-foreground px-10 py-5 rounded-xl font-semibold text-lg shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300 mb-10"
           >
             {trainer.primaryCTA}
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -41,7 +41,7 @@ const CTASection = ({ trainer }: CTASectionProps) => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
             <a
               href={`mailto:${trainer.contactEmail}`}
-              className="flex items-center gap-2 text-foreground-muted hover:text-primary transition-colors"
+              className="flex items-center gap-2 text-foreground/60 hover:text-primary transition-colors"
             >
               <Mail className="w-5 h-5" />
               {trainer.contactEmail}
@@ -49,7 +49,7 @@ const CTASection = ({ trainer }: CTASectionProps) => {
             {trainer.contactPhone && (
               <a
                 href={`tel:${trainer.contactPhone}`}
-                className="flex items-center gap-2 text-foreground-muted hover:text-primary transition-colors"
+                className="flex items-center gap-2 text-foreground/60 hover:text-primary transition-colors"
               >
                 <Phone className="w-5 h-5" />
                 {trainer.contactPhone}

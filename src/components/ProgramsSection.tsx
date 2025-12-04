@@ -1,5 +1,5 @@
 import { TrainerProgram } from "@/types/TrainerProgram";
-import { Check, Sparkles } from "lucide-react";
+import { Check, Sparkles, ArrowRight } from "lucide-react";
 
 interface ProgramsSectionProps {
   programs: TrainerProgram[];
@@ -17,8 +17,8 @@ const ProgramsSection = ({ programs }: ProgramsSectionProps) => {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             Choose Your Path
           </h2>
-          <p className="text-lg text-foreground-muted max-w-2xl mx-auto">
-            Every program includes personalized coaching, accountability, and a clear roadmap to your goals.
+          <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
+            Every program includes personalized coaching, accountability, and a tailored roadmap to your goals.
           </p>
         </div>
 
@@ -27,7 +27,7 @@ const ProgramsSection = ({ programs }: ProgramsSectionProps) => {
           {programs.map((program, index) => (
             <div
               key={program.id}
-              className={`relative group rounded-2xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-2 ${
+              className={`relative group rounded-2xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-glow ${
                 program.isFeatured
                   ? "bg-gradient-card border-2 border-primary/30 shadow-glow"
                   : "bg-card border border-card-border hover:border-primary/20"
@@ -47,7 +47,7 @@ const ProgramsSection = ({ programs }: ProgramsSectionProps) => {
                 <h3 className="text-xl md:text-2xl font-bold text-foreground mb-2">
                   {program.name}
                 </h3>
-                <p className="text-foreground-muted mb-6">
+                <p className="text-foreground/60 mb-6">
                   {program.shortTagline}
                 </p>
 
@@ -56,7 +56,7 @@ const ProgramsSection = ({ programs }: ProgramsSectionProps) => {
                   <span className="text-3xl md:text-4xl font-bold text-foreground">
                     {program.pricePerMonth.split("/")[0]}
                   </span>
-                  <span className="text-foreground-muted">
+                  <span className="text-foreground/60">
                     /{program.pricePerMonth.split("/")[1] || "month"}
                   </span>
                 </div>
@@ -66,21 +66,22 @@ const ProgramsSection = ({ programs }: ProgramsSectionProps) => {
                   {program.bulletPoints.map((point, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                      <span className="text-foreground-muted">{point}</span>
+                      <span className="text-foreground/70">{point}</span>
                     </li>
                   ))}
                 </ul>
 
-                {/* CTA Button */}
+                {/* CTA Button - Full Width */}
                 <a
                   href="#contact"
-                  className={`block text-center py-3 rounded-xl font-semibold transition-all duration-300 ${
+                  className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl font-semibold transition-all duration-300 ${
                     program.isFeatured
-                      ? "bg-gradient-primary text-primary-foreground shadow-button hover:shadow-glow"
+                      ? "bg-gradient-primary text-primary-foreground shadow-button hover:shadow-glow hover:scale-[1.02]"
                       : "bg-accent text-foreground border border-border hover:border-primary/30 hover:bg-accent/80"
                   }`}
                 >
                   Get Started
+                  <ArrowRight className="w-4 h-4" />
                 </a>
               </div>
             </div>
