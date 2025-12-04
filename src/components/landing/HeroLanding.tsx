@@ -15,13 +15,13 @@ const HeroLanding = () => {
         <source src="/videos/hero-bg.mp4" type="video/mp4" />
       </video>
       
-      {/* Darkened Overlay with animated gradient */}
-      <div className="absolute inset-0 bg-background/85" />
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-background/80" />
+      {/* Lightened Overlay - more video visible */}
+      <div className="absolute inset-0 bg-background/60" />
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 animate-[pulse_8s_ease-in-out_infinite]" />
       
       {/* Spotlight effect */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-primary/10 blur-[120px] pointer-events-none" />
 
       <div className="container relative z-10 text-center py-20 px-4">
         {/* Eyebrow Badge */}
@@ -75,7 +75,7 @@ const HeroLanding = () => {
 
         {/* Micro-proof row */}
         <div
-          className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 text-sm text-foreground/60 opacity-0 animate-fade-up"
+          className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 text-sm text-foreground/60 opacity-0 animate-fade-up mb-16"
           style={{ animationDelay: "400ms", animationFillMode: "forwards" }}
         >
           <span className="flex items-center gap-2">
@@ -90,6 +90,27 @@ const HeroLanding = () => {
             <MessageCircle className="w-4 h-4 text-primary" />
             Perfect for Instagram bios
           </span>
+        </div>
+
+        {/* Trust Images */}
+        <div 
+          className="flex justify-center gap-4 opacity-0 animate-fade-up"
+          style={{ animationDelay: "500ms", animationFillMode: "forwards" }}
+        >
+          <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border-2 border-primary/30 shadow-lg">
+            <img 
+              src="/images/trainer-trust-1.jpg" 
+              alt="Trainer coaching" 
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border-2 border-primary/30 shadow-lg">
+            <img 
+              src="/images/trainer-trust-2.jpg" 
+              alt="Training session" 
+              className="w-full h-full object-cover"
+            />
+          </div>
         </div>
       </div>
 
