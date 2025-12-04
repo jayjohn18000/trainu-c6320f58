@@ -1,0 +1,65 @@
+{
+  "slug": "coach-demo",
+  "fullName": "Ava Johnson",
+  "brandName": "AvaFit Coaching",
+  "niche": "Women's Strength & Conditioning",
+  "location": "Chicago, IL",
+  "heroHeadline": "Build Strength. Gain Confidence.",
+  "heroSubheadline": "Online strength coaching for women who want to look and feel incredible.",
+  "primaryCTA": "Start Your Free Consultation",
+  "primaryCTALink": "#contact",
+  "aboutMe": "I'm Ava, a strength and conditioning coach specializing in helping women build confidence in and out of the gym. My coaching blends structured progressive overload, habit development, and mindset training so you can unlock your strongest self. Whether you're a beginner or ready to advance, we'll build a clear, sustainable plan together.",
+  "heroImageUrl": "/images/demo-hero.png",
+  "galleryImageUrls": [
+    "/images/gallery1.webp",
+    "/images/gallery2.webp",
+    "/images/gallery3.webp"
+  ],
+  "social": {
+    "instagram": "https://instagram.com/example",
+    "tiktok": "",
+    "youtube": ""
+  },
+  "programs": [
+    {
+      "id": "p1",
+      "name": "12-Week Strength Transformation",
+      "shortTagline": "Build lean muscle & develop unstoppable confidence.",
+      "pricePerMonth": "$249 / month",
+      "bulletPoints": [
+        "Customized training plan",
+        "Weekly form checks",
+        "Nutrition guidance",
+        "Habit tracking & check-ins"
+      ],
+      "isFeatured": true
+    },
+    {
+      "id": "p2",
+      "name": "Busy Professional Program",
+      "shortTagline": "Strength coaching designed for tight schedules.",
+      "pricePerMonth": "$199 / month",
+      "bulletPoints": [
+        "3–4 day training split",
+        "Time-efficient workouts",
+        "Lifestyle-first planning"
+      ]
+    },
+    {
+      "id": "p3",
+      "name": "Online Coaching Lite",
+      "shortTagline": "A starter plan for beginners.",
+      "pricePerMonth": "$129 / month",
+      "bulletPoints": [
+        "Beginner-friendly routines",
+        "Monthly check-ins",
+        "Foundational movement coaching"
+      ]
+    }
+  ],
+  "testimonialQuote": "Ava helped me get in the best shape of my life. I finally feel strong, capable, and consistent.",
+  "testimonialName": "Mia R.",
+  "testimonialRole": "12-Week Transformation Client",
+  "contactEmail": "hello@avafit.com",
+  "contactPhone": ""
+}
