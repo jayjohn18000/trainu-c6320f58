@@ -40,6 +40,26 @@ const WhyThisMattersSection = () => {
 
   return (
     <section className="py-24 md:py-32 bg-background-elevated relative overflow-hidden">
+      {/* Background Images with heavy dark overlay */}
+      <div className="absolute top-0 left-0 w-80 h-96 pointer-events-none">
+        <img 
+          src="/images/trainer-trust-1.jpg" 
+          alt="" 
+          className="w-full h-full object-cover opacity-30"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-background-elevated via-background-elevated/90 to-background-elevated" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background-elevated via-transparent to-background-elevated" />
+      </div>
+      <div className="absolute bottom-0 left-0 w-72 h-80 pointer-events-none">
+        <img 
+          src="/images/trainer-trust-2.jpg" 
+          alt="" 
+          className="w-full h-full object-cover opacity-30"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-background-elevated via-background-elevated/90 to-background-elevated" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background-elevated via-transparent to-background-elevated" />
+      </div>
+      
       {/* Subtle glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[100px] pointer-events-none" />
       
