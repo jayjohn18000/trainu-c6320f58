@@ -41,7 +41,10 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
       ]
     : [
         { label: "Home", href: "/" },
-        { label: "Demo", href: "/trainers/coach-demo" },
+        { label: "How It Works", href: "#how-it-works" },
+        { label: "What You Get", href: "#what-you-get" },
+        { label: "Testimonials", href: "#testimonials" },
+        { label: "Get My Free Site", href: "#claim" },
       ];
 
   return (
