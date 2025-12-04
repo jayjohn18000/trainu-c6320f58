@@ -5,6 +5,7 @@ import ProgramsSection from "@/components/ProgramsSection";
 import AboutSection from "@/components/AboutSection";
 import TestimonialSection from "@/components/TestimonialSection";
 import CTASection from "@/components/CTASection";
+import MobileBottomBar from "@/components/MobileBottomBar";
 import { TrainerProfile } from "@/types/TrainerProfile";
 
 // Import trainer data
@@ -39,13 +40,16 @@ const TrainerPage = () => {
   }
 
   return (
-    <Layout trainer={trainer}>
-      <HeroSection trainer={trainer} />
-      <ProgramsSection programs={trainer.programs} />
-      <AboutSection trainer={trainer} />
-      <TestimonialSection trainer={trainer} />
-      <CTASection trainer={trainer} />
-    </Layout>
+    <>
+      <Layout trainer={trainer}>
+        <HeroSection trainer={trainer} />
+        <ProgramsSection programs={trainer.programs} />
+        <AboutSection trainer={trainer} />
+        <TestimonialSection trainer={trainer} />
+        <CTASection trainer={trainer} />
+      </Layout>
+      <MobileBottomBar trainer={trainer} />
+    </>
   );
 };
 
