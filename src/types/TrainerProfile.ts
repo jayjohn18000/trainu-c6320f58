@@ -30,6 +30,8 @@ export type TrainerProfile = {
   testimonialQuote?: string;
   testimonialName?: string;
   testimonialRole?: string;
+  beforeImageUrl?: string;
+  afterImageUrl?: string;
 
   contactEmail: string;
   contactPhone?: string;

@@ -57,9 +57,11 @@
       ]
     }
   ],
-  "testimonialQuote": "Ava helped me get in the best shape of my life. I finally feel strong, capable, and consistent.",
-  "testimonialName": "Mia R.",
-  "testimonialRole": "12-Week Transformation Client",
+  "testimonialQuote": "I used to feel drained and frustrated no matter how much I tried. Ava helped me reconnect with my body and rebuild strength without burnout. For the first time, I actually enjoy moving again — and the changes haven't just been physical, they've been mental too.",
+  "testimonialName": "Sophie Lammers",
+  "testimonialRole": "12-Week Transformation Program",
+  "beforeImageUrl": "/images/before.png",
+  "afterImageUrl": "/images/after.png",
   "contactEmail": "hello@avafit.com",
   "contactPhone": ""
 }
