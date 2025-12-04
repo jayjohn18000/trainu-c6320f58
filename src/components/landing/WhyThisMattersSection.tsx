@@ -22,6 +22,22 @@ const WhyThisMattersSection = () => {
     },
   ];
 
+  const beforeItems = [
+    "Messy Instagram bio with random links",
+    "Canva link to program PDFs",
+    "Notes app program list",
+    '"DM me to book" in bio',
+    "No credibility signals",
+  ];
+
+  const afterItems = [
+    "Clean, branded hero section",
+    "Professional program cards",
+    "Client testimonials displayed",
+    "One-click booking button",
+    "Trust badges & social proof",
+  ];
+
   return (
     <section className="py-24 md:py-32 bg-background-elevated relative overflow-hidden">
       {/* Subtle glow */}
@@ -45,6 +61,74 @@ const WhyThisMattersSection = () => {
           </p>
         </div>
 
+        {/* Before/After Transformation */}
+        <div 
+          className={`grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-20 transition-all duration-700 ease-out ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+          style={{ transitionDelay: "150ms" }}
+        >
+          {/* BEFORE Card */}
+          <div className="bg-card/50 rounded-2xl p-6 border border-destructive/20 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-destructive/50 to-destructive/20" />
+            <div className="flex items-center gap-2 mb-5">
+              <span className="text-xs font-bold uppercase tracking-wider text-destructive bg-destructive/10 px-3 py-1 rounded-full">
+                Before
+              </span>
+              <span className="text-foreground/50 text-sm">The messy trainer look</span>
+            </div>
+            <ul className="space-y-3">
+              {beforeItems.map((item, index) => (
+                <li 
+                  key={index}
+                  className={`flex items-center gap-3 text-foreground/60 transition-all duration-300 ${
+                    isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
+                  }`}
+                  style={{ transitionDelay: `${250 + index * 80}ms` }}
+                >
+                  <span className="w-5 h-5 rounded-full bg-destructive/20 flex items-center justify-center flex-shrink-0">
+                    <span className="w-2 h-0.5 bg-destructive/60 rotate-45" />
+                  </span>
+                  <span className="line-through decoration-foreground/30">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* AFTER Card */}
+          <div className="bg-card rounded-2xl p-6 border border-primary/30 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-primary/40" />
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
+            <div className="relative">
+              <div className="flex items-center gap-2 mb-5">
+                <span className="text-xs font-bold uppercase tracking-wider text-primary bg-primary/10 px-3 py-1 rounded-full">
+                  After
+                </span>
+                <span className="text-foreground/70 text-sm">Your TrainU website</span>
+              </div>
+              <ul className="space-y-3">
+                {afterItems.map((item, index) => (
+                  <li 
+                    key={index}
+                    className={`flex items-center gap-3 text-foreground transition-all duration-300 ${
+                      isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
+                    }`}
+                    style={{ transitionDelay: `${250 + index * 80}ms` }}
+                  >
+                    <span className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-3 h-3 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Feature Cards */}
         <div className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
           {cards.map((card, index) => (
             <div
@@ -52,7 +136,7 @@ const WhyThisMattersSection = () => {
               className={`group bg-card rounded-2xl p-8 border border-border/50 hover:border-primary/40 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 ${
                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
-              style={{ transitionDelay: `${200 + index * 100}ms` }}
+              style={{ transitionDelay: `${500 + index * 100}ms` }}
             >
               <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 group-hover:shadow-glow transition-all duration-300">
                 <card.icon className="w-7 h-7 text-primary" />
