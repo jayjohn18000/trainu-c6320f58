@@ -15,15 +15,18 @@ const HeroLanding = () => {
         <source src="/videos/hero-bg.mp4" type="video/mp4" />
       </video>
       
-      {/* Darkened Overlay */}
-      <div className="absolute inset-0 bg-background/80" />
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-background/70" />
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 animate-pulse" />
+      {/* Darkened Overlay with animated gradient */}
+      <div className="absolute inset-0 bg-background/85" />
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-background/80" />
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 animate-[pulse_8s_ease-in-out_infinite]" />
+      
+      {/* Spotlight effect */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
 
-      <div className="container relative z-10 text-center py-20">
+      <div className="container relative z-10 text-center py-20 px-4">
         {/* Eyebrow Badge */}
         <div 
-          className="inline-flex items-center gap-2 bg-primary/10 backdrop-blur-sm border border-primary/20 rounded-full px-4 py-2 mb-8 opacity-0 animate-fade-up"
+          className="inline-flex items-center gap-2 bg-primary/10 backdrop-blur-sm border border-primary/20 rounded-full px-5 py-2.5 mb-8 opacity-0 animate-fade-up"
           style={{ animationDelay: "0ms", animationFillMode: "forwards" }}
         >
           <Sparkles className="w-4 h-4 text-primary" />
@@ -32,25 +35,25 @@ const HeroLanding = () => {
 
         {/* Main Headline */}
         <h1
-          className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground leading-tight mb-6 opacity-0 animate-fade-up max-w-4xl mx-auto"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-[1.1] mb-6 opacity-0 animate-fade-up max-w-4xl mx-auto"
           style={{ animationDelay: "100ms", animationFillMode: "forwards" }}
         >
           Become a Professional Trainer
-          <br />
-          <span className="text-gradient">Online—For Free.</span>
+          <br className="hidden sm:block" />
+          <span className="text-gradient"> Online—For Free.</span>
         </h1>
 
         {/* Subheadline */}
         <p
-          className="text-lg md:text-xl text-foreground/80 max-w-3xl mx-auto mb-10 opacity-0 animate-fade-up leading-relaxed"
+          className="text-base sm:text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto mb-10 opacity-0 animate-fade-up leading-relaxed"
           style={{ animationDelay: "200ms", animationFillMode: "forwards" }}
         >
-          TrainU builds personal trainers a studio-quality website that positions you as a real professional—ready to sell programs, book clients, and grow your brand. No fees. No tech. No barriers. Just instant credibility.
+          TrainU builds personal trainers a studio-quality website that positions you as a real professional—ready to sell programs, book clients, and grow your brand. No fees. No tech. No barriers.
         </p>
 
         {/* CTAs */}
         <div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 opacity-0 animate-fade-up"
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 opacity-0 animate-fade-up"
           style={{ animationDelay: "300ms", animationFillMode: "forwards" }}
         >
           <a
@@ -63,7 +66,7 @@ const HeroLanding = () => {
           </a>
           <Link
             to="/trainers/coach-demo"
-            className="text-foreground/70 hover:text-primary font-medium transition-colors flex items-center gap-2"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border/50 text-foreground/80 hover:text-foreground hover:border-primary/30 hover:bg-primary/5 font-medium transition-all duration-300"
           >
             See a Live Demo
             <ArrowRight className="w-4 h-4" />
@@ -72,7 +75,7 @@ const HeroLanding = () => {
 
         {/* Micro-proof row */}
         <div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm text-foreground/60 opacity-0 animate-fade-up"
+          className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 text-sm text-foreground/60 opacity-0 animate-fade-up"
           style={{ animationDelay: "400ms", animationFillMode: "forwards" }}
         >
           <span className="flex items-center gap-2">
@@ -91,7 +94,7 @@ const HeroLanding = () => {
       </div>
 
       {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background to-transparent" />
     </section>
   );
 };

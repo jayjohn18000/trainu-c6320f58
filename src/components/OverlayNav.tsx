@@ -50,13 +50,13 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
   return (
     <>
       {/* Top Bar */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/30">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xl border-b border-border/20">
         <div className="container flex items-center justify-between h-16 md:h-20">
           {/* Left: Brand Identity */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => setIsOpen(true)}
-              className="flex items-center justify-center w-10 h-10 rounded-lg bg-card/50 border border-border/50 hover:bg-card hover:border-primary/30 transition-all duration-300"
+              className="flex items-center justify-center w-10 h-10 rounded-lg bg-card/50 border border-border/30 hover:bg-card hover:border-primary/30 transition-all duration-200"
               aria-label="Open menu"
             >
               <Menu className="w-5 h-5 text-foreground" />
@@ -77,21 +77,20 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
           </div>
 
           {/* Right: Primary CTA */}
-          {trainer && (
+          {trainer ? (
             <a
               href={trainer.primaryCTALink}
               className="hidden sm:inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-5 py-2.5 rounded-xl font-semibold text-sm shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
             >
               Book Consultation
             </a>
-          )}
-          {!trainer && (
-            <a
-              href="/trainers/coach-demo"
+          ) : (
+            <Link
+              to="/trainers/coach-demo"
               className="inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-5 py-2.5 rounded-xl font-semibold text-sm shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
             >
               View Demo
-            </a>
+            </Link>
           )}
         </div>
       </header>
@@ -101,28 +100,32 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
         className={`fixed inset-0 z-[100] transition-all duration-300 ${
           isOpen ? "visible" : "invisible"
         }`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation menu"
       >
         {/* Backdrop */}
         <div
-          className={`absolute inset-0 bg-background/90 backdrop-blur-md transition-opacity duration-300 ${
+          className={`absolute inset-0 bg-background/95 backdrop-blur-lg transition-opacity duration-300 ${
             isOpen ? "opacity-100" : "opacity-0"
           }`}
           onClick={() => setIsOpen(false)}
+          aria-hidden="true"
         />
 
         {/* Panel - Left Aligned */}
         <div
-          className={`absolute top-0 left-0 h-full w-full sm:w-[380px] bg-card/95 backdrop-blur-2xl border-r border-border/30 shadow-2xl transition-transform duration-300 ease-out ${
+          className={`absolute top-0 left-0 h-full w-full sm:w-[400px] bg-card/98 backdrop-blur-2xl border-r border-border/20 shadow-2xl transition-transform duration-300 ease-out ${
             isOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           {/* Panel Header */}
-          <div className="flex items-start justify-between p-6 border-b border-border/30">
+          <div className="flex items-start justify-between p-6 border-b border-border/20">
             <div className="flex flex-col">
               <span className="text-2xl font-bold text-foreground">
                 {trainer?.brandName || "TrainU"}
               </span>
-              {trainer && (
+              {trainer ? (
                 <>
                   <span className="text-sm text-foreground/70 mt-1">
                     {trainer.niche}
@@ -131,18 +134,23 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
                     📍 {trainer.location}
                   </span>
                 </>
+              ) : (
+                <span className="text-sm text-foreground/60 mt-1">
+                  Free Trainer Websites
+                </span>
               )}
             </div>
             <button
               onClick={() => setIsOpen(false)}
               className="p-2 rounded-lg hover:bg-muted transition-colors"
+              aria-label="Close menu"
             >
               <X className="w-6 h-6 text-foreground" />
             </button>
           </div>
 
           {/* Nav Links */}
-          <nav className="flex flex-col p-6 gap-1">
+          <nav className="flex flex-col p-6 gap-1" aria-label="Main navigation">
             {navLinks.map((link, index) => (
               <a
                 key={link.label}
@@ -164,7 +172,7 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
           </nav>
 
           {/* CTA Button */}
-          {trainer && (
+          {trainer ? (
             <div className="px-6 mt-4">
               <a
                 href={trainer.primaryCTALink}
@@ -174,59 +182,72 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
                 {trainer.primaryCTA}
               </a>
             </div>
+          ) : (
+            <div className="px-6 mt-4">
+              <a
+                href="#claim"
+                onClick={() => setIsOpen(false)}
+                className="block w-full text-center bg-gradient-primary text-primary-foreground px-6 py-4 rounded-xl font-semibold text-lg shadow-button hover:scale-[1.02] transition-transform"
+              >
+                Get My Free Site
+              </a>
+            </div>
           )}
 
           {/* Social Icons */}
-          <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-border/30">
+          <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-border/20">
             <p className="text-xs text-foreground/50 uppercase tracking-wider mb-4">Connect</p>
             <div className="flex items-center gap-3">
-              {trainer?.social?.instagram && (
+              {trainer?.social?.instagram ? (
                 <a
                   href={trainer.social.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="w-5 h-5" />
+                </a>
+              ) : !trainer && (
+                <a
+                  href="https://instagram.com/trainu"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                  aria-label="Instagram"
                 >
                   <Instagram className="w-5 h-5" />
                 </a>
               )}
-              {trainer?.social?.youtube && (
+              {trainer?.social?.youtube ? (
                 <a
                   href={trainer.social.youtube}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                  aria-label="YouTube"
+                >
+                  <Youtube className="w-5 h-5" />
+                </a>
+              ) : !trainer && (
+                <a
+                  href="https://youtube.com/@trainu"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                  aria-label="YouTube"
                 >
                   <Youtube className="w-5 h-5" />
                 </a>
               )}
               {(trainer?.contactEmail || !trainer) && (
                 <a
-                  href={trainer ? `mailto:${trainer.contactEmail}` : "#"}
+                  href={trainer ? `mailto:${trainer.contactEmail}` : "mailto:hello@trainu.us"}
                   className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                  aria-label="Email"
                 >
                   <Mail className="w-5 h-5" />
                 </a>
-              )}
-              {!trainer && (
-                <>
-                  <a
-                    href="https://instagram.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
-                  >
-                    <Instagram className="w-5 h-5" />
-                  </a>
-                  <a
-                    href="https://youtube.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
-                  >
-                    <Youtube className="w-5 h-5" />
-                  </a>
-                </>
               )}
             </div>
             <p className="text-center text-foreground/30 text-xs mt-6">
