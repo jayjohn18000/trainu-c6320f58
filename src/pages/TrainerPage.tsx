@@ -5,6 +5,7 @@ import ProgramsSection from "@/components/ProgramsSection";
 import AboutSection from "@/components/AboutSection";
 import ResultsSection from "@/components/ResultsSection";
 import TestimonialSection from "@/components/TestimonialSection";
+import ContactSection from "@/components/ContactSection";
 import CTASection from "@/components/CTASection";
 import MobileBottomBar from "@/components/MobileBottomBar";
 import { TrainerProfile } from "@/types/TrainerProfile";
@@ -48,6 +49,7 @@ const TrainerPage = () => {
         <AboutSection trainer={trainer} />
         <ResultsSection trainer={trainer} />
         <TestimonialSection trainer={trainer} />
+        <ContactSection trainer={trainer} />
         <CTASection trainer={trainer} />
       </Layout>
       <MobileBottomBar trainer={trainer} />
