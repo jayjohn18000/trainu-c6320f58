@@ -75,7 +75,7 @@ const HeroLanding = () => {
 
         {/* Micro-proof row */}
         <div
-          className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 text-sm text-foreground/60 opacity-0 animate-fade-up mb-16"
+          className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 text-sm text-foreground/60 opacity-0 animate-fade-up"
           style={{ animationDelay: "400ms", animationFillMode: "forwards" }}
         >
           <span className="flex items-center gap-2">
@@ -90,27 +90,6 @@ const HeroLanding = () => {
             <MessageCircle className="w-4 h-4 text-primary" />
             Perfect for Instagram bios
           </span>
-        </div>
-
-        {/* Trust Images */}
-        <div 
-          className="flex justify-center gap-4 opacity-0 animate-fade-up"
-          style={{ animationDelay: "500ms", animationFillMode: "forwards" }}
-        >
-          <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border-2 border-primary/30 shadow-lg">
-            <img 
-              src="/images/trainer-trust-1.jpg" 
-              alt="Trainer coaching" 
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border-2 border-primary/30 shadow-lg">
-            <img 
-              src="/images/trainer-trust-2.jpg" 
-              alt="Training session" 
-              className="w-full h-full object-cover"
-            />
-          </div>
         </div>
       </div>
 

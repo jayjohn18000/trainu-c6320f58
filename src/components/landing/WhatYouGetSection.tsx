@@ -71,21 +71,28 @@ const WhatYouGetSection = () => {
               }`}
               style={{ transitionDelay: "400ms" }}
             >
+              {/* Glow effect behind mockups */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="w-3/4 h-3/4 bg-primary/20 blur-[80px] rounded-full" />
+              </div>
+              
               <div className="relative flex items-end justify-center gap-4">
                 {/* Desktop Mockup */}
-                <div className="w-3/4">
+                <div className="w-3/4 relative">
+                  <div className="absolute inset-0 bg-primary/10 blur-[40px] scale-90 rounded-3xl" />
                   <img
                     src="/images/mockup-desktop.png"
                     alt="Desktop trainer website preview"
-                    className="w-full h-auto drop-shadow-2xl"
+                    className="w-full h-auto drop-shadow-2xl relative"
                   />
                 </div>
                 {/* Mobile Mockup */}
                 <div className="w-1/3 -ml-16 mb-4 relative z-10">
+                  <div className="absolute inset-0 bg-primary/10 blur-[30px] scale-90 rounded-3xl" />
                   <img
                     src="/images/mockup-mobile.png"
                     alt="Mobile trainer website preview"
-                    className="w-full h-auto drop-shadow-2xl"
+                    className="w-full h-auto drop-shadow-2xl relative"
                   />
                 </div>
               </div>
