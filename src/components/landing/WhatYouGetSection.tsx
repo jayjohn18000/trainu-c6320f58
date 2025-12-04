@@ -29,10 +29,10 @@ const WhatYouGetSection = () => {
             <span className="inline-block text-primary text-sm font-semibold tracking-wider uppercase mb-4">
               What You Get
             </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6 leading-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
               Everything You Need, <span className="text-gradient">Done For You</span>
             </h2>
-            <p className="text-lg text-foreground/70 max-w-xl mx-auto leading-relaxed">
+            <p className="text-lg text-white/70 max-w-xl mx-auto leading-relaxed">
               Send us your info. Get a complete website in 24 hours. No coding required.
             </p>
           </div>
@@ -46,7 +46,7 @@ const WhatYouGetSection = () => {
               }`}
               style={{ transitionDelay: "200ms" }}
             >
-              <div className="grid sm:grid-cols-2 gap-3">
+              <div className="grid sm:grid-cols-2 gap-4">
                 {features.map((feature, index) => (
                   <div
                     key={index}
@@ -58,7 +58,7 @@ const WhatYouGetSection = () => {
                     <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
                       <Check className="w-3.5 h-3.5 text-primary" />
                     </div>
-                    <span className="text-foreground/80">{feature}</span>
+                    <span className="text-white/90">{feature}</span>
                   </div>
                 ))}
               </div>
@@ -110,17 +110,17 @@ const WhatYouGetSection = () => {
                   />
                   <div className="absolute inset-0 bg-background/30 group-hover:bg-transparent transition-all duration-500" />
                   <div className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-300">
-                    <span className="text-foreground font-semibold bg-background/80 backdrop-blur-sm px-4 py-2 rounded-lg">
+                    <span className="text-white font-semibold text-lg">
                       Hover to preview
                     </span>
                   </div>
                 </div>
               </div>
               <div className="w-full md:w-1/2 text-center md:text-left">
-                <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
                   See It In Action
                 </h3>
-                <p className="text-foreground/70 mb-8 leading-relaxed">
+                <p className="text-white/70 mb-8 leading-relaxed">
                   Preview our demo site—a premium, professional trainer website ready to convert followers into clients.
                 </p>
                 <Link
