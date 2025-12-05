@@ -4,9 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Check, X, FileJson, Loader2, ExternalLink } from "lucide-react";
+import { ArrowLeft, Check, X, FileJson, Loader2, ExternalLink, Copy, CheckCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import AdminPasswordGate from "@/components/admin/AdminPasswordGate";
+import DomainManager from "@/components/admin/DomainManager";
 
 type Program = {
   title: string;
@@ -59,6 +60,9 @@ const AdminSubmissionDetail = () => {
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const [generatedJson, setGeneratedJson] = useState<string | null>(null);
+  const [generatedSlug, setGeneratedSlug] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated && id) {
@@ -81,7 +85,6 @@ const AdminSubmissionDetail = () => {
       toast({ title: "Submission not found", variant: "destructive" });
       navigate("/admin/submissions");
     } else {
-      // Parse programs if it's a string
       const parsedData = {
         ...data,
         programs: typeof data.programs === 'string' 
@@ -89,6 +92,10 @@ const AdminSubmissionDetail = () => {
           : data.programs
       };
       setSubmission(parsedData as Submission);
+      
+      // Generate slug for domain manager
+      const slug = data.business_name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      setGeneratedSlug(slug);
     }
     setLoading(false);
   };
@@ -124,14 +131,32 @@ const AdminSubmissionDetail = () => {
         throw new Error(response.error.message);
       }
 
+      // Store the generated JSON for display
+      if (response.data?.json) {
+        setGeneratedJson(JSON.stringify(response.data.json, null, 2));
+        setGeneratedSlug(response.data.slug);
+      }
+
       toast({ title: "JSON generated successfully!" });
-      // Optionally update status to generated
       await updateStatus("generated");
     } catch (error) {
       console.error("Error generating JSON:", error);
       toast({ title: "Error generating JSON", variant: "destructive" });
     }
     setGenerating(false);
+  };
+
+  const copyJson = async () => {
+    if (!generatedJson) return;
+    
+    try {
+      await navigator.clipboard.writeText(generatedJson);
+      setCopied(true);
+      toast({ title: "JSON copied to clipboard!" });
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      toast({ title: "Failed to copy", variant: "destructive" });
+    }
   };
 
   if (!isAuthenticated) {
@@ -151,6 +176,7 @@ const AdminSubmissionDetail = () => {
   }
 
   const programs = submission.programs || [];
+  const trainerSlug = submission.business_name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -219,7 +245,7 @@ const AdminSubmissionDetail = () => {
                 className="border-green-500 text-green-400 hover:bg-green-500 hover:text-white"
               >
                 <a
-                  href={`/trainers/${submission.business_name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`}
+                  href={`/trainers/${trainerSlug}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -230,6 +256,50 @@ const AdminSubmissionDetail = () => {
             )}
           </CardContent>
         </Card>
+
+        {/* Generated JSON Display */}
+        {generatedJson && (
+          <Card className="mb-6 bg-card border-border border-primary/30">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg text-primary">Generated JSON</CardTitle>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={copyJson}
+                  className="border-primary/50"
+                >
+                  {copied ? (
+                    <CheckCheck className="mr-2 h-4 w-4 text-green-400" />
+                  ) : (
+                    <Copy className="mr-2 h-4 w-4" />
+                  )}
+                  {copied ? "Copied!" : "Copy JSON"}
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="p-3 rounded-lg bg-muted/30 border border-border">
+                <p className="text-sm text-foreground/70 mb-2">
+                  To add this trainer to the codebase for editing in Lovable:
+                </p>
+                <code className="text-primary text-sm">
+                  src/data/trainers/{generatedSlug}.json
+                </code>
+              </div>
+              <pre className="p-4 rounded-lg bg-muted/20 border border-border overflow-auto max-h-96 text-xs">
+                <code className="text-foreground/80">{generatedJson}</code>
+              </pre>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Domain Manager - show for generated trainers */}
+        {submission.status === "generated" && generatedSlug && (
+          <div className="mb-6">
+            <DomainManager trainerSlug={generatedSlug} />
+          </div>
+        )}
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Contact Info */}

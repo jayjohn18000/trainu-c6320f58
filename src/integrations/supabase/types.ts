@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      trainer_domains: {
+        Row: {
+          created_at: string | null
+          domain: string
+          id: string
+          is_primary: boolean | null
+          trainer_slug: string
+        }
+        Insert: {
+          created_at?: string | null
+          domain: string
+          id?: string
+          is_primary?: boolean | null
+          trainer_slug: string
+        }
+        Update: {
+          created_at?: string | null
+          domain?: string
+          id?: string
+          is_primary?: boolean | null
+          trainer_slug?: string
+        }
+        Relationships: []
+      }
       trainer_submissions: {
         Row: {
           after_photo_url: string | null
