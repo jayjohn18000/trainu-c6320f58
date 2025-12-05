@@ -58,6 +58,7 @@ interface FileState {
   profilePhoto: File | null;
   beforePhoto: File | null;
   afterPhoto: File | null;
+  galleryPhotos: File[];
 }
 
 const specialtyOptions: SpecialtyOption[] = [
@@ -116,6 +117,7 @@ const TrainerWebsiteForm: React.FC = () => {
     profilePhoto: null,
     beforePhoto: null,
     afterPhoto: null,
+    galleryPhotos: [],
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -143,6 +145,15 @@ const TrainerWebsiteForm: React.FC = () => {
     setFiles((prev) => ({
       ...prev,
       [name]: file,
+    }));
+  };
+
+  const handleGalleryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { files: fileList } = e.target;
+    if (!fileList || fileList.length === 0) return;
+    setFiles((prev) => ({
+      ...prev,
+      galleryPhotos: Array.from(fileList).slice(0, 5), // Max 5 gallery images
     }));
   };
 
@@ -205,6 +216,7 @@ const TrainerWebsiteForm: React.FC = () => {
       let profilePhotoUrl: string | null = null;
       let beforePhotoUrl: string | null = null;
       let afterPhotoUrl: string | null = null;
+      const galleryPhotoUrls: string[] = [];
 
       if (files.profilePhoto) {
         profilePhotoUrl = await uploadFile(files.profilePhoto, 'profile-photos');
@@ -215,6 +227,12 @@ const TrainerWebsiteForm: React.FC = () => {
       if (files.afterPhoto) {
         afterPhotoUrl = await uploadFile(files.afterPhoto, 'after-photos');
       }
+      
+      // Upload gallery photos
+      for (const galleryPhoto of files.galleryPhotos) {
+        const url = await uploadFile(galleryPhoto, 'gallery-photos');
+        if (url) galleryPhotoUrls.push(url);
+      }
 
       // Call edge function
       const { data, error } = await supabase.functions.invoke('trainer-intake', {
@@ -223,6 +241,7 @@ const TrainerWebsiteForm: React.FC = () => {
           profilePhotoUrl,
           beforePhotoUrl,
           afterPhotoUrl,
+          galleryPhotoUrls,
         },
       });
 
@@ -470,6 +489,30 @@ const TrainerWebsiteForm: React.FC = () => {
               </p>
             </div>
 
+            <div className="sm:col-span-2">
+              <label className="block text-sm font-medium text-foreground/90">
+                Supporting Photos <span className="text-foreground/50 text-xs font-normal">(optional, up to 5)</span>
+              </label>
+              <input
+                type="file"
+                name="galleryPhotos"
+                accept="image/*"
+                multiple
+                onChange={handleGalleryChange}
+                className="mt-1 block w-full text-sm text-foreground/80 file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-sm file:font-semibold file:text-primary-foreground hover:file:bg-primary/90"
+              />
+              {files.galleryPhotos.length > 0 && (
+                <p className="mt-1 text-xs text-foreground/70">
+                  {files.galleryPhotos.length} photo{files.galleryPhotos.length > 1 ? 's' : ''} selected
+                </p>
+              )}
+              <p className="mt-1 text-xs text-foreground/50">
+                Training shots, gym photos, lifestyle images for your gallery section.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 mt-4">
             <div>
               <label className="block text-sm font-medium text-foreground/90">
                 Specialty / Niche <span className="text-red-400">*</span>
