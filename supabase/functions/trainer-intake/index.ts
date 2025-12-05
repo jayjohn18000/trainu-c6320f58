@@ -147,12 +147,34 @@ serve(async (req) => {
           `,
         });
         console.log("Confirmation email sent:", emailResponse);
+
+        // Send admin notification email
+        const adminNotification = await resend.emails.send({
+          from: "TrainU <hello@notifications.trainu.us>",
+          to: ["jaylen@trainu.us"],
+          subject: `🚀 New Trainer Submission: ${body.businessName}`,
+          html: `
+            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+              <h1 style="color: #ff5f26; margin-bottom: 24px;">New Trainer Submission!</h1>
+              <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 24px 0;">
+                <p style="margin: 8px 0;"><strong>Name:</strong> ${body.fullName}</p>
+                <p style="margin: 8px 0;"><strong>Business:</strong> ${body.businessName}</p>
+                <p style="margin: 8px 0;"><strong>Email:</strong> ${body.email}</p>
+                <p style="margin: 8px 0;"><strong>Phone:</strong> ${body.phone}</p>
+                <p style="margin: 8px 0;"><strong>Location:</strong> ${body.location}</p>
+                <p style="margin: 8px 0;"><strong>Specialty:</strong> ${body.specialty}</p>
+              </div>
+              <a href="https://trainu.lovable.app/admin/submissions/${data.id}" style="display: inline-block; background: #ff5f26; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">Review Submission</a>
+            </div>
+          `,
+        });
+        console.log("Admin notification sent:", adminNotification);
       } catch (emailError) {
-        console.error("Failed to send confirmation email:", emailError);
+        console.error("Failed to send email:", emailError);
         // Don't fail the request if email fails
       }
     } else {
-      console.warn("RESEND_API_KEY not configured, skipping confirmation email");
+      console.warn("RESEND_API_KEY not configured, skipping emails");
     }
 
     return new Response(

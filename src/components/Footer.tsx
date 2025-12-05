@@ -38,24 +38,20 @@ const Footer = ({ trainer }: FooterProps) => {
                 <span className="hidden sm:inline">{trainer.contact.email}</span>
               </a>
               {trainer.social.instagram && (
-                <a
-                  href={trainer.social.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={() => window.open(trainer.social.instagram, '_blank', 'noopener,noreferrer')}
                   className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-muted-hover transition-all"
                 >
                   <Instagram className="w-5 h-5" />
-                </a>
+                </button>
               )}
               {trainer.social.youtube && (
-                <a
-                  href={trainer.social.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={() => window.open(trainer.social.youtube, '_blank', 'noopener,noreferrer')}
                   className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-muted-hover transition-all"
                 >
                   <Youtube className="w-5 h-5" />
-                </a>
+                </button>
               )}
             </div>
           )}
