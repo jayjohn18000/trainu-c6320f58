@@ -1,13 +1,15 @@
+import { Link } from "react-router-dom";
 import { TrainerProfile } from "@/types/TrainerProfile";
-import { ArrowRight, Star, Users, Award } from "lucide-react";
+import { ArrowRight, Star, Users, Award, Calendar } from "lucide-react";
 
 interface HeroSectionProps {
   trainer: TrainerProfile;
+  isDemo?: boolean;
 }
 
-const HeroSection = ({ trainer }: HeroSectionProps) => {
+const HeroSection = ({ trainer, isDemo = false }: HeroSectionProps) => {
   return (
-    <section className="relative min-h-[90vh] md:min-h-screen flex items-center overflow-hidden">
+    <section className={`relative min-h-[90vh] md:min-h-screen flex items-center overflow-hidden ${isDemo ? 'pt-[52px]' : ''}`}>
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
@@ -22,6 +24,18 @@ const HeroSection = ({ trainer }: HeroSectionProps) => {
       {/* Content */}
       <div className="container relative z-10 pt-20">
         <div className="max-w-2xl">
+          {/* Demo Badge */}
+          {isDemo && (
+            <div 
+              className="animate-fade-up opacity-0 mb-4" 
+              style={{ animationDelay: "0s", animationFillMode: "forwards" }}
+            >
+              <span className="inline-flex items-center gap-2 bg-primary/20 text-primary px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider border border-primary/30">
+                Demo Site
+              </span>
+            </div>
+          )}
+
           {/* Trainer Identity - Name & Niche */}
           <div 
             className="animate-fade-up opacity-0" 
@@ -76,25 +90,49 @@ const HeroSection = ({ trainer }: HeroSectionProps) => {
             {trainer.hero.subheadline}
           </p>
 
-          {/* CTA */}
+          {/* CTA - Different for demo vs regular trainer sites */}
           <div 
             className="flex flex-col sm:flex-row items-start sm:items-center gap-4 animate-fade-up opacity-0" 
             style={{ animationDelay: "0.25s", animationFillMode: "forwards" }}
           >
-            <a
-              href={trainer.hero.ctaPrimaryLink}
-              className="group inline-flex items-center justify-center gap-3 bg-gradient-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
-            >
-              {trainer.hero.ctaPrimaryLabel}
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
-            {trainer.hero.ctaSecondaryLabel && trainer.hero.ctaSecondaryLink && (
-              <a 
-                href={trainer.hero.ctaSecondaryLink} 
-                className="text-foreground/60 hover:text-primary transition-colors font-medium"
-              >
-                {trainer.hero.ctaSecondaryLabel} →
-              </a>
+            {isDemo ? (
+              <>
+                {/* Demo: Primary CTA goes to claim form */}
+                <Link
+                  to="/claim"
+                  className="group inline-flex items-center justify-center gap-3 bg-gradient-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
+                >
+                  Get a Site Like This
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+                {/* Demo: Secondary CTA goes to booking */}
+                <a 
+                  href={trainer.hero.ctaPrimaryLink} 
+                  className="inline-flex items-center gap-2 text-foreground/60 hover:text-primary transition-colors font-medium"
+                >
+                  <Calendar className="w-4 h-4" />
+                  Or book a demo consultation →
+                </a>
+              </>
+            ) : (
+              <>
+                {/* Regular trainer site: Original CTA behavior */}
+                <a
+                  href={trainer.hero.ctaPrimaryLink}
+                  className="group inline-flex items-center justify-center gap-3 bg-gradient-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
+                >
+                  {trainer.hero.ctaPrimaryLabel}
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </a>
+                {trainer.hero.ctaSecondaryLabel && trainer.hero.ctaSecondaryLink && (
+                  <a 
+                    href={trainer.hero.ctaSecondaryLink} 
+                    className="text-foreground/60 hover:text-primary transition-colors font-medium"
+                  >
+                    {trainer.hero.ctaSecondaryLabel} →
+                  </a>
+                )}
+              </>
             )}
           </div>
         </div>

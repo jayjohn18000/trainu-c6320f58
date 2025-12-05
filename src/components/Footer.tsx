@@ -1,11 +1,13 @@
+import { Link } from "react-router-dom";
 import { TrainerProfile } from "@/types/TrainerProfile";
-import { Instagram, Youtube, Mail } from "lucide-react";
+import { Instagram, Youtube, Mail, ArrowRight } from "lucide-react";
 
 interface FooterProps {
   trainer?: TrainerProfile;
+  isDemo?: boolean;
 }
 
-const Footer = ({ trainer }: FooterProps) => {
+const Footer = ({ trainer, isDemo = false }: FooterProps) => {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -14,6 +16,20 @@ const Footer = ({ trainer }: FooterProps) => {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       
       <div className="container py-12">
+        {/* Demo: Add CTA banner above footer content */}
+        {isDemo && (
+          <div className="mb-10 p-6 rounded-2xl bg-card/50 border border-border/30 text-center">
+            <p className="text-foreground/70 mb-3">Like what you see?</p>
+            <Link
+              to="/claim"
+              className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-semibold transition-colors"
+            >
+              Get Your Own Free Trainer Website
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        )}
+
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Brand */}
           <div className="text-center md:text-left">
@@ -56,17 +72,15 @@ const Footer = ({ trainer }: FooterProps) => {
             </div>
           )}
 
-          {/* Powered By */}
+          {/* Powered By - Links to landing page */}
           <div className="flex items-center gap-2">
             <span className="text-sm text-foreground/50">Powered by</span>
-            <a
-              href="https://trainu.us"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              to="/"
               className="text-sm font-semibold text-primary hover:text-primary-glow transition-colors"
             >
               TrainU
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { X, Menu, Instagram, Youtube, Mail } from "lucide-react";
+import { X, Menu, Instagram, Youtube, Mail, Home, Calendar } from "lucide-react";
 import { TrainerProfile } from "@/types/TrainerProfile";
 
 interface OverlayNavProps {
   trainer?: TrainerProfile;
+  isDemo?: boolean;
 }
 
-const OverlayNav = ({ trainer }: OverlayNavProps) => {
+const OverlayNav = ({ trainer, isDemo = false }: OverlayNavProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Close on escape key
@@ -31,6 +32,7 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
     };
   }, [isOpen]);
 
+  // Navigation links based on context
   const navLinks = trainer
     ? [
         { label: "Home", href: `/trainers/${trainer.slug}` },
@@ -38,19 +40,27 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
         { label: "Programs", href: "#programs" },
         { label: "Results", href: "#testimonials" },
         { label: "Contact", href: "#contact" },
+        ...(isDemo ? [{ label: "Back to TrainU", href: "/", isInternal: true }] : []),
       ]
     : [
         { label: "Home", href: "/" },
         { label: "How It Works", href: "#how-it-works" },
         { label: "What You Get", href: "#what-you-get" },
         { label: "Testimonials", href: "#testimonials" },
-        { label: "Get My Free Site", href: "/claim" },
+        { label: "Get My Free Site", href: "/claim", isInternal: true },
       ];
+
+  // CTA configuration based on context
+  const headerCta = isDemo
+    ? { label: "Get My Free Site", href: "/claim", isInternal: true }
+    : trainer
+    ? { label: "Book Consultation", href: trainer.hero.ctaPrimaryLink, isInternal: false }
+    : { label: "View Demo", href: "/trainers/coach-demo", isInternal: true };
 
   return (
     <>
       {/* Top Bar */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xl border-b border-border/20">
+      <header className={`fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xl border-b border-border/20 ${isDemo ? 'top-[52px]' : ''}`}>
         <div className="container flex items-center justify-between h-16 md:h-20">
           {/* Left: Brand Identity */}
           <div className="flex items-center gap-3">
@@ -77,20 +87,20 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
           </div>
 
           {/* Right: Primary CTA */}
-          {trainer ? (
-            <a
-              href={trainer.hero.ctaPrimaryLink}
+          {headerCta.isInternal ? (
+            <Link
+              to={headerCta.href}
               className="hidden sm:inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-5 py-2.5 rounded-xl font-semibold text-sm shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
             >
-              Book Consultation
-            </a>
-          ) : (
-            <Link
-              to="/trainers/coach-demo"
-              className="inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-5 py-2.5 rounded-xl font-semibold text-sm shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
-            >
-              View Demo
+              {headerCta.label}
             </Link>
+          ) : (
+            <a
+              href={headerCta.href}
+              className="hidden sm:inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-5 py-2.5 rounded-xl font-semibold text-sm shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
+            >
+              {headerCta.label}
+            </a>
           )}
         </div>
       </header>
@@ -152,28 +162,70 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
           {/* Nav Links */}
           <nav className="flex flex-col p-6 gap-1" aria-label="Main navigation">
             {navLinks.map((link, index) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className="group flex items-center py-4 px-4 -mx-4 rounded-xl text-xl font-medium text-foreground/70 hover:text-foreground hover:bg-muted/50 transition-all duration-200"
-                style={{ 
-                  opacity: isOpen ? 1 : 0,
-                  transform: isOpen ? 'translateX(0)' : 'translateX(-20px)',
-                  transition: `all 0.3s ease ${index * 0.05 + 0.1}s`
-                }}
-              >
-                <span className="relative">
-                  {link.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300" />
-                </span>
-              </a>
+              link.isInternal ? (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className="group flex items-center gap-3 py-4 px-4 -mx-4 rounded-xl text-xl font-medium text-foreground/70 hover:text-foreground hover:bg-muted/50 transition-all duration-200"
+                  style={{ 
+                    opacity: isOpen ? 1 : 0,
+                    transform: isOpen ? 'translateX(0)' : 'translateX(-20px)',
+                    transition: `all 0.3s ease ${index * 0.05 + 0.1}s`
+                  }}
+                >
+                  {link.label === "Back to TrainU" && <Home className="w-5 h-5" />}
+                  <span className="relative">
+                    {link.label}
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300" />
+                  </span>
+                </Link>
+              ) : (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className="group flex items-center py-4 px-4 -mx-4 rounded-xl text-xl font-medium text-foreground/70 hover:text-foreground hover:bg-muted/50 transition-all duration-200"
+                  style={{ 
+                    opacity: isOpen ? 1 : 0,
+                    transform: isOpen ? 'translateX(0)' : 'translateX(-20px)',
+                    transition: `all 0.3s ease ${index * 0.05 + 0.1}s`
+                  }}
+                >
+                  <span className="relative">
+                    {link.label}
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300" />
+                  </span>
+                </a>
+              )
             ))}
           </nav>
 
-          {/* CTA Button */}
-          {trainer ? (
-            <div className="px-6 mt-4">
+          {/* CTA Buttons */}
+          <div className="px-6 mt-4 space-y-3">
+            {/* Primary CTA */}
+            {isDemo ? (
+              <>
+                <Link
+                  to="/claim"
+                  onClick={() => setIsOpen(false)}
+                  className="block w-full text-center bg-gradient-primary text-primary-foreground px-6 py-4 rounded-xl font-semibold text-lg shadow-button hover:scale-[1.02] transition-transform"
+                >
+                  Get My Free Site
+                </Link>
+                {/* Secondary: Consultation */}
+                {trainer && (
+                  <a
+                    href={trainer.hero.ctaPrimaryLink}
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-center gap-2 w-full text-foreground/60 hover:text-foreground py-2 transition-colors"
+                  >
+                    <Calendar className="w-4 h-4" />
+                    Or book a demo consultation
+                  </a>
+                )}
+              </>
+            ) : trainer ? (
               <a
                 href={trainer.hero.ctaPrimaryLink}
                 onClick={() => setIsOpen(false)}
@@ -181,9 +233,7 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
               >
                 {trainer.hero.ctaPrimaryLabel}
               </a>
-            </div>
-          ) : (
-            <div className="px-6 mt-4">
+            ) : (
               <Link
                 to="/claim"
                 onClick={() => setIsOpen(false)}
@@ -191,8 +241,8 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
               >
                 Get My Free Site
               </Link>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Social Icons */}
           <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-border/20">
@@ -242,9 +292,13 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
                 </a>
               )}
             </div>
-            <p className="text-center text-foreground/30 text-xs mt-6">
+            <Link 
+              to="/"
+              onClick={() => setIsOpen(false)}
+              className="block text-center text-foreground/30 hover:text-primary text-xs mt-6 transition-colors"
+            >
               Powered by TrainU
-            </p>
+            </Link>
           </div>
         </div>
       </div>
