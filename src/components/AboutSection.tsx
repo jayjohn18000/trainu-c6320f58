@@ -6,8 +6,9 @@ interface AboutSectionProps {
 }
 
 const AboutSection = ({ trainer }: AboutSectionProps) => {
-  // Use the third gallery image (Strength in Action)
-  const heroImage = trainer.galleryImageUrls[2] || trainer.galleryImageUrls[0];
+  // Use the third gallery image (Strength in Action) or profile photo
+  const galleryImages = trainer.trainer.galleryImageUrls || [];
+  const heroImage = galleryImages[2] || galleryImages[0] || trainer.trainer.profilePhotoUrl;
 
   return (
     <section id="about" className="py-20 md:py-32 bg-background-elevated">
@@ -18,7 +19,7 @@ const AboutSection = ({ trainer }: AboutSectionProps) => {
             <div className="relative overflow-hidden rounded-2xl aspect-[4/5]">
               <img
                 src={heroImage}
-                alt={`${trainer.fullName} - Strength in Action`}
+                alt={`${trainer.trainer.fullName} - Strength in Action`}
                 className="w-full h-full object-cover brightness-110"
               />
               {/* Subtle gradient overlay */}
@@ -69,22 +70,22 @@ const AboutSection = ({ trainer }: AboutSectionProps) => {
               About
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-2">
-              Meet {trainer.fullName}
+              Meet {trainer.trainer.fullName}
             </h2>
             <div className="flex items-center gap-2 text-foreground/60 mb-6">
               <MapPin className="w-4 h-4" />
-              <span className="text-sm">{trainer.niche} • {trainer.location}</span>
+              <span className="text-sm">{trainer.trainer.specialty} • {trainer.trainer.location}</span>
             </div>
             
             <div className="space-y-4 mb-8">
               <p className="text-lg text-foreground/70 leading-relaxed max-w-xl">
-                {trainer.aboutMe}
+                {trainer.trainer.bio}
               </p>
             </div>
 
             {/* Connect Section */}
             <div className="border-t border-border/30 pt-6">
-              <p className="text-xs text-foreground/50 uppercase tracking-wider mb-4">Connect with {trainer.fullName.split(" ")[0]}</p>
+              <p className="text-xs text-foreground/50 uppercase tracking-wider mb-4">Connect with {trainer.trainer.fullName.split(" ")[0]}</p>
               <div className="flex flex-wrap gap-3">
                 {trainer.social.instagram && (
                   <a
@@ -109,7 +110,7 @@ const AboutSection = ({ trainer }: AboutSectionProps) => {
                   </a>
                 )}
                 <a
-                  href={`mailto:${trainer.contactEmail}`}
+                  href={`mailto:${trainer.contact.email}`}
                   className="flex items-center gap-2 px-4 py-2 rounded-xl bg-card border border-border hover:border-primary/30 hover:bg-card-hover transition-all"
                 >
                   <Mail className="w-4 h-4 text-primary" />
