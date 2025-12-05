@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Check, X, FileJson, Loader2 } from "lucide-react";
+import { ArrowLeft, Check, X, FileJson, Loader2, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import AdminPasswordGate from "@/components/admin/AdminPasswordGate";
 
@@ -212,6 +212,22 @@ const AdminSubmissionDetail = () => {
               )}
               Generate Website JSON
             </Button>
+            {submission.status === "generated" && (
+              <Button
+                asChild
+                variant="outline"
+                className="border-green-500 text-green-400 hover:bg-green-500 hover:text-white"
+              >
+                <a
+                  href={`/trainers/${submission.business_name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  View Live Site
+                </a>
+              </Button>
+            )}
           </CardContent>
         </Card>
 
