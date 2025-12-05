@@ -2,6 +2,12 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { TrainerProfile } from "@/types/TrainerProfile";
 
+// Static trainer registry - trainers with JSON files in codebase
+// Dynamic imports return the JSON module directly
+const staticTrainers: Record<string, () => Promise<TrainerProfile>> = {
+  "coach-demo": () => import("@/data/trainers/coach-demo.json").then(m => m.default as TrainerProfile),
+};
+
 export function useTrainerProfile(slug: string | undefined) {
   const [trainer, setTrainer] = useState<TrainerProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -19,12 +25,18 @@ export function useTrainerProfile(slug: string | undefined) {
         setLoading(true);
         setError(null);
 
-        // Get public URL for the trainer JSON file
+        // Check if trainer exists in static registry first
+        if (staticTrainers[slug]) {
+          const trainerData = await staticTrainers[slug]();
+          setTrainer(trainerData);
+          return;
+        }
+
+        // Fall back to Supabase storage
         const { data: urlData } = supabase.storage
           .from("trainer-json")
           .getPublicUrl(`${slug}.json`);
 
-        // Fetch the JSON file
         const response = await fetch(urlData.publicUrl);
         
         if (!response.ok) {

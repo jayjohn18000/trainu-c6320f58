@@ -10,8 +10,13 @@ import CTASection from "@/components/CTASection";
 import MobileBottomBar from "@/components/MobileBottomBar";
 import { useTrainerProfile } from "@/hooks/useTrainerProfile";
 
-const TrainerPage = () => {
-  const { slug } = useParams<{ slug: string }>();
+type TrainerPageProps = {
+  customSlug?: string;
+};
+
+const TrainerPage = ({ customSlug }: TrainerPageProps) => {
+  const { slug: urlSlug } = useParams<{ slug: string }>();
+  const slug = customSlug || urlSlug;
   const { trainer, loading, error } = useTrainerProfile(slug);
 
   if (loading) {
