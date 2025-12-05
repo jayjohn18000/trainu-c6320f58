@@ -123,7 +123,7 @@ serve(async (req) => {
       try {
         const resend = new Resend(resendApiKey);
         const emailResponse = await resend.emails.send({
-          from: "TrainU <onboarding@resend.dev>",
+          from: "TrainU <hello@notifications.trainu.us>",
           to: [body.email],
           subject: "We received your website request!",
           html: `
