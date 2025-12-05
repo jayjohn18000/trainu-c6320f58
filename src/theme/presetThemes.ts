@@ -18,6 +18,10 @@ export const backgroundStyles = {
     card: "217 33% 8%",
     muted: "217 33% 12%",
     border: "217 33% 15%",
+    backgroundElevated: "0 0% 8%",
+    cardBorder: "0 0% 18%",
+    gradientCard: "linear-gradient(145deg, hsl(0 0% 12%) 0%, hsl(0 0% 7%) 100%)",
+    gradientSurface: "linear-gradient(180deg, hsl(217 33% 8%), hsl(217 33% 6%))",
   },
   light: {
     name: "Light",
@@ -26,6 +30,10 @@ export const backgroundStyles = {
     card: "0 0% 98%",
     muted: "220 14% 96%",
     border: "220 13% 91%",
+    backgroundElevated: "220 14% 96%",
+    cardBorder: "220 13% 85%",
+    gradientCard: "linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(220 14% 96%) 100%)",
+    gradientSurface: "linear-gradient(180deg, hsl(0 0% 100%), hsl(220 14% 96%))",
   },
 } as const;
 
@@ -58,6 +66,11 @@ export function getThemeVariables(
     "--popover-foreground": bg.foreground,
     "--secondary": bg.muted,
     "--secondary-foreground": bg.foreground,
+    // Theme-aware background and card styles
+    "--background-elevated": bg.backgroundElevated,
+    "--card-border": bg.cardBorder,
+    "--gradient-card": bg.gradientCard,
+    "--gradient-surface": bg.gradientSurface,
     // Dynamic gradients and shadows based on primary color
     "--gradient-primary": `linear-gradient(135deg, hsl(${primary.hsl}), hsl(${primary.hsl} / 0.8))`,
     "--shadow-glow": `0 0 40px -8px hsl(${primary.hsl} / 0.3)`,
