@@ -95,6 +95,8 @@ serve(async (req) => {
       wants_ai_assistant: body.wantsAiAssistant === true || body.wantsAiAssistant === 'true',
       wants_courses: body.wantsCourses === true || body.wantsCourses === 'true',
       wants_client_app: body.wantsClientApp === true || body.wantsClientApp === 'true',
+      primary_color: body.primaryColor || 'orange',
+      background_style: body.backgroundStyle || 'dark',
       status: 'pending'
     };
 

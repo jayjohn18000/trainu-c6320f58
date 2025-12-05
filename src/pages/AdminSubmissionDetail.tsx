@@ -40,6 +40,8 @@ type Submission = {
   wants_ai_assistant: boolean | null;
   wants_courses: boolean | null;
   wants_client_app: boolean | null;
+  primary_color: string | null;
+  background_style: string | null;
   status: string | null;
   created_at: string;
 };
@@ -238,24 +240,57 @@ const AdminSubmissionDetail = () => {
               )}
               Generate Website JSON
             </Button>
-            {submission.status === "generated" && (
-              <Button
-                asChild
-                variant="outline"
-                className="border-green-500 text-green-400 hover:bg-green-500 hover:text-white"
-              >
-                <a
-                  href={`/trainers/${trainerSlug}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  View Live Site
-                </a>
-              </Button>
-            )}
           </CardContent>
         </Card>
+
+        {/* Live Site URL Card - Show for generated trainers */}
+        {submission.status === "generated" && (
+          <Card className="mb-6 bg-gradient-to-br from-green-500/10 to-emerald-500/5 border-green-500/30">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center gap-2 text-green-400">
+                <span className="text-xl">🌐</span>
+                Live Site URL
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="p-4 rounded-lg bg-background/50 border border-border">
+                <p className="text-xs text-foreground/50 mb-1">Your trainer's website is live at:</p>
+                <p className="text-lg font-mono text-foreground break-all">
+                  {window.location.origin}/trainers/{trainerSlug}
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={async () => {
+                    await navigator.clipboard.writeText(`${window.location.origin}/trainers/${trainerSlug}`);
+                    toast({ title: "URL copied to clipboard!" });
+                  }}
+                  className="border-green-500/50 text-green-400 hover:bg-green-500/10"
+                >
+                  <Copy className="mr-2 h-4 w-4" />
+                  Copy URL
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="border-green-500/50 text-green-400 hover:bg-green-500/10"
+                >
+                  <a
+                    href={`/trainers/${trainerSlug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ExternalLink className="mr-2 h-4 w-4" />
+                    Open Site
+                  </a>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Generated JSON Display */}
         {generatedJson && (
@@ -326,6 +361,31 @@ const AdminSubmissionDetail = () => {
             <CardContent className="space-y-3">
               <InfoRow label="Specialty" value={submission.specialty} />
               <InfoRow label="Coaching Style" value={submission.coaching_style} />
+              <div className="flex gap-4">
+                <div>
+                  <span className="text-foreground/60 text-sm">Primary Color</span>
+                  <div className="flex items-center gap-2 mt-1">
+                    <div 
+                      className="w-6 h-6 rounded-full border border-border"
+                      style={{ 
+                        backgroundColor: submission.primary_color === 'orange' ? '#ff5f26' :
+                          submission.primary_color === 'red' ? '#ef4444' :
+                          submission.primary_color === 'blue' ? '#3b82f6' :
+                          submission.primary_color === 'green' ? '#22c55e' :
+                          submission.primary_color === 'purple' ? '#a855f7' :
+                          submission.primary_color === 'gold' ? '#f59e0b' :
+                          submission.primary_color === 'pink' ? '#ec4899' :
+                          submission.primary_color === 'cyan' ? '#22d3ee' : '#ff5f26'
+                      }}
+                    />
+                    <span className="text-foreground capitalize">{submission.primary_color || 'orange'}</span>
+                  </div>
+                </div>
+                <div>
+                  <span className="text-foreground/60 text-sm">Background</span>
+                  <p className="text-foreground mt-1 capitalize">{submission.background_style || 'dark'}</p>
+                </div>
+              </div>
               <div>
                 <span className="text-foreground/60 text-sm">Bio</span>
                 <p className="text-foreground mt-1">{submission.bio}</p>

@@ -41,6 +41,7 @@ export type Database = {
       trainer_submissions: {
         Row: {
           after_photo_url: string | null
+          background_style: string | null
           before_photo_url: string | null
           bio: string
           booking_link: string | null
@@ -53,6 +54,7 @@ export type Database = {
           instagram_url: string | null
           location: string
           phone: string
+          primary_color: string | null
           profile_photo_url: string | null
           programs: Json | null
           specialty: string
@@ -69,6 +71,7 @@ export type Database = {
         }
         Insert: {
           after_photo_url?: string | null
+          background_style?: string | null
           before_photo_url?: string | null
           bio: string
           booking_link?: string | null
@@ -81,6 +84,7 @@ export type Database = {
           instagram_url?: string | null
           location: string
           phone: string
+          primary_color?: string | null
           profile_photo_url?: string | null
           programs?: Json | null
           specialty: string
@@ -97,6 +101,7 @@ export type Database = {
         }
         Update: {
           after_photo_url?: string | null
+          background_style?: string | null
           before_photo_url?: string | null
           bio?: string
           booking_link?: string | null
@@ -109,6 +114,7 @@ export type Database = {
           instagram_url?: string | null
           location?: string
           phone?: string
+          primary_color?: string | null
           profile_photo_url?: string | null
           programs?: Json | null
           specialty?: string
