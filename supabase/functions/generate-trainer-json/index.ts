@@ -3,7 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-admin-passcode",
 };
 
 serve(async (req) => {
@@ -13,6 +13,18 @@ serve(async (req) => {
   }
 
   try {
+    // Verify admin passcode
+    const passcode = req.headers.get("x-admin-passcode");
+    const adminPasscode = Deno.env.get("ADMIN_PASSCODE");
+
+    if (!passcode || passcode !== adminPasscode) {
+      console.log("Unauthorized: Invalid or missing passcode for generate-trainer-json");
+      return new Response(
+        JSON.stringify({ error: "Unauthorized" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const { submissionId } = await req.json();
 
     if (!submissionId) {
