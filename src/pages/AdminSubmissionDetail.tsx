@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -58,6 +58,7 @@ const AdminSubmissionDetail = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [adminPasscode, setAdminPasscode] = useState<string | null>(null);
   const [submission, setSubmission] = useState<Submission | null>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
@@ -66,27 +67,34 @@ const AdminSubmissionDetail = () => {
   const [generatedSlug, setGeneratedSlug] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    if (isAuthenticated && id) {
-      fetchSubmission();
-    }
-  }, [isAuthenticated, id]);
-
-  const fetchSubmission = async () => {
+  const fetchSubmission = useCallback(async (passcode: string) => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("trainer_submissions")
-      .select("*")
-      .eq("id", id)
-      .maybeSingle();
+    try {
+      const response = await supabase.functions.invoke("admin-fetch-submissions", {
+        body: { submissionId: id },
+        headers: {
+          "x-admin-passcode": passcode,
+        },
+      });
 
-    if (error) {
-      console.error("Error fetching submission:", error);
-      toast({ title: "Error loading submission", variant: "destructive" });
-    } else if (!data) {
-      toast({ title: "Submission not found", variant: "destructive" });
-      navigate("/admin/submissions");
-    } else {
+      if (response.error) {
+        console.error("Error fetching submission:", response.error);
+        if (response.error.message?.includes("Unauthorized")) {
+          sessionStorage.removeItem("admin_passcode");
+          setIsAuthenticated(false);
+          setAdminPasscode(null);
+        }
+        toast({ title: "Error loading submission", variant: "destructive" });
+        return;
+      }
+
+      const data = response.data?.data;
+      if (!data) {
+        toast({ title: "Submission not found", variant: "destructive" });
+        navigate("/admin/submissions");
+        return;
+      }
+
       const parsedData = {
         ...data,
         programs: typeof data.programs === 'string' 
@@ -98,35 +106,57 @@ const AdminSubmissionDetail = () => {
       // Generate slug for domain manager
       const slug = data.business_name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
       setGeneratedSlug(slug);
+    } catch (error) {
+      console.error("Error:", error);
+      toast({ title: "Error loading submission", variant: "destructive" });
     }
     setLoading(false);
-  };
+  }, [id, navigate, toast]);
+
+  useEffect(() => {
+    if (isAuthenticated && adminPasscode && id) {
+      fetchSubmission(adminPasscode);
+    }
+  }, [isAuthenticated, adminPasscode, id, fetchSubmission]);
 
   const updateStatus = async (newStatus: string) => {
-    if (!submission) return;
+    if (!submission || !adminPasscode) return;
     setUpdating(true);
 
-    const { error } = await supabase
-      .from("trainer_submissions")
-      .update({ status: newStatus })
-      .eq("id", submission.id);
+    try {
+      const response = await supabase.functions.invoke("admin-update-submission", {
+        body: { 
+          submissionId: submission.id,
+          updates: { status: newStatus }
+        },
+        headers: {
+          "x-admin-passcode": adminPasscode,
+        },
+      });
 
-    if (error) {
-      toast({ title: "Error updating status", variant: "destructive" });
-    } else {
+      if (response.error) {
+        throw new Error(response.error.message);
+      }
+
       setSubmission({ ...submission, status: newStatus });
       toast({ title: `Status updated to ${newStatus}` });
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast({ title: "Error updating status", variant: "destructive" });
     }
     setUpdating(false);
   };
 
   const generateJson = async () => {
-    if (!submission) return;
+    if (!submission || !adminPasscode) return;
     setGenerating(true);
 
     try {
       const response = await supabase.functions.invoke("generate-trainer-json", {
         body: { submissionId: submission.id },
+        headers: {
+          "x-admin-passcode": adminPasscode,
+        },
       });
 
       if (response.error) {
@@ -161,8 +191,13 @@ const AdminSubmissionDetail = () => {
     }
   };
 
+  const handleAuthSuccess = (passcode: string) => {
+    setAdminPasscode(passcode);
+    setIsAuthenticated(true);
+  };
+
   if (!isAuthenticated) {
-    return <AdminPasswordGate onSuccess={() => setIsAuthenticated(true)} />;
+    return <AdminPasswordGate onSuccess={handleAuthSuccess} />;
   }
 
   if (loading) {

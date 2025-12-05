@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,13 +6,39 @@ import { Lock, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 type Props = {
-  onSuccess: () => void;
+  onSuccess: (passcode: string) => void;
 };
 
 const AdminPasswordGate = ({ onSuccess }: Props) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
+
+  // Check for stored passcode and verify it on mount
+  useEffect(() => {
+    const verifyStoredPasscode = async () => {
+      const storedPasscode = sessionStorage.getItem("admin_passcode");
+      if (storedPasscode) {
+        try {
+          const response = await supabase.functions.invoke("verify-admin", {
+            body: { passcode: storedPasscode },
+          });
+          if (response.data?.success) {
+            onSuccess(storedPasscode);
+          } else {
+            // Invalid stored passcode, clear it
+            sessionStorage.removeItem("admin_passcode");
+          }
+        } catch {
+          sessionStorage.removeItem("admin_passcode");
+        }
+      }
+      setCheckingSession(false);
+    };
+
+    verifyStoredPasscode();
+  }, [onSuccess]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,9 +53,9 @@ const AdminPasswordGate = ({ onSuccess }: Props) => {
       if (response.error || !response.data?.success) {
         setError("Invalid passcode");
       } else {
-        // Store in session for this tab only
-        sessionStorage.setItem("admin_verified", "true");
-        onSuccess();
+        // Store passcode (not just boolean) for subsequent API calls
+        sessionStorage.setItem("admin_passcode", password);
+        onSuccess(password);
       }
     } catch (err) {
       setError("Error verifying passcode");
@@ -37,12 +63,13 @@ const AdminPasswordGate = ({ onSuccess }: Props) => {
     setLoading(false);
   };
 
-  // Check if already verified in this session
-  useState(() => {
-    if (sessionStorage.getItem("admin_verified") === "true") {
-      onSuccess();
-    }
-  });
+  if (checkingSession) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">

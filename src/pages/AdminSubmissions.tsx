@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, ChevronDown, ChevronUp } from "lucide-react";
+import { Search, ChevronDown, ChevronUp, Loader2 } from "lucide-react";
 import AdminPasswordGate from "@/components/admin/AdminPasswordGate";
 
 type Submission = {
@@ -38,6 +38,7 @@ const statusColors: Record<string, string> = {
 
 const AdminSubmissions = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [adminPasscode, setAdminPasscode] = useState<string | null>(null);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -45,26 +46,39 @@ const AdminSubmissions = () => {
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchSubmissions();
-    }
-  }, [isAuthenticated]);
-
-  const fetchSubmissions = async () => {
+  const fetchSubmissions = useCallback(async (passcode: string) => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("trainer_submissions")
-      .select("id, full_name, business_name, email, phone, location, specialty, created_at, status")
-      .order("created_at", { ascending: false });
+    try {
+      const response = await supabase.functions.invoke("admin-fetch-submissions", {
+        body: {},
+        headers: {
+          "x-admin-passcode": passcode,
+        },
+      });
 
-    if (error) {
-      console.error("Error fetching submissions:", error);
-    } else {
-      setSubmissions(data || []);
+      if (response.error) {
+        console.error("Error fetching submissions:", response.error);
+        // If unauthorized, clear session and show login
+        if (response.error.message?.includes("Unauthorized")) {
+          sessionStorage.removeItem("admin_passcode");
+          setIsAuthenticated(false);
+          setAdminPasscode(null);
+        }
+        return;
+      }
+
+      setSubmissions(response.data?.data || []);
+    } catch (error) {
+      console.error("Error:", error);
     }
     setLoading(false);
-  };
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated && adminPasscode) {
+      fetchSubmissions(adminPasscode);
+    }
+  }, [isAuthenticated, adminPasscode, fetchSubmissions]);
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -100,8 +114,13 @@ const AdminSubmissions = () => {
     );
   };
 
+  const handleAuthSuccess = (passcode: string) => {
+    setAdminPasscode(passcode);
+    setIsAuthenticated(true);
+  };
+
   if (!isAuthenticated) {
-    return <AdminPasswordGate onSuccess={() => setIsAuthenticated(true)} />;
+    return <AdminPasswordGate onSuccess={handleAuthSuccess} />;
   }
 
   return (
@@ -128,7 +147,9 @@ const AdminSubmissions = () => {
 
         <div className="rounded-lg border border-border bg-card overflow-hidden">
           {loading ? (
-            <div className="p-8 text-center text-foreground/60">Loading...</div>
+            <div className="p-8 text-center text-foreground/60">
+              <Loader2 className="w-6 h-6 animate-spin mx-auto" />
+            </div>
           ) : filteredSubmissions.length === 0 ? (
             <div className="p-8 text-center text-foreground/60">
               No submissions found
