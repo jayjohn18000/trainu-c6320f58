@@ -122,6 +122,8 @@ serve(async (req) => {
       { field: 'tiktokUrl', name: 'TikTok URL', value: body.tiktokUrl },
       { field: 'youtubeUrl', name: 'YouTube URL', value: body.youtubeUrl },
       { field: 'bookingLink', name: 'Booking link', value: body.bookingLink },
+      { field: 'xUrl', name: 'X (Twitter) URL', value: body.xUrl },
+      { field: 'facebookUrl', name: 'Facebook URL', value: body.facebookUrl },
     ];
 
     for (const urlField of urlFields) {
@@ -185,7 +187,15 @@ serve(async (req) => {
       wants_client_app: body.wantsClientApp === true || body.wantsClientApp === 'true',
       primary_color: body.primaryColor || 'orange',
       background_style: body.backgroundStyle || 'dark',
-      status: 'pending'
+      status: 'pending',
+      // New fields
+      custom_hero_title: body.customHeroTitle?.trim() || null,
+      x_url: body.xUrl || null,
+      facebook_url: body.facebookUrl || null,
+      gallery_photo_urls: body.galleryPhotoUrls || null,
+      wants_website_enhancements: body.wantsWebsiteEnhancements === true || body.wantsWebsiteEnhancements === 'true',
+      wants_social_media_management: body.wantsSocialMediaManagement === true || body.wantsSocialMediaManagement === 'true',
+      wants_done_for_you: body.wantsDoneForYou === true || body.wantsDoneForYou === 'true',
     };
 
     console.log("Inserting submission for:", body.email);

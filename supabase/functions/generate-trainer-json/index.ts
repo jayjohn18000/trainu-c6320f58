@@ -81,7 +81,7 @@ serve(async (req) => {
         specialty: submission.specialty,
         bio: submission.bio,
         profilePhotoUrl: submission.profile_photo_url || "/images/demo-hero.png",
-        galleryImageUrls: [
+        galleryImageUrls: submission.gallery_photo_urls || [
           submission.profile_photo_url || "/images/gallery1.webp",
         ].filter(Boolean),
       },
@@ -93,7 +93,7 @@ serve(async (req) => {
       },
 
       hero: {
-        headline: `Transform Your Life with ${submission.full_name.split(" ")[0]}`,
+        headline: submission.custom_hero_title || `Transform Your Life with ${submission.full_name.split(" ")[0]}`,
         subheadline: submission.bio || `Expert ${submission.specialty} coaching to help you reach your goals.`,
         ctaPrimaryLabel: "Book Consultation",
         ctaPrimaryLink: submission.booking_link || "#contact",
@@ -106,6 +106,8 @@ serve(async (req) => {
         instagram: submission.instagram_url || undefined,
         tiktok: submission.tiktok_url || undefined,
         youtube: submission.youtube_url || undefined,
+        x: submission.x_url || undefined,
+        facebook: submission.facebook_url || undefined,
         bookingLink: submission.booking_link || undefined,
       },
 
@@ -145,6 +147,9 @@ serve(async (req) => {
         wantsAiAssistant: submission.wants_ai_assistant || false,
         wantsCourses: submission.wants_courses || false,
         wantsClientApp: submission.wants_client_app || false,
+        wantsWebsiteEnhancements: submission.wants_website_enhancements || false,
+        wantsSocialMediaManagement: submission.wants_social_media_management || false,
+        wantsDoneForYou: submission.wants_done_for_you || false,
       },
 
       contact: {
