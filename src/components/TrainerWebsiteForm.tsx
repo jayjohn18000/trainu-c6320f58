@@ -23,6 +23,7 @@ interface FormState {
   location: string;
   bio: string;
   specialty: SpecialtyOption | "";
+  customHeroTitle: string;
   program1Title: string;
   program1Price: string;
   program1Description: string;
@@ -46,6 +47,9 @@ interface FormState {
   wantsAiAssistant: boolean;
   wantsCourses: boolean;
   wantsClientApp: boolean;
+  wantsWebsiteEnhancements: boolean;
+  wantsSocialMediaManagement: boolean;
+  wantsDoneForYou: boolean;
   primaryColor: PrimaryColorKey;
   backgroundStyle: BackgroundStyleKey;
 }
@@ -77,6 +81,7 @@ const TrainerWebsiteForm: React.FC = () => {
     location: "",
     bio: "",
     specialty: "",
+    customHeroTitle: "",
     program1Title: "",
     program1Price: "",
     program1Description: "",
@@ -100,6 +105,9 @@ const TrainerWebsiteForm: React.FC = () => {
     wantsAiAssistant: false,
     wantsCourses: false,
     wantsClientApp: false,
+    wantsWebsiteEnhancements: false,
+    wantsSocialMediaManagement: false,
+    wantsDoneForYou: false,
     primaryColor: "orange",
     backgroundStyle: "dark",
   });
@@ -485,6 +493,23 @@ const TrainerWebsiteForm: React.FC = () => {
 
           <div className="mt-4">
             <label className="block text-sm font-medium text-foreground/90">
+              Custom Hero Title <span className="text-foreground/50 text-xs font-normal">(optional)</span>
+            </label>
+            <input
+              type="text"
+              name="customHeroTitle"
+              value={form.customHeroTitle}
+              onChange={handleChange}
+              className={`${inputBaseClass} ${inputNormalClass}`}
+              placeholder="Transform Your Life with [Your Name]"
+            />
+            <p className="mt-1 text-xs text-foreground/50">
+              Leave blank to use your specialty as the headline. Example: "Transform Your Life with Demo."
+            </p>
+          </div>
+
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-foreground/90">
               Short Bio (2–3 sentences) <span className="text-red-400">*</span>
             </label>
             <textarea
@@ -848,6 +873,36 @@ const TrainerWebsiteForm: React.FC = () => {
                 className="h-4 w-4 rounded border-border bg-background text-primary focus:ring-primary"
               />
               <span>Interested in a client app</span>
+            </label>
+            <label className="flex items-center gap-2 text-sm text-foreground/90">
+              <input
+                type="checkbox"
+                name="wantsWebsiteEnhancements"
+                checked={form.wantsWebsiteEnhancements}
+                onChange={handleChange}
+                className="h-4 w-4 rounded border-border bg-background text-primary focus:ring-primary"
+              />
+              <span>Interested in website enhancements</span>
+            </label>
+            <label className="flex items-center gap-2 text-sm text-foreground/90">
+              <input
+                type="checkbox"
+                name="wantsSocialMediaManagement"
+                checked={form.wantsSocialMediaManagement}
+                onChange={handleChange}
+                className="h-4 w-4 rounded border-border bg-background text-primary focus:ring-primary"
+              />
+              <span>Interested in social media management</span>
+            </label>
+            <label className="flex items-center gap-2 text-sm text-foreground/90">
+              <input
+                type="checkbox"
+                name="wantsDoneForYou"
+                checked={form.wantsDoneForYou}
+                onChange={handleChange}
+                className="h-4 w-4 rounded border-border bg-background text-primary focus:ring-primary"
+              />
+              <span>Interested in 100% done-for-you</span>
             </label>
           </div>
         </section>
