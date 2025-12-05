@@ -75,7 +75,9 @@ serve(async (req) => {
       },
 
       branding: {
-        theme: "dark",
+        theme: submission.background_style === "light" ? "light" : "dark",
+        primaryColor: submission.primary_color || "orange",
+        backgroundStyle: submission.background_style || "dark",
       },
 
       hero: {

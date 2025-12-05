@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { primaryColors, backgroundStyles, PrimaryColorKey, BackgroundStyleKey } from "@/theme/presetThemes";
 
 type SpecialtyOption =
   | "Strength Training"
@@ -43,6 +44,8 @@ interface FormState {
   wantsAiAssistant: boolean;
   wantsCourses: boolean;
   wantsClientApp: boolean;
+  primaryColor: PrimaryColorKey;
+  backgroundStyle: BackgroundStyleKey;
 }
 
 interface FileState {
@@ -93,6 +96,8 @@ const TrainerWebsiteForm: React.FC = () => {
     wantsAiAssistant: false,
     wantsCourses: false,
     wantsClientApp: false,
+    primaryColor: "orange",
+    backgroundStyle: "dark",
   });
 
   const [files, setFiles] = useState<FileState>({
@@ -344,6 +349,95 @@ const TrainerWebsiteForm: React.FC = () => {
         {/* Branding & Bio */}
         <section>
           <h3 className="text-lg font-semibold text-foreground mb-3">Branding & Bio</h3>
+          
+          {/* Color Theme Picker */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-foreground/90 mb-3">
+              Choose Your Website Colors
+            </label>
+            
+            {/* Primary Color Selection */}
+            <div className="mb-4">
+              <span className="text-xs text-foreground/60 uppercase tracking-wide">Primary Color</span>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {(Object.entries(primaryColors) as [PrimaryColorKey, typeof primaryColors[PrimaryColorKey]][]).map(([key, color]) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setForm(prev => ({ ...prev, primaryColor: key }))}
+                    className={`w-10 h-10 rounded-full border-2 transition-all flex items-center justify-center ${
+                      form.primaryColor === key 
+                        ? "border-foreground scale-110 ring-2 ring-foreground/20" 
+                        : "border-transparent hover:scale-105"
+                    }`}
+                    style={{ backgroundColor: color.hex }}
+                    title={color.name}
+                  >
+                    {form.primaryColor === key && (
+                      <svg className="w-5 h-5 text-white drop-shadow-md" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs text-foreground/50 mt-1">
+                Selected: {primaryColors[form.primaryColor].name}
+              </p>
+            </div>
+
+            {/* Background Style Selection */}
+            <div>
+              <span className="text-xs text-foreground/60 uppercase tracking-wide">Background Style</span>
+              <div className="flex gap-3 mt-2">
+                {(Object.entries(backgroundStyles) as [BackgroundStyleKey, typeof backgroundStyles[BackgroundStyleKey]][]).map(([key, style]) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setForm(prev => ({ ...prev, backgroundStyle: key }))}
+                    className={`flex-1 py-3 px-4 rounded-lg border-2 transition-all ${
+                      form.backgroundStyle === key
+                        ? "border-primary bg-primary/10"
+                        : "border-border hover:border-foreground/30"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div 
+                        className={`w-8 h-8 rounded-md border ${key === 'dark' ? 'bg-zinc-900 border-zinc-700' : 'bg-white border-zinc-300'}`}
+                      />
+                      <span className="text-sm font-medium text-foreground">{style.name}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Preview */}
+            <div className="mt-4 p-4 rounded-lg border border-border">
+              <span className="text-xs text-foreground/60 uppercase tracking-wide">Preview</span>
+              <div 
+                className="mt-2 p-4 rounded-lg flex items-center gap-3"
+                style={{ 
+                  backgroundColor: form.backgroundStyle === 'dark' ? '#0a0a0f' : '#ffffff',
+                  border: `1px solid ${form.backgroundStyle === 'dark' ? '#1f1f2e' : '#e5e5e5'}`
+                }}
+              >
+                <div 
+                  className="w-12 h-12 rounded-full"
+                  style={{ backgroundColor: primaryColors[form.primaryColor].hex }}
+                />
+                <div>
+                  <p style={{ color: form.backgroundStyle === 'dark' ? '#ffffff' : '#0a0a0f' }} className="font-semibold">
+                    {form.businessName || "Your Brand"}
+                  </p>
+                  <p style={{ color: form.backgroundStyle === 'dark' ? '#888' : '#666' }} className="text-sm">
+                    {form.specialty || "Your Specialty"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="block text-sm font-medium text-foreground/90">

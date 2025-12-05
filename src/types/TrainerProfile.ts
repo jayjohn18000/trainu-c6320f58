@@ -37,6 +37,7 @@ export type TrainerProfile = {
 
   branding: {
     primaryColor?: string;
+    backgroundStyle?: string;
     secondaryColor?: string;
     accentColor?: string;
     backgroundGradient?: string;

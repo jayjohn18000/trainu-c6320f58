@@ -8,6 +8,7 @@ import TestimonialSection from "@/components/TestimonialSection";
 import ContactSection from "@/components/ContactSection";
 import CTASection from "@/components/CTASection";
 import MobileBottomBar from "@/components/MobileBottomBar";
+import TrainerThemeProvider from "@/components/TrainerThemeProvider";
 import { useTrainerProfile } from "@/hooks/useTrainerProfile";
 
 type TrainerPageProps = {
@@ -21,38 +22,38 @@ const TrainerPage = ({ customSlug }: TrainerPageProps) => {
 
   if (loading) {
     return (
-      <Layout>
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-foreground/60">Loading trainer profile...</p>
-          </div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-foreground/60">Loading trainer profile...</p>
         </div>
-      </Layout>
+      </div>
     );
   }
 
   if (error || !trainer) {
     return (
-      <Layout>
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-foreground mb-4">404</h1>
-            <p className="text-xl text-foreground/60 mb-6">Trainer Not Found</p>
-            <a
-              href="/"
-              className="text-primary hover:text-primary-glow font-semibold transition-colors"
-            >
-              Return to Home
-            </a>
-          </div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-foreground mb-4">404</h1>
+          <p className="text-xl text-foreground/60 mb-6">Trainer Not Found</p>
+          <a
+            href="/"
+            className="text-primary hover:text-primary/80 font-semibold transition-colors"
+          >
+            Return to Home
+          </a>
         </div>
-      </Layout>
+      </div>
     );
   }
 
+  // Get theme settings from trainer profile
+  const primaryColor = trainer.branding?.primaryColor || "orange";
+  const backgroundStyle = trainer.branding?.backgroundStyle || "dark";
+
   return (
-    <>
+    <TrainerThemeProvider primaryColor={primaryColor} backgroundStyle={backgroundStyle}>
       <Layout trainer={trainer}>
         <HeroSection trainer={trainer} />
         <ProgramsSection programs={trainer.programs} />
@@ -63,7 +64,7 @@ const TrainerPage = ({ customSlug }: TrainerPageProps) => {
         <CTASection trainer={trainer} />
       </Layout>
       <MobileBottomBar trainer={trainer} />
-    </>
+    </TrainerThemeProvider>
   );
 };
 
