@@ -48,8 +48,11 @@ export type Database = {
           business_name: string
           coaching_style: string | null
           created_at: string
+          custom_hero_title: string | null
           email: string
+          facebook_url: string | null
           full_name: string
+          gallery_photo_urls: Json | null
           id: string
           instagram_url: string | null
           location: string
@@ -66,7 +69,11 @@ export type Database = {
           wants_client_app: boolean | null
           wants_courses: boolean | null
           wants_custom_domain: boolean | null
+          wants_done_for_you: boolean | null
           wants_sms_automations: boolean | null
+          wants_social_media_management: boolean | null
+          wants_website_enhancements: boolean | null
+          x_url: string | null
           youtube_url: string | null
         }
         Insert: {
@@ -78,8 +85,11 @@ export type Database = {
           business_name: string
           coaching_style?: string | null
           created_at?: string
+          custom_hero_title?: string | null
           email: string
+          facebook_url?: string | null
           full_name: string
+          gallery_photo_urls?: Json | null
           id?: string
           instagram_url?: string | null
           location: string
@@ -96,7 +106,11 @@ export type Database = {
           wants_client_app?: boolean | null
           wants_courses?: boolean | null
           wants_custom_domain?: boolean | null
+          wants_done_for_you?: boolean | null
           wants_sms_automations?: boolean | null
+          wants_social_media_management?: boolean | null
+          wants_website_enhancements?: boolean | null
+          x_url?: string | null
           youtube_url?: string | null
         }
         Update: {
@@ -108,8 +122,11 @@ export type Database = {
           business_name?: string
           coaching_style?: string | null
           created_at?: string
+          custom_hero_title?: string | null
           email?: string
+          facebook_url?: string | null
           full_name?: string
+          gallery_photo_urls?: Json | null
           id?: string
           instagram_url?: string | null
           location?: string
@@ -126,7 +143,11 @@ export type Database = {
           wants_client_app?: boolean | null
           wants_courses?: boolean | null
           wants_custom_domain?: boolean | null
+          wants_done_for_you?: boolean | null
           wants_sms_automations?: boolean | null
+          wants_social_media_management?: boolean | null
+          wants_website_enhancements?: boolean | null
+          x_url?: string | null
           youtube_url?: string | null
         }
         Relationships: []
