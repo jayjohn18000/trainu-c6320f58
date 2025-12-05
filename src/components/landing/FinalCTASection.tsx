@@ -24,14 +24,14 @@ const FinalCTASection = () => {
           One short form. A done-for-you website. A real link you can put in your bio today.
         </p>
         <div className="flex flex-col items-center gap-6">
-          <a
-            href="#claim"
+          <Link
+            to="/claim"
             className="group relative inline-flex items-center justify-center gap-3 bg-gradient-primary text-primary-foreground px-10 py-5 rounded-xl font-semibold text-lg shadow-button hover:shadow-glow hover:scale-[1.03] transition-all duration-300"
           >
             <span className="absolute inset-0 rounded-xl bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <span className="relative">Get My Free Trainer Site</span>
             <ArrowRight className="w-5 h-5 relative group-hover:translate-x-1 transition-transform" />
-          </a>
+          </Link>
           <Link
             to="/trainers/coach-demo"
             className="text-foreground/60 hover:text-primary transition-colors flex items-center gap-2"

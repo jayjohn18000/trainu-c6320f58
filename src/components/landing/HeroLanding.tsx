@@ -51,14 +51,14 @@ const HeroLanding = () => {
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 opacity-0 animate-fade-up"
           style={{ animationDelay: "300ms", animationFillMode: "forwards" }}
         >
-          <a
-            href="#claim"
+          <Link
+            to="/claim"
             className="group relative inline-flex items-center justify-center gap-3 bg-gradient-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg shadow-button hover:shadow-glow hover:scale-[1.03] transition-all duration-300"
           >
             <span className="absolute inset-0 rounded-xl bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <span className="relative">Claim My Free Trainer Site</span>
             <ArrowRight className="w-5 h-5 relative group-hover:translate-x-1 transition-transform" />
-          </a>
+          </Link>
           <Link
             to="/trainers/coach-demo"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border/50 text-foreground/80 hover:text-foreground hover:border-primary/30 hover:bg-primary/5 font-medium transition-all duration-300"

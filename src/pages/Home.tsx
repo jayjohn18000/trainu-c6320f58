@@ -6,7 +6,6 @@ import IsThisYouSection from "@/components/landing/IsThisYouSection";
 import WhatYouGetSection from "@/components/landing/WhatYouGetSection";
 import TestimonialsLanding from "@/components/landing/TestimonialsLanding";
 import FinalCTASection from "@/components/landing/FinalCTASection";
-import ClaimFormSection from "@/components/landing/ClaimFormSection";
 
 const Home = () => {
   return (
@@ -24,7 +23,6 @@ const Home = () => {
         <TestimonialsLanding />
       </div>
       <FinalCTASection />
-      <ClaimFormSection />
     </Layout>
   );
 };
