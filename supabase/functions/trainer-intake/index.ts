@@ -7,6 +7,39 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Validation constants
+const MAX_LENGTHS = {
+  fullName: 100,
+  businessName: 100,
+  email: 255,
+  phone: 30,
+  location: 200,
+  bio: 1500,
+  specialty: 200,
+  testimonialQuote: 500,
+  testimonialName: 100,
+  coachingStyle: 500,
+  programTitle: 100,
+  programPrice: 50,
+  programDescription: 500,
+};
+
+// URL validation pattern (must start with http:// or https://)
+const urlPattern = /^https?:\/\/.+/i;
+
+// Validate URL format
+function isValidUrl(url: string): boolean {
+  return urlPattern.test(url);
+}
+
+// Validate string length
+function validateLength(value: string | undefined | null, fieldName: string, maxLength: number): string | null {
+  if (value && value.length > maxLength) {
+    return `${fieldName} exceeds maximum length of ${maxLength} characters`;
+  }
+  return null;
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -44,6 +77,61 @@ serve(async (req) => {
         JSON.stringify({ error: 'Invalid email format' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
+    }
+
+    // Validate field lengths
+    const lengthErrors: string[] = [];
+    
+    const lengthChecks = [
+      validateLength(body.fullName, 'Full name', MAX_LENGTHS.fullName),
+      validateLength(body.businessName, 'Business name', MAX_LENGTHS.businessName),
+      validateLength(body.email, 'Email', MAX_LENGTHS.email),
+      validateLength(body.phone, 'Phone', MAX_LENGTHS.phone),
+      validateLength(body.location, 'Location', MAX_LENGTHS.location),
+      validateLength(body.bio, 'Bio', MAX_LENGTHS.bio),
+      validateLength(body.specialty, 'Specialty', MAX_LENGTHS.specialty),
+      validateLength(body.testimonialQuote, 'Testimonial quote', MAX_LENGTHS.testimonialQuote),
+      validateLength(body.testimonialName, 'Testimonial name', MAX_LENGTHS.testimonialName),
+      validateLength(body.coachingStyle, 'Coaching style', MAX_LENGTHS.coachingStyle),
+      validateLength(body.program1Title, 'Program 1 title', MAX_LENGTHS.programTitle),
+      validateLength(body.program1Price, 'Program 1 price', MAX_LENGTHS.programPrice),
+      validateLength(body.program1Description, 'Program 1 description', MAX_LENGTHS.programDescription),
+      validateLength(body.program2Title, 'Program 2 title', MAX_LENGTHS.programTitle),
+      validateLength(body.program2Price, 'Program 2 price', MAX_LENGTHS.programPrice),
+      validateLength(body.program2Description, 'Program 2 description', MAX_LENGTHS.programDescription),
+      validateLength(body.program3Title, 'Program 3 title', MAX_LENGTHS.programTitle),
+      validateLength(body.program3Price, 'Program 3 price', MAX_LENGTHS.programPrice),
+      validateLength(body.program3Description, 'Program 3 description', MAX_LENGTHS.programDescription),
+    ];
+
+    lengthChecks.forEach(error => {
+      if (error) lengthErrors.push(error);
+    });
+
+    if (lengthErrors.length > 0) {
+      console.error("Field length validation errors:", lengthErrors);
+      return new Response(
+        JSON.stringify({ error: lengthErrors[0] }), // Return first error for simplicity
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate URL formats for social links
+    const urlFields = [
+      { field: 'instagramUrl', name: 'Instagram URL', value: body.instagramUrl },
+      { field: 'tiktokUrl', name: 'TikTok URL', value: body.tiktokUrl },
+      { field: 'youtubeUrl', name: 'YouTube URL', value: body.youtubeUrl },
+      { field: 'bookingLink', name: 'Booking link', value: body.bookingLink },
+    ];
+
+    for (const urlField of urlFields) {
+      if (urlField.value && !isValidUrl(urlField.value)) {
+        console.error(`Invalid URL format for ${urlField.name}:`, urlField.value);
+        return new Response(
+          JSON.stringify({ error: `${urlField.name} must be a valid URL starting with http:// or https://` }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
     }
 
     // Build programs array from individual program fields
