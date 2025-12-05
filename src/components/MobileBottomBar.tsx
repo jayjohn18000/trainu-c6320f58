@@ -26,14 +26,13 @@ const MobileBottomBar = ({ trainer }: MobileBottomBarProps) => {
         {/* Actions */}
         <div className="flex items-center gap-2">
           {trainer.social.instagram && (
-            <a
-              href={trainer.social.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => window.open(trainer.social.instagram, '_blank', 'noopener,noreferrer')}
               className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/70 hover:text-primary transition-colors"
+              aria-label="Instagram"
             >
               <Instagram className="w-5 h-5" />
-            </a>
+            </button>
           )}
           <a
             href={bookingLink}

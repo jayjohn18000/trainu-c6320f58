@@ -60,14 +60,12 @@ const ContactSection = ({ trainer }: ContactSectionProps) => {
               Send me a message on Instagram for quick questions.
             </p>
             {trainer.social.instagram ? (
-              <a
-                href={trainer.social.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:text-primary-glow font-medium text-sm transition-colors"
+              <button
+                onClick={() => window.open(trainer.social.instagram, '_blank', 'noopener,noreferrer')}
+                className="text-primary hover:text-primary/80 font-medium text-sm transition-colors"
               >
                 Message on Instagram →
-              </a>
+              </button>
             ) : (
               <a
                 href={`mailto:${trainer.contact.email}`}

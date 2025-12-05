@@ -199,46 +199,38 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
             <p className="text-xs text-foreground/50 uppercase tracking-wider mb-4">Connect</p>
             <div className="flex items-center gap-3">
               {trainer?.social?.instagram ? (
-                <a
-                  href={trainer.social.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={() => window.open(trainer.social.instagram, '_blank', 'noopener,noreferrer')}
                   className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
                   aria-label="Instagram"
                 >
                   <Instagram className="w-5 h-5" />
-                </a>
+                </button>
               ) : !trainer && (
-                <a
-                  href="https://instagram.com/trainu"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={() => window.open('https://instagram.com/trainu', '_blank', 'noopener,noreferrer')}
                   className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
                   aria-label="Instagram"
                 >
                   <Instagram className="w-5 h-5" />
-                </a>
+                </button>
               )}
               {trainer?.social?.youtube ? (
-                <a
-                  href={trainer.social.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={() => window.open(trainer.social.youtube, '_blank', 'noopener,noreferrer')}
                   className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
                   aria-label="YouTube"
                 >
                   <Youtube className="w-5 h-5" />
-                </a>
+                </button>
               ) : !trainer && (
-                <a
-                  href="https://youtube.com/@trainu"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={() => window.open('https://youtube.com/@trainu', '_blank', 'noopener,noreferrer')}
                   className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
                   aria-label="YouTube"
                 >
                   <Youtube className="w-5 h-5" />
-                </a>
+                </button>
               )}
               {(trainer?.contact?.email || !trainer) && (
                 <a

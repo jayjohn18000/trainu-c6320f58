@@ -58,5 +58,14 @@ export function getThemeVariables(
     "--popover-foreground": bg.foreground,
     "--secondary": bg.muted,
     "--secondary-foreground": bg.foreground,
+    // Dynamic gradients and shadows based on primary color
+    "--gradient-primary": `linear-gradient(135deg, hsl(${primary.hsl}), hsl(${primary.hsl} / 0.8))`,
+    "--shadow-glow": `0 0 40px -8px hsl(${primary.hsl} / 0.3)`,
+    "--shadow-button": `0 4px 24px -4px hsl(${primary.hsl} / 0.4)`,
+    "--shadow-glow-intense": `0 0 60px -8px hsl(${primary.hsl} / 0.5)`,
+    "--shadow-elevated": `0 8px 40px -8px hsl(${primary.hsl} / 0.15)`,
+    "--primary-glow": primary.hsl,
+    "--sidebar-primary": primary.hsl,
+    "--sidebar-ring": primary.hsl,
   };
 }
