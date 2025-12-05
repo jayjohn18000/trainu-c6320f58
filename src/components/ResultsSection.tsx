@@ -34,8 +34,10 @@ const steps = [
 ];
 
 const ResultsSection = ({ trainer }: ResultsSectionProps) => {
-  // Use the "Client Results" image (index 1 from gallery)
-  const resultsImage = trainer.galleryImageUrls[1] || trainer.galleryImageUrls[0];
+  // Use the "Client Results" image (index 1 from gallery) or profile photo
+  const galleryImages = trainer.trainer.galleryImageUrls || [];
+  const resultsImage = galleryImages[1] || galleryImages[0] || trainer.trainer.profilePhotoUrl;
+  const bookingLink = trainer.social.bookingLink || trainer.hero.ctaPrimaryLink;
 
   return (
     <section id="results" className="py-20 md:py-32 bg-background">
@@ -55,7 +57,7 @@ const ResultsSection = ({ trainer }: ResultsSectionProps) => {
 
             {/* CTA Button */}
             <a
-              href={trainer.primaryCTALink}
+              href={bookingLink}
               className="group inline-flex items-center gap-3 border-2 border-primary text-primary px-6 py-3 rounded-xl font-semibold hover:bg-primary hover:text-primary-foreground transition-all duration-300 mb-12"
             >
               Book Your Free Call

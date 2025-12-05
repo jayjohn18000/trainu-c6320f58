@@ -6,6 +6,8 @@ interface MobileBottomBarProps {
 }
 
 const MobileBottomBar = ({ trainer }: MobileBottomBarProps) => {
+  const bookingLink = trainer.social.bookingLink || trainer.hero.ctaPrimaryLink;
+
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 sm:hidden bg-card/95 backdrop-blur-xl border-t border-border/30 px-4 py-3">
       <div className="flex items-center justify-between gap-3">
@@ -13,11 +15,11 @@ const MobileBottomBar = ({ trainer }: MobileBottomBarProps) => {
         <div className="flex items-center gap-2 min-w-0">
           <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
             <span className="text-xs font-bold text-primary">
-              {trainer.fullName.split(" ").map(n => n[0]).join("")}
+              {trainer.trainer.fullName.split(" ").map(n => n[0]).join("")}
             </span>
           </div>
           <span className="text-sm font-medium text-foreground truncate">
-            {trainer.brandName}
+            {trainer.trainer.businessName}
           </span>
         </div>
 
@@ -34,7 +36,7 @@ const MobileBottomBar = ({ trainer }: MobileBottomBarProps) => {
             </a>
           )}
           <a
-            href={trainer.primaryCTALink}
+            href={bookingLink}
             className="flex items-center gap-2 bg-gradient-primary text-primary-foreground px-4 py-2.5 rounded-xl font-semibold text-sm shadow-button"
           >
             <Calendar className="w-4 h-4" />

@@ -1,67 +1,107 @@
 {
   "slug": "coach-demo",
-  "fullName": "Ava Johnson",
-  "brandName": "AvaFit Coaching",
-  "niche": "Women's Strength & Conditioning",
-  "location": "Chicago, IL",
-  "heroHeadline": "Build Strength. Gain Confidence.",
-  "heroSubheadline": "Online strength coaching for women who want to look and feel incredible.",
-  "primaryCTA": "Start Your Free Consultation",
-  "primaryCTALink": "https://api.leadconnectorhq.com/widget/booking/mtXIZ2paE6umxArw3BP1",
-  "aboutMe": "I'm Ava, a strength and conditioning coach specializing in helping women build confidence in and out of the gym. My coaching blends structured progressive overload, habit development, and mindset training so you can unlock your strongest self. Whether you're a beginner or ready to advance, we'll build a clear, sustainable plan together.",
-  "heroImageUrl": "/images/demo-hero.png",
-  "galleryImageUrls": [
-    "/images/gallery1.webp",
-    "/images/gallery2.webp",
-    "/images/gallery3.webp"
-  ],
+  "status": "generated",
+
+  "trainer": {
+    "fullName": "Ava Johnson",
+    "businessName": "AvaFit Coaching",
+    "location": "Chicago, IL",
+    "specialty": "Women's Strength & Conditioning",
+    "bio": "I'm Ava, a strength and conditioning coach specializing in helping women build confidence in and out of the gym. My coaching blends structured progressive overload, habit development, and mindset training so you can unlock your strongest self. Whether you're a beginner or ready to advance, we'll build a clear, sustainable plan together.",
+    "profilePhotoUrl": "/images/demo-hero.png",
+    "galleryImageUrls": [
+      "/images/gallery1.webp",
+      "/images/gallery2.webp",
+      "/images/gallery3.webp"
+    ]
+  },
+
+  "branding": {
+    "theme": "dark"
+  },
+
+  "hero": {
+    "headline": "Build Strength. Gain Confidence.",
+    "subheadline": "Online strength coaching for women who want to look and feel incredible.",
+    "ctaPrimaryLabel": "Start Your Free Consultation",
+    "ctaPrimaryLink": "https://api.leadconnectorhq.com/widget/booking/mtXIZ2paE6umxArw3BP1",
+    "ctaSecondaryLabel": "View Programs",
+    "ctaSecondaryLink": "#programs",
+    "backgroundImageUrl": "/images/demo-hero.png"
+  },
+
   "social": {
     "instagram": "https://instagram.com/example",
     "tiktok": "",
-    "youtube": ""
+    "youtube": "",
+    "bookingLink": "https://api.leadconnectorhq.com/widget/booking/mtXIZ2paE6umxArw3BP1"
   },
+
   "programs": [
     {
       "id": "p1",
-      "name": "12-Week Strength Transformation",
-      "shortTagline": "Build lean muscle & develop unstoppable confidence.",
-      "pricePerMonth": "$249 / month",
-      "bulletPoints": [
-        "Customized training plan",
-        "Weekly form checks",
-        "Nutrition guidance",
-        "Habit tracking & check-ins"
-      ],
-      "isFeatured": true
+      "title": "12-Week Strength Transformation",
+      "price": "249",
+      "priceLabel": "$249 / month",
+      "description": "Build lean muscle & develop unstoppable confidence with customized training, weekly form checks, nutrition guidance, and habit tracking.",
+      "isPrimary": true
     },
     {
       "id": "p2",
-      "name": "Busy Professional Program",
-      "shortTagline": "Strength coaching designed for tight schedules.",
-      "pricePerMonth": "$199 / month",
-      "bulletPoints": [
-        "3–4 day training split",
-        "Time-efficient workouts",
-        "Lifestyle-first planning"
-      ]
+      "title": "Busy Professional Program",
+      "price": "199",
+      "priceLabel": "$199 / month",
+      "description": "Strength coaching designed for tight schedules with 3–4 day training splits and time-efficient workouts.",
+      "isPrimary": false
     },
     {
       "id": "p3",
-      "name": "Online Coaching Lite",
-      "shortTagline": "A starter plan for beginners.",
-      "pricePerMonth": "$129 / month",
-      "bulletPoints": [
-        "Beginner-friendly routines",
-        "Monthly check-ins",
-        "Foundational movement coaching"
-      ]
+      "title": "Online Coaching Lite",
+      "price": "129",
+      "priceLabel": "$129 / month",
+      "description": "A starter plan for beginners with foundational movement coaching and monthly check-ins.",
+      "isPrimary": false
     }
   ],
-  "testimonialQuote": "I used to feel drained and frustrated no matter how much I tried. Ava helped me reconnect with my body and rebuild strength without burnout. For the first time, I actually enjoy moving again — and the changes haven't just been physical, they've been mental too.",
-  "testimonialName": "Sophie Lammers",
-  "testimonialRole": "12-Week Transformation Program",
-  "beforeImageUrl": "/images/before.png",
-  "afterImageUrl": "/images/after.png",
-  "contactEmail": "hello@avafit.com",
-  "contactPhone": ""
+
+  "results": {
+    "beforeAfter": [
+      {
+        "id": "ba-1",
+        "beforeImageUrl": "/images/before.png",
+        "afterImageUrl": "/images/after.png",
+        "label": "12 weeks"
+      }
+    ]
+  },
+
+  "testimonials": [
+    {
+      "id": "t-1",
+      "quote": "I used to feel drained and frustrated no matter how much I tried. Ava helped me reconnect with my body and rebuild strength without burnout. For the first time, I actually enjoy moving again — and the changes haven't just been physical, they've been mental too.",
+      "name": "Sophie Lammers",
+      "subtitle": "12-Week Transformation Program"
+    }
+  ],
+
+  "preferences": {
+    "coachingStyle": "Online Only",
+    "wantsCustomDomain": false,
+    "wantsSmsAutomations": false,
+    "wantsAiAssistant": false,
+    "wantsCourses": false,
+    "wantsClientApp": false
+  },
+
+  "contact": {
+    "email": "hello@avafit.com",
+    "phone": ""
+  },
+
+  "meta": {
+    "createdAt": "2025-01-01T00:00:00Z",
+    "updatedAt": "2025-01-01T00:00:00Z",
+    "sourceSubmissionId": null,
+    "notes": "Demo trainer profile"
+  }
 }

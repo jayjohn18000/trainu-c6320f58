@@ -55,53 +55,95 @@ serve(async (req) => {
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "");
 
-    // Build trainer JSON following the existing schema
+    const now = new Date().toISOString();
+
+    // Build trainer JSON following the new nested schema
     const trainerJson = {
       slug,
-      fullName: submission.full_name,
-      brandName: submission.business_name,
-      niche: submission.specialty,
-      location: submission.location,
+      status: "generated",
 
-      heroHeadline: `Transform Your Life with ${submission.full_name}`,
-      heroSubheadline: submission.bio || `Expert ${submission.specialty} coaching to help you reach your goals.`,
+      trainer: {
+        fullName: submission.full_name,
+        businessName: submission.business_name,
+        location: submission.location,
+        specialty: submission.specialty,
+        bio: submission.bio,
+        profilePhotoUrl: submission.profile_photo_url || "/images/demo-hero.png",
+        galleryImageUrls: [
+          submission.profile_photo_url || "/images/gallery1.webp",
+        ].filter(Boolean),
+      },
 
-      primaryCTA: "Book Consultation",
-      primaryCTALink: submission.booking_link || "#contact",
+      branding: {
+        theme: "dark",
+      },
 
-      aboutMe: submission.bio,
-
-      heroImageUrl: submission.profile_photo_url || "/images/demo-hero.png",
-      galleryImageUrls: [
-        submission.profile_photo_url || "/images/gallery1.webp",
-      ].filter(Boolean),
+      hero: {
+        headline: `Transform Your Life with ${submission.full_name.split(" ")[0]}`,
+        subheadline: submission.bio || `Expert ${submission.specialty} coaching to help you reach your goals.`,
+        ctaPrimaryLabel: "Book Consultation",
+        ctaPrimaryLink: submission.booking_link || "#contact",
+        ctaSecondaryLabel: "View Programs",
+        ctaSecondaryLink: "#programs",
+        backgroundImageUrl: submission.profile_photo_url || "/images/demo-hero.png",
+      },
 
       social: {
         instagram: submission.instagram_url || undefined,
         tiktok: submission.tiktok_url || undefined,
         youtube: submission.youtube_url || undefined,
+        bookingLink: submission.booking_link || undefined,
       },
 
       programs: programs.map((p: any, index: number) => ({
         id: `program-${index + 1}`,
         title: p.title || `Program ${index + 1}`,
-        price: p.price || "Contact for pricing",
+        price: p.price || "Contact",
+        priceLabel: p.price ? `$${p.price} / month` : "Contact for pricing",
         description: p.description || "",
-        features: [],
-        ctaText: "Learn More",
-        ctaLink: submission.booking_link || "#contact",
+        isPrimary: index === 0,
       })),
 
-      testimonialQuote: submission.testimonial_quote || undefined,
-      testimonialName: submission.testimonial_name || undefined,
-      testimonialRole: "Client",
-      beforeImageUrl: submission.before_photo_url || undefined,
-      afterImageUrl: submission.after_photo_url || undefined,
+      results: {
+        beforeAfter: submission.before_photo_url && submission.after_photo_url
+          ? [{
+              id: "ba-1",
+              beforeImageUrl: submission.before_photo_url,
+              afterImageUrl: submission.after_photo_url,
+              label: "Transformation",
+            }]
+          : [],
+      },
 
-      contactEmail: submission.email,
-      contactPhone: submission.phone || undefined,
+      testimonials: submission.testimonial_quote
+        ? [{
+            id: "t-1",
+            quote: submission.testimonial_quote,
+            name: submission.testimonial_name || "Client",
+            subtitle: "Coaching Client",
+          }]
+        : [],
 
-      themeOverride: undefined,
+      preferences: {
+        coachingStyle: submission.coaching_style || undefined,
+        wantsCustomDomain: submission.wants_custom_domain || false,
+        wantsSmsAutomations: submission.wants_sms_automations || false,
+        wantsAiAssistant: submission.wants_ai_assistant || false,
+        wantsCourses: submission.wants_courses || false,
+        wantsClientApp: submission.wants_client_app || false,
+      },
+
+      contact: {
+        email: submission.email,
+        phone: submission.phone || undefined,
+      },
+
+      meta: {
+        createdAt: submission.created_at || now,
+        updatedAt: now,
+        sourceSubmissionId: submission.id,
+        notes: null,
+      },
     };
 
     // Save to storage bucket
@@ -122,6 +164,12 @@ serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    // Update submission status to "generated"
+    await supabase
+      .from("trainer_submissions")
+      .update({ status: "generated" })
+      .eq("id", submissionId);
 
     console.log(`Successfully generated JSON: ${fileName}`);
 

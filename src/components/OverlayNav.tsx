@@ -66,11 +66,11 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
               className="flex flex-col"
             >
               <span className="text-lg md:text-xl font-bold text-foreground leading-tight">
-                {trainer?.brandName || "TrainU"}
+                {trainer?.trainer.businessName || "TrainU"}
               </span>
               {trainer && (
                 <span className="text-xs text-foreground/60 hidden sm:block">
-                  {trainer.niche}
+                  {trainer.trainer.specialty}
                 </span>
               )}
             </Link>
@@ -79,7 +79,7 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
           {/* Right: Primary CTA */}
           {trainer ? (
             <a
-              href={trainer.primaryCTALink}
+              href={trainer.hero.ctaPrimaryLink}
               className="hidden sm:inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-5 py-2.5 rounded-xl font-semibold text-sm shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
             >
               Book Consultation
@@ -123,15 +123,15 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
           <div className="flex items-start justify-between p-6 border-b border-border/20">
             <div className="flex flex-col">
               <span className="text-2xl font-bold text-foreground">
-                {trainer?.brandName || "TrainU"}
+                {trainer?.trainer.businessName || "TrainU"}
               </span>
               {trainer ? (
                 <>
                   <span className="text-sm text-foreground/70 mt-1">
-                    {trainer.niche}
+                    {trainer.trainer.specialty}
                   </span>
                   <span className="text-xs text-foreground/50 mt-0.5">
-                    📍 {trainer.location}
+                    📍 {trainer.trainer.location}
                   </span>
                 </>
               ) : (
@@ -175,11 +175,11 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
           {trainer ? (
             <div className="px-6 mt-4">
               <a
-                href={trainer.primaryCTALink}
+                href={trainer.hero.ctaPrimaryLink}
                 onClick={() => setIsOpen(false)}
                 className="block w-full text-center bg-gradient-primary text-primary-foreground px-6 py-4 rounded-xl font-semibold text-lg shadow-button hover:scale-[1.02] transition-transform"
               >
-                {trainer.primaryCTA}
+                {trainer.hero.ctaPrimaryLabel}
               </a>
             </div>
           ) : (
@@ -240,9 +240,9 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
                   <Youtube className="w-5 h-5" />
                 </a>
               )}
-              {(trainer?.contactEmail || !trainer) && (
+              {(trainer?.contact?.email || !trainer) && (
                 <a
-                  href={trainer ? `mailto:${trainer.contactEmail}` : "mailto:hello@trainu.us"}
+                  href={trainer ? `mailto:${trainer.contact.email}` : "mailto:hello@trainu.us"}
                   className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
                   aria-label="Email"
                 >

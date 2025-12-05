@@ -17,6 +17,8 @@ const ContactSection = ({ trainer }: ContactSectionProps) => {
     message: "",
   });
 
+  const bookingLink = trainer.social.bookingLink || trainer.hero.ctaPrimaryLink;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // For static site, open mailto link with form data
@@ -24,7 +26,7 @@ const ContactSection = ({ trainer }: ContactSectionProps) => {
     const body = encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
     );
-    window.location.href = `mailto:${trainer.contactEmail}?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:${trainer.contact.email}?subject=${subject}&body=${body}`;
     toast({
       title: "Opening email client",
       description: "Your message is ready to send.",
@@ -68,7 +70,7 @@ const ContactSection = ({ trainer }: ContactSectionProps) => {
               </a>
             ) : (
               <a
-                href={`mailto:${trainer.contactEmail}`}
+                href={`mailto:${trainer.contact.email}`}
                 className="text-primary hover:text-primary-glow font-medium text-sm transition-colors"
               >
                 Send an Email →
@@ -86,7 +88,7 @@ const ContactSection = ({ trainer }: ContactSectionProps) => {
               Book a free consultation call to discuss your goals.
             </p>
             <a
-              href={trainer.primaryCTALink}
+              href={bookingLink}
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:text-primary-glow font-medium text-sm transition-colors"

@@ -18,11 +18,11 @@ const Footer = ({ trainer }: FooterProps) => {
           {/* Brand */}
           <div className="text-center md:text-left">
             <p className="text-lg font-semibold text-foreground mb-1">
-              {trainer?.brandName || "TrainU Website Factory"}
+              {trainer?.trainer.businessName || "TrainU Website Factory"}
             </p>
             <p className="text-sm text-foreground/60">
               {trainer
-                ? `© ${currentYear} ${trainer.fullName}. All rights reserved.`
+                ? `© ${currentYear} ${trainer.trainer.fullName}. All rights reserved.`
                 : `© ${currentYear} TrainU. All rights reserved.`}
             </p>
           </div>
@@ -31,11 +31,11 @@ const Footer = ({ trainer }: FooterProps) => {
           {trainer && (
             <div className="flex items-center gap-4">
               <a
-                href={`mailto:${trainer.contactEmail}`}
+                href={`mailto:${trainer.contact.email}`}
                 className="flex items-center gap-2 text-sm text-foreground/60 hover:text-primary transition-colors"
               >
                 <Mail className="w-4 h-4" />
-                <span className="hidden sm:inline">{trainer.contactEmail}</span>
+                <span className="hidden sm:inline">{trainer.contact.email}</span>
               </a>
               {trainer.social.instagram && (
                 <a

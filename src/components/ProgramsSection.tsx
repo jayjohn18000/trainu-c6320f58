@@ -1,4 +1,4 @@
-import { TrainerProgram } from "@/types/TrainerProgram";
+import { TrainerProgram } from "@/types/TrainerProfile";
 import { Check, Sparkles, ArrowRight } from "lucide-react";
 
 interface ProgramsSectionProps {
@@ -28,14 +28,14 @@ const ProgramsSection = ({ programs }: ProgramsSectionProps) => {
             <div
               key={program.id}
               className={`relative group rounded-2xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-glow flex flex-col h-full ${
-                program.isFeatured
+                program.isPrimary
                   ? "bg-gradient-card border-2 border-primary/30 shadow-glow"
                   : "bg-card border border-card-border hover:border-primary/20"
               }`}
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               {/* Featured Badge */}
-              {program.isFeatured && (
+              {program.isPrimary && (
                 <div className="absolute -top-3 left-6 inline-flex items-center gap-1.5 bg-gradient-primary text-primary-foreground px-4 py-1.5 rounded-full text-sm font-medium">
                   <Sparkles className="w-4 h-4" />
                   Most Popular
@@ -45,37 +45,27 @@ const ProgramsSection = ({ programs }: ProgramsSectionProps) => {
               {/* Program Content */}
               <div className="pt-2 flex flex-col flex-1">
                 <h3 className="text-xl md:text-2xl font-bold text-foreground mb-2">
-                  {program.name}
+                  {program.title}
                 </h3>
                 <p className="text-foreground/60 mb-6">
-                  {program.shortTagline}
+                  {program.description}
                 </p>
 
                 {/* Price */}
                 <div className="mb-6">
                   <span className="text-3xl md:text-4xl font-bold text-foreground">
-                    {program.pricePerMonth.split("/")[0]}
+                    ${program.price}
                   </span>
                   <span className="text-foreground/60">
-                    /{program.pricePerMonth.split("/")[1] || "month"}
+                    /{program.priceLabel.split("/")[1] || "month"}
                   </span>
                 </div>
-
-                {/* Features */}
-                <ul className="space-y-3 flex-1">
-                  {program.bulletPoints.map((point, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                      <span className="text-foreground/70">{point}</span>
-                    </li>
-                  ))}
-                </ul>
 
                 {/* CTA Button - Full Width */}
                 <a
                   href="#contact"
-                  className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl font-semibold transition-all duration-300 mt-8 ${
-                    program.isFeatured
+                  className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl font-semibold transition-all duration-300 mt-auto ${
+                    program.isPrimary
                       ? "bg-gradient-primary text-primary-foreground shadow-button hover:shadow-glow hover:scale-[1.02]"
                       : "bg-accent text-foreground border border-border hover:border-primary/30 hover:bg-accent/80"
                   }`}

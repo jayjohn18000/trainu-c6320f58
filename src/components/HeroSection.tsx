@@ -11,8 +11,8 @@ const HeroSection = ({ trainer }: HeroSectionProps) => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src={trainer.heroImageUrl}
-          alt={trainer.brandName}
+          src={trainer.hero.backgroundImageUrl}
+          alt={trainer.trainer.businessName}
           className="w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/30" />
@@ -28,10 +28,10 @@ const HeroSection = ({ trainer }: HeroSectionProps) => {
             style={{ animationDelay: "0.05s", animationFillMode: "forwards" }}
           >
             <p className="text-primary font-semibold tracking-wide mb-2">
-              {trainer.fullName}
+              {trainer.trainer.fullName}
             </p>
             <p className="text-sm text-foreground/60 uppercase tracking-widest mb-6">
-              {trainer.niche} • {trainer.location}
+              {trainer.trainer.specialty} • {trainer.trainer.location}
             </p>
           </div>
 
@@ -59,11 +59,11 @@ const HeroSection = ({ trainer }: HeroSectionProps) => {
             className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] mb-6 animate-fade-up opacity-0" 
             style={{ animationDelay: "0.15s", animationFillMode: "forwards" }}
           >
-            <span className="text-foreground">{trainer.heroHeadline.split(".")[0]}.</span>
-            {trainer.heroHeadline.split(".")[1] && (
+            <span className="text-foreground">{trainer.hero.headline.split(".")[0]}.</span>
+            {trainer.hero.headline.split(".")[1] && (
               <>
                 <br />
-                <span className="text-gradient">{trainer.heroHeadline.split(".")[1].trim()}.</span>
+                <span className="text-gradient">{trainer.hero.headline.split(".")[1].trim()}.</span>
               </>
             )}
           </h1>
@@ -73,7 +73,7 @@ const HeroSection = ({ trainer }: HeroSectionProps) => {
             className="text-lg md:text-xl text-foreground/70 mb-8 leading-relaxed max-w-xl animate-fade-up opacity-0" 
             style={{ animationDelay: "0.2s", animationFillMode: "forwards" }}
           >
-            {trainer.heroSubheadline}
+            {trainer.hero.subheadline}
           </p>
 
           {/* CTA */}
@@ -82,18 +82,20 @@ const HeroSection = ({ trainer }: HeroSectionProps) => {
             style={{ animationDelay: "0.25s", animationFillMode: "forwards" }}
           >
             <a
-              href={trainer.primaryCTALink}
+              href={trainer.hero.ctaPrimaryLink}
               className="group inline-flex items-center justify-center gap-3 bg-gradient-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
             >
-              {trainer.primaryCTA}
+              {trainer.hero.ctaPrimaryLabel}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
-            <a 
-              href="#programs" 
-              className="text-foreground/60 hover:text-primary transition-colors font-medium"
-            >
-              View Programs →
-            </a>
+            {trainer.hero.ctaSecondaryLabel && trainer.hero.ctaSecondaryLink && (
+              <a 
+                href={trainer.hero.ctaSecondaryLink} 
+                className="text-foreground/60 hover:text-primary transition-colors font-medium"
+              >
+                {trainer.hero.ctaSecondaryLabel} →
+              </a>
+            )}
           </div>
         </div>
       </div>

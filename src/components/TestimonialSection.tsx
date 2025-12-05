@@ -7,7 +7,11 @@ interface TestimonialSectionProps {
 }
 
 const TestimonialSection = ({ trainer }: TestimonialSectionProps) => {
-  if (!trainer.testimonialQuote) return null;
+  // Get first testimonial and first before/after result
+  const testimonial = trainer.testimonials[0];
+  const beforeAfter = trainer.results.beforeAfter[0];
+
+  if (!testimonial) return null;
 
   return (
     <section id="testimonials" className="py-20 md:py-32 bg-background relative overflow-hidden">
@@ -36,14 +40,14 @@ const TestimonialSection = ({ trainer }: TestimonialSectionProps) => {
               {/* Avatar and info */}
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-full bg-gradient-primary flex items-center justify-center text-xl font-bold text-primary-foreground ring-4 ring-primary/20">
-                  {trainer.testimonialName?.charAt(0) || "C"}
+                  {testimonial.name.charAt(0)}
                 </div>
                 <div>
                   <p className="font-semibold text-foreground">
-                    {trainer.testimonialName}
+                    {testimonial.name}
                   </p>
                   <p className="text-sm text-foreground/60">
-                    {trainer.testimonialRole}
+                    {testimonial.subtitle}
                   </p>
                 </div>
               </div>
@@ -57,20 +61,22 @@ const TestimonialSection = ({ trainer }: TestimonialSectionProps) => {
 
               {/* Quote */}
               <blockquote className="text-lg text-foreground/80 leading-relaxed">
-                "{trainer.testimonialQuote}"
+                "{testimonial.quote}"
               </blockquote>
             </div>
           </div>
 
           {/* Right side - Before/After Slider */}
-          <div className="lg:pl-8">
-            <BeforeAfterSlider
-              beforeImage={trainer.beforeImageUrl || "/images/before.png"}
-              afterImage={trainer.afterImageUrl || "/images/after.png"}
-              beforeLabel="Before"
-              afterLabel="After"
-            />
-          </div>
+          {beforeAfter && (
+            <div className="lg:pl-8">
+              <BeforeAfterSlider
+                beforeImage={beforeAfter.beforeImageUrl}
+                afterImage={beforeAfter.afterImageUrl}
+                beforeLabel="Before"
+                afterLabel="After"
+              />
+            </div>
+          )}
         </div>
       </div>
     </section>
