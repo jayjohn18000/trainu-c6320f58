@@ -35,6 +35,8 @@ interface FormState {
   instagramUrl: string;
   tiktokUrl: string;
   youtubeUrl: string;
+  xUrl: string;
+  facebookUrl: string;
   bookingLink: string;
   testimonialQuote: string;
   testimonialName: string;
@@ -87,6 +89,8 @@ const TrainerWebsiteForm: React.FC = () => {
     instagramUrl: "",
     tiktokUrl: "",
     youtubeUrl: "",
+    xUrl: "",
+    facebookUrl: "",
     bookingLink: "",
     testimonialQuote: "",
     testimonialName: "",
@@ -688,6 +692,30 @@ const TrainerWebsiteForm: React.FC = () => {
                 onChange={handleChange}
                 className={`${inputBaseClass} ${inputNormalClass}`}
                 placeholder="https://youtube.com/@yourchannel"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-foreground/90">X (Twitter) URL</label>
+              <input
+                type="url"
+                name="xUrl"
+                value={form.xUrl}
+                onChange={handleChange}
+                className={`${inputBaseClass} ${inputNormalClass}`}
+                placeholder="https://twitter.com/yourhandle"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-foreground/90">Facebook URL</label>
+              <input
+                type="url"
+                name="facebookUrl"
+                value={form.facebookUrl}
+                onChange={handleChange}
+                className={`${inputBaseClass} ${inputNormalClass}`}
+                placeholder="https://facebook.com/yourpage"
               />
             </div>
           </div>

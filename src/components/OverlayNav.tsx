@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { X, Menu, Instagram, Youtube, Mail, Home, Calendar } from "lucide-react";
+import { X, Menu, Instagram, Youtube, Mail, Home, Calendar, Twitter, Facebook } from "lucide-react";
 import { TrainerProfile } from "@/types/TrainerProfile";
 
 interface OverlayNavProps {
@@ -247,49 +247,77 @@ const OverlayNav = ({ trainer, isDemo = false }: OverlayNavProps) => {
           {/* Social Icons */}
           <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-border/20">
             <p className="text-xs text-foreground/50 uppercase tracking-wider mb-4">Connect</p>
-            <div className="flex items-center gap-3">
-              {trainer?.social?.instagram ? (
-                <button
-                  onClick={() => window.open(trainer.social.instagram, '_blank', 'noopener,noreferrer')}
-                  className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="w-5 h-5" />
-                </button>
-              ) : !trainer && (
-                <button
-                  onClick={() => window.open('https://instagram.com/trainu', '_blank', 'noopener,noreferrer')}
-                  className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="w-5 h-5" />
-                </button>
-              )}
-              {trainer?.social?.youtube ? (
-                <button
-                  onClick={() => window.open(trainer.social.youtube, '_blank', 'noopener,noreferrer')}
-                  className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
-                  aria-label="YouTube"
-                >
-                  <Youtube className="w-5 h-5" />
-                </button>
-              ) : !trainer && (
-                <button
-                  onClick={() => window.open('https://youtube.com/@trainu', '_blank', 'noopener,noreferrer')}
-                  className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
-                  aria-label="YouTube"
-                >
-                  <Youtube className="w-5 h-5" />
-                </button>
-              )}
-              {(trainer?.contact?.email || !trainer) && (
-                <a
-                  href={trainer ? `mailto:${trainer.contact.email}` : "mailto:hello@trainu.us"}
-                  className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
-                  aria-label="Email"
-                >
-                  <Mail className="w-5 h-5" />
-                </a>
+            <div className="flex items-center gap-3 flex-wrap">
+              {trainer ? (
+                <>
+                  {trainer.social?.instagram && (
+                    <button
+                      onClick={() => window.open(trainer.social.instagram, '_blank', 'noopener,noreferrer')}
+                      className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                      aria-label="Instagram"
+                    >
+                      <Instagram className="w-5 h-5" />
+                    </button>
+                  )}
+                  {trainer.social?.youtube && (
+                    <button
+                      onClick={() => window.open(trainer.social.youtube, '_blank', 'noopener,noreferrer')}
+                      className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                      aria-label="YouTube"
+                    >
+                      <Youtube className="w-5 h-5" />
+                    </button>
+                  )}
+                  {trainer.contact?.email && (
+                    <a
+                      href={`mailto:${trainer.contact.email}`}
+                      className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                      aria-label="Email"
+                    >
+                      <Mail className="w-5 h-5" />
+                    </a>
+                  )}
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => window.open('https://instagram.com/official.trainu', '_blank', 'noopener,noreferrer')}
+                    className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                    aria-label="Instagram"
+                  >
+                    <Instagram className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => window.open('https://twitter.com/official_trainu', '_blank', 'noopener,noreferrer')}
+                    className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                    aria-label="X (Twitter)"
+                  >
+                    <Twitter className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => window.open('https://tiktok.com/@trainu8', '_blank', 'noopener,noreferrer')}
+                    className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                    aria-label="TikTok"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => window.open('https://facebook.com/TrainU', '_blank', 'noopener,noreferrer')}
+                    className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                    aria-label="Facebook"
+                  >
+                    <Facebook className="w-5 h-5" />
+                  </button>
+                  <a
+                    href="mailto:hello@trainu.us"
+                    className="flex items-center gap-2 p-3 rounded-xl bg-muted/50 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                    aria-label="Email"
+                  >
+                    <Mail className="w-5 h-5" />
+                  </a>
+                </>
               )}
             </div>
             <Link 
