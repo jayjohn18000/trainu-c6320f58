@@ -1,5 +1,6 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { Resend } from "https://esm.sh/resend@2.0.0";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -115,6 +116,42 @@ serve(async (req) => {
     }
 
     console.log("Submission saved successfully:", data.id);
+
+    // Send confirmation email
+    const resendApiKey = Deno.env.get('RESEND_API_KEY');
+    if (resendApiKey) {
+      try {
+        const resend = new Resend(resendApiKey);
+        const emailResponse = await resend.emails.send({
+          from: "TrainU <onboarding@resend.dev>",
+          to: [body.email],
+          subject: "We received your website request!",
+          html: `
+            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+              <h1 style="color: #ff5f26; margin-bottom: 24px;">Thanks for claiming your free trainer website, ${body.fullName}!</h1>
+              <p style="color: #333; font-size: 16px; line-height: 1.6;">We've received your submission and our team is already working on your professional trainer website.</p>
+              <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 24px 0;">
+                <h3 style="margin-top: 0; color: #333;">What happens next:</h3>
+                <ul style="color: #555; line-height: 1.8;">
+                  <li>Our team will review your submission within 24 hours</li>
+                  <li>We'll create your personalized trainer website</li>
+                  <li>You'll receive a preview link to review and approve</li>
+                  <li>Once approved, your site goes live!</li>
+                </ul>
+              </div>
+              <p style="color: #333; font-size: 16px;">In the meantime, feel free to reach out if you have any questions.</p>
+              <p style="color: #888; font-size: 14px; margin-top: 32px;">— The TrainU Team</p>
+            </div>
+          `,
+        });
+        console.log("Confirmation email sent:", emailResponse);
+      } catch (emailError) {
+        console.error("Failed to send confirmation email:", emailError);
+        // Don't fail the request if email fails
+      }
+    } else {
+      console.warn("RESEND_API_KEY not configured, skipping confirmation email");
+    }
 
     return new Response(
       JSON.stringify({ 
