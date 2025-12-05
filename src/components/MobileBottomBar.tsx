@@ -1,11 +1,13 @@
+import { Link } from "react-router-dom";
 import { TrainerProfile } from "@/types/TrainerProfile";
-import { Instagram, Calendar } from "lucide-react";
+import { Instagram, Calendar, ArrowRight } from "lucide-react";
 
 interface MobileBottomBarProps {
   trainer: TrainerProfile;
+  isDemo?: boolean;
 }
 
-const MobileBottomBar = ({ trainer }: MobileBottomBarProps) => {
+const MobileBottomBar = ({ trainer, isDemo = false }: MobileBottomBarProps) => {
   const bookingLink = trainer.social.bookingLink || trainer.hero.ctaPrimaryLink;
 
   return (
@@ -23,24 +25,48 @@ const MobileBottomBar = ({ trainer }: MobileBottomBarProps) => {
           </span>
         </div>
 
-        {/* Actions */}
+        {/* Actions - Different for demo vs regular */}
         <div className="flex items-center gap-2">
-          {trainer.social.instagram && (
-            <button
-              onClick={() => window.open(trainer.social.instagram, '_blank', 'noopener,noreferrer')}
-              className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/70 hover:text-primary transition-colors"
-              aria-label="Instagram"
-            >
-              <Instagram className="w-5 h-5" />
-            </button>
+          {isDemo ? (
+            <>
+              {/* Demo: Calendar as secondary icon button */}
+              <a
+                href={bookingLink}
+                className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/70 hover:text-primary transition-colors"
+                aria-label="Book consultation"
+              >
+                <Calendar className="w-5 h-5" />
+              </a>
+              {/* Demo: Primary CTA to claim form */}
+              <Link
+                to="/claim"
+                className="flex items-center gap-2 bg-gradient-primary text-primary-foreground px-4 py-2.5 rounded-xl font-semibold text-sm shadow-button"
+              >
+                Get My Site
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </>
+          ) : (
+            <>
+              {/* Regular: Original behavior */}
+              {trainer.social.instagram && (
+                <button
+                  onClick={() => window.open(trainer.social.instagram, '_blank', 'noopener,noreferrer')}
+                  className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/70 hover:text-primary transition-colors"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="w-5 h-5" />
+                </button>
+              )}
+              <a
+                href={bookingLink}
+                className="flex items-center gap-2 bg-gradient-primary text-primary-foreground px-4 py-2.5 rounded-xl font-semibold text-sm shadow-button"
+              >
+                <Calendar className="w-4 h-4" />
+                Book
+              </a>
+            </>
           )}
-          <a
-            href={bookingLink}
-            className="flex items-center gap-2 bg-gradient-primary text-primary-foreground px-4 py-2.5 rounded-xl font-semibold text-sm shadow-button"
-          >
-            <Calendar className="w-4 h-4" />
-            Book
-          </a>
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ import TestimonialSection from "@/components/TestimonialSection";
 import ContactSection from "@/components/ContactSection";
 import CTASection from "@/components/CTASection";
 import MobileBottomBar from "@/components/MobileBottomBar";
+import DemoBanner from "@/components/DemoBanner";
 import TrainerThemeProvider from "@/components/TrainerThemeProvider";
 import { useTrainerProfile } from "@/hooks/useTrainerProfile";
 
@@ -19,6 +20,9 @@ const TrainerPage = ({ customSlug }: TrainerPageProps) => {
   const { slug: urlSlug } = useParams<{ slug: string }>();
   const slug = customSlug || urlSlug;
   const { trainer, loading, error } = useTrainerProfile(slug);
+
+  // Determine if this is a demo page
+  const isDemo = slug === "coach-demo";
 
   if (loading) {
     return (
@@ -54,16 +58,17 @@ const TrainerPage = ({ customSlug }: TrainerPageProps) => {
 
   return (
     <TrainerThemeProvider primaryColor={primaryColor} backgroundStyle={backgroundStyle}>
-      <Layout trainer={trainer}>
-        <HeroSection trainer={trainer} />
+      {isDemo && <DemoBanner />}
+      <Layout trainer={trainer} isDemo={isDemo}>
+        <HeroSection trainer={trainer} isDemo={isDemo} />
         <ProgramsSection programs={trainer.programs} />
         <AboutSection trainer={trainer} />
         <ResultsSection trainer={trainer} />
         <TestimonialSection trainer={trainer} />
         <ContactSection trainer={trainer} />
-        <CTASection trainer={trainer} />
+        <CTASection trainer={trainer} isDemo={isDemo} />
       </Layout>
-      <MobileBottomBar trainer={trainer} />
+      <MobileBottomBar trainer={trainer} isDemo={isDemo} />
     </TrainerThemeProvider>
   );
 };
