@@ -5,27 +5,21 @@ const HeroLanding = () => {
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
       {/* Video Background */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-      >
+      <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
         <source src="/videos/hero-bg.mp4" type="video/mp4" />
       </video>
-      
+
       {/* Lightened Overlay - more video visible */}
       <div className="absolute inset-0 bg-background/60" />
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 animate-[pulse_8s_ease-in-out_infinite]" />
-      
+
       {/* Spotlight effect */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-primary/10 blur-[120px] pointer-events-none" />
 
       <div className="container relative z-10 text-center py-20 px-4">
         {/* Eyebrow Badge */}
-        <div 
+        <div
           className="inline-flex items-center gap-2 bg-primary/10 backdrop-blur-sm border border-primary/20 rounded-full px-5 py-2.5 mb-8 opacity-0 animate-fade-up"
           style={{ animationDelay: "0ms", animationFillMode: "forwards" }}
         >
@@ -38,9 +32,9 @@ const HeroLanding = () => {
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-[1.1] mb-6 opacity-0 animate-fade-up max-w-4xl mx-auto"
           style={{ animationDelay: "100ms", animationFillMode: "forwards" }}
         >
-          Become a Professional Trainer
+          Build Your Online Presence
           <br className="hidden sm:block" />
-          <span className="text-gradient"> Online—For Free.</span>
+          <span className="text-gradient"> For Free.</span>
         </h1>
 
         {/* Subheadline */}
@@ -48,7 +42,8 @@ const HeroLanding = () => {
           className="text-base sm:text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto mb-10 opacity-0 animate-fade-up leading-relaxed"
           style={{ animationDelay: "200ms", animationFillMode: "forwards" }}
         >
-          TrainU builds personal trainers a studio-quality website that positions you as a real professional—ready to sell programs, book clients, and grow your brand. No fees. No tech. No barriers.
+          TrainU builds personal trainers a studio-quality website that positions you as a real professional—ready to
+          sell programs, book clients, and grow your brand. No fees. No tech. No barriers.
         </p>
 
         {/* CTAs */}
