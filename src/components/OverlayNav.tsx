@@ -44,7 +44,7 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
         { label: "How It Works", href: "#how-it-works" },
         { label: "What You Get", href: "#what-you-get" },
         { label: "Testimonials", href: "#testimonials" },
-        { label: "Get My Free Site", href: "#claim" },
+        { label: "Get My Free Site", href: "/claim" },
       ];
 
   return (
@@ -184,13 +184,13 @@ const OverlayNav = ({ trainer }: OverlayNavProps) => {
             </div>
           ) : (
             <div className="px-6 mt-4">
-              <a
-                href="#claim"
+              <Link
+                to="/claim"
                 onClick={() => setIsOpen(false)}
                 className="block w-full text-center bg-gradient-primary text-primary-foreground px-6 py-4 rounded-xl font-semibold text-lg shadow-button hover:scale-[1.02] transition-transform"
               >
                 Get My Free Site
-              </a>
+              </Link>
             </div>
           )}
 

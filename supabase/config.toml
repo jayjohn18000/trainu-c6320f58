@@ -1,0 +1,4 @@
+project_id = "ihtffuincksucgewpjhq"
+
+[functions.trainer-intake]
+verify_jwt = false

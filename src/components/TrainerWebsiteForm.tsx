@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 type SpecialtyOption =
   | "Strength Training"
@@ -61,6 +63,7 @@ const specialtyOptions: SpecialtyOption[] = [
 ];
 
 const TrainerWebsiteForm: React.FC = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState<FormState>({
     fullName: "",
     businessName: "",
@@ -148,6 +151,26 @@ const TrainerWebsiteForm: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const uploadFile = async (file: File, folder: string): Promise<string | null> => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${folder}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+    
+    const { error } = await supabase.storage
+      .from('trainer-submissions')
+      .upload(fileName, file);
+
+    if (error) {
+      console.error('File upload error:', error);
+      return null;
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('trainer-submissions')
+      .getPublicUrl(fileName);
+
+    return publicUrl;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitSuccess(false);
@@ -161,57 +184,42 @@ const TrainerWebsiteForm: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const formData = new FormData();
-
-      Object.entries(form).forEach(([key, value]) => {
-        if (typeof value === "boolean") {
-          formData.append(key, value ? "true" : "false");
-        } else {
-          formData.append(key, value ?? "");
-        }
-      });
+      // Upload files first
+      let profilePhotoUrl: string | null = null;
+      let beforePhotoUrl: string | null = null;
+      let afterPhotoUrl: string | null = null;
 
       if (files.profilePhoto) {
-        formData.append("profilePhoto", files.profilePhoto);
+        profilePhotoUrl = await uploadFile(files.profilePhoto, 'profile-photos');
       }
       if (files.beforePhoto) {
-        formData.append("beforePhoto", files.beforePhoto);
+        beforePhotoUrl = await uploadFile(files.beforePhoto, 'before-photos');
       }
       if (files.afterPhoto) {
-        formData.append("afterPhoto", files.afterPhoto);
+        afterPhotoUrl = await uploadFile(files.afterPhoto, 'after-photos');
       }
 
-      // TODO: Wire to actual API endpoint
-      const res = await fetch("/api/trainer-intake", {
-        method: "POST",
-        body: formData,
+      // Call edge function
+      const { data, error } = await supabase.functions.invoke('trainer-intake', {
+        body: {
+          ...form,
+          profilePhotoUrl,
+          beforePhotoUrl,
+          afterPhotoUrl,
+        },
       });
 
-      if (!res.ok) {
-        throw new Error(`Request failed with status ${res.status}`);
+      if (error) {
+        throw new Error(error.message || 'Submission failed');
       }
 
-      setSubmitSuccess(true);
-      setForm((prev) => ({
-        ...prev,
-        program1Title: "",
-        program1Price: "",
-        program1Description: "",
-        program2Title: "",
-        program2Price: "",
-        program2Description: "",
-        program3Title: "",
-        program3Price: "",
-        program3Description: "",
-        testimonialQuote: "",
-        testimonialName: "",
-      }));
-      setFiles({
-        profilePhoto: null,
-        beforePhoto: null,
-        afterPhoto: null,
-      });
-      setErrors({});
+      if (!data?.success) {
+        throw new Error(data?.error || 'Submission failed');
+      }
+
+      // Redirect to success page
+      navigate('/claim/success');
+
     } catch (err: unknown) {
       console.error(err);
       setSubmitError("Something went wrong submitting your info. Please try again.");
