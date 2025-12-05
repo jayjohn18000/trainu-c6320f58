@@ -8,21 +8,26 @@ import TestimonialSection from "@/components/TestimonialSection";
 import ContactSection from "@/components/ContactSection";
 import CTASection from "@/components/CTASection";
 import MobileBottomBar from "@/components/MobileBottomBar";
-import { TrainerProfile } from "@/types/TrainerProfile";
-
-// Import trainer data
-import coachDemoData from "@/data/trainers/coach-demo.json";
-
-// Trainer data registry
-const trainersRegistry: Record<string, TrainerProfile> = {
-  "coach-demo": coachDemoData as TrainerProfile,
-};
+import { useTrainerProfile } from "@/hooks/useTrainerProfile";
 
 const TrainerPage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const trainer = slug ? trainersRegistry[slug] : null;
+  const { trainer, loading, error } = useTrainerProfile(slug);
 
-  if (!trainer) {
+  if (loading) {
+    return (
+      <Layout>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-foreground/60">Loading trainer profile...</p>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error || !trainer) {
     return (
       <Layout>
         <div className="min-h-screen flex items-center justify-center">
