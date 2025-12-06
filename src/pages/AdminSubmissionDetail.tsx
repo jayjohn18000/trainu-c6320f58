@@ -4,7 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Check, X, FileJson, Loader2, ExternalLink, Copy, CheckCheck } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { ArrowLeft, Check, X, FileJson, Loader2, ExternalLink, Copy, CheckCheck, Pencil, Save } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import AdminPasswordGate from "@/components/admin/AdminPasswordGate";
 import DomainManager from "@/components/admin/DomainManager";
@@ -28,18 +32,25 @@ type Submission = {
   instagram_url: string | null;
   tiktok_url: string | null;
   youtube_url: string | null;
+  x_url: string | null;
+  facebook_url: string | null;
   booking_link: string | null;
   testimonial_quote: string | null;
   testimonial_name: string | null;
   before_photo_url: string | null;
   after_photo_url: string | null;
   profile_photo_url: string | null;
+  gallery_photo_urls: string[] | null;
   coaching_style: string | null;
+  custom_hero_title: string | null;
   wants_custom_domain: boolean | null;
   wants_sms_automations: boolean | null;
   wants_ai_assistant: boolean | null;
   wants_courses: boolean | null;
   wants_client_app: boolean | null;
+  wants_website_enhancements: boolean | null;
+  wants_social_media_management: boolean | null;
+  wants_done_for_you: boolean | null;
   primary_color: string | null;
   background_style: string | null;
   status: string | null;
@@ -66,6 +77,11 @@ const AdminSubmissionDetail = () => {
   const [generatedJson, setGeneratedJson] = useState<string | null>(null);
   const [generatedSlug, setGeneratedSlug] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  
+  // Edit mode state
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editData, setEditData] = useState<Partial<Submission>>({});
+  const [saving, setSaving] = useState(false);
 
   const fetchSubmission = useCallback(async (passcode: string) => {
     setLoading(true);
@@ -99,7 +115,10 @@ const AdminSubmissionDetail = () => {
         ...data,
         programs: typeof data.programs === 'string' 
           ? JSON.parse(data.programs) 
-          : data.programs
+          : data.programs,
+        gallery_photo_urls: typeof data.gallery_photo_urls === 'string'
+          ? JSON.parse(data.gallery_photo_urls)
+          : data.gallery_photo_urls
       };
       setSubmission(parsedData as Submission);
       
@@ -196,6 +215,58 @@ const AdminSubmissionDetail = () => {
     setIsAuthenticated(true);
   };
 
+  const enterEditMode = () => {
+    if (!submission) return;
+    setEditData({
+      custom_hero_title: submission.custom_hero_title || "",
+      x_url: submission.x_url || "",
+      facebook_url: submission.facebook_url || "",
+      wants_website_enhancements: submission.wants_website_enhancements || false,
+      wants_social_media_management: submission.wants_social_media_management || false,
+      wants_done_for_you: submission.wants_done_for_you || false,
+      bio: submission.bio || "",
+      specialty: submission.specialty || "",
+      coaching_style: submission.coaching_style || "",
+    });
+    setIsEditMode(true);
+  };
+
+  const cancelEdit = () => {
+    setIsEditMode(false);
+    setEditData({});
+  };
+
+  const saveChanges = async () => {
+    if (!submission || !adminPasscode) return;
+    setSaving(true);
+
+    try {
+      const response = await supabase.functions.invoke("admin-update-submission", {
+        body: { 
+          submissionId: submission.id,
+          updates: editData
+        },
+        headers: {
+          "x-admin-passcode": adminPasscode,
+        },
+      });
+
+      if (response.error) {
+        throw new Error(response.error.message);
+      }
+
+      // Update local state
+      setSubmission({ ...submission, ...editData });
+      setIsEditMode(false);
+      setEditData({});
+      toast({ title: "Changes saved successfully!" });
+    } catch (error) {
+      console.error("Error saving changes:", error);
+      toast({ title: "Error saving changes", variant: "destructive" });
+    }
+    setSaving(false);
+  };
+
   if (!isAuthenticated) {
     return <AdminPasswordGate onSuccess={handleAuthSuccess} />;
   }
@@ -232,12 +303,30 @@ const AdminSubmissionDetail = () => {
             <h1 className="text-3xl font-bold">{submission.full_name}</h1>
             <p className="text-foreground/60">{submission.business_name}</p>
           </div>
-          <Badge
-            variant="outline"
-            className={`text-sm px-4 py-2 ${statusColors[submission.status || "pending"]}`}
-          >
-            {submission.status || "pending"}
-          </Badge>
+          <div className="flex items-center gap-3">
+            <Badge
+              variant="outline"
+              className={`text-sm px-4 py-2 ${statusColors[submission.status || "pending"]}`}
+            >
+              {submission.status || "pending"}
+            </Badge>
+            {!isEditMode ? (
+              <Button variant="outline" size="sm" onClick={enterEditMode}>
+                <Pencil className="mr-2 h-4 w-4" />
+                Edit
+              </Button>
+            ) : (
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" onClick={cancelEdit} disabled={saving}>
+                  Cancel
+                </Button>
+                <Button size="sm" onClick={saveChanges} disabled={saving}>
+                  {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+                  Save
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Action Buttons */}
@@ -394,8 +483,47 @@ const AdminSubmissionDetail = () => {
               <CardTitle className="text-lg">Branding</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <InfoRow label="Specialty" value={submission.specialty} />
-              <InfoRow label="Coaching Style" value={submission.coaching_style} />
+              {/* Custom Hero Title - Editable */}
+              {isEditMode ? (
+                <div className="space-y-2">
+                  <Label htmlFor="custom_hero_title">Custom Hero Title</Label>
+                  <Input
+                    id="custom_hero_title"
+                    value={editData.custom_hero_title || ""}
+                    onChange={(e) => setEditData({ ...editData, custom_hero_title: e.target.value })}
+                    placeholder="Enter custom hero headline"
+                  />
+                </div>
+              ) : (
+                <InfoRow label="Custom Hero Title" value={submission.custom_hero_title} />
+              )}
+              
+              {isEditMode ? (
+                <div className="space-y-2">
+                  <Label htmlFor="specialty">Specialty</Label>
+                  <Input
+                    id="specialty"
+                    value={editData.specialty || ""}
+                    onChange={(e) => setEditData({ ...editData, specialty: e.target.value })}
+                  />
+                </div>
+              ) : (
+                <InfoRow label="Specialty" value={submission.specialty} />
+              )}
+              
+              {isEditMode ? (
+                <div className="space-y-2">
+                  <Label htmlFor="coaching_style">Coaching Style</Label>
+                  <Input
+                    id="coaching_style"
+                    value={editData.coaching_style || ""}
+                    onChange={(e) => setEditData({ ...editData, coaching_style: e.target.value })}
+                  />
+                </div>
+              ) : (
+                <InfoRow label="Coaching Style" value={submission.coaching_style} />
+              )}
+              
               <div className="flex gap-4">
                 <div>
                   <span className="text-foreground/60 text-sm">Primary Color</span>
@@ -421,10 +549,23 @@ const AdminSubmissionDetail = () => {
                   <p className="text-foreground mt-1 capitalize">{submission.background_style || 'dark'}</p>
                 </div>
               </div>
-              <div>
-                <span className="text-foreground/60 text-sm">Bio</span>
-                <p className="text-foreground mt-1">{submission.bio}</p>
-              </div>
+              
+              {isEditMode ? (
+                <div className="space-y-2">
+                  <Label htmlFor="bio">Bio</Label>
+                  <Textarea
+                    id="bio"
+                    value={editData.bio || ""}
+                    onChange={(e) => setEditData({ ...editData, bio: e.target.value })}
+                    rows={4}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <span className="text-foreground/60 text-sm">Bio</span>
+                  <p className="text-foreground mt-1">{submission.bio}</p>
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -464,6 +605,35 @@ const AdminSubmissionDetail = () => {
               <InfoRow label="Instagram" value={submission.instagram_url} isLink />
               <InfoRow label="TikTok" value={submission.tiktok_url} isLink />
               <InfoRow label="YouTube" value={submission.youtube_url} isLink />
+              
+              {isEditMode ? (
+                <div className="space-y-2">
+                  <Label htmlFor="x_url">X (Twitter)</Label>
+                  <Input
+                    id="x_url"
+                    value={editData.x_url || ""}
+                    onChange={(e) => setEditData({ ...editData, x_url: e.target.value })}
+                    placeholder="https://x.com/username"
+                  />
+                </div>
+              ) : (
+                <InfoRow label="X (Twitter)" value={submission.x_url} isLink />
+              )}
+              
+              {isEditMode ? (
+                <div className="space-y-2">
+                  <Label htmlFor="facebook_url">Facebook</Label>
+                  <Input
+                    id="facebook_url"
+                    value={editData.facebook_url || ""}
+                    onChange={(e) => setEditData({ ...editData, facebook_url: e.target.value })}
+                    placeholder="https://facebook.com/page"
+                  />
+                </div>
+              ) : (
+                <InfoRow label="Facebook" value={submission.facebook_url} isLink />
+              )}
+              
               <InfoRow label="Booking Link" value={submission.booking_link} isLink />
             </CardContent>
           </Card>
@@ -495,11 +665,26 @@ const AdminSubmissionDetail = () => {
               <CardTitle className="text-lg">Images</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-4 mb-4">
                 <ImagePreview label="Profile Photo" url={submission.profile_photo_url} />
                 <ImagePreview label="Before Photo" url={submission.before_photo_url} />
                 <ImagePreview label="After Photo" url={submission.after_photo_url} />
               </div>
+              {submission.gallery_photo_urls && submission.gallery_photo_urls.length > 0 && (
+                <div>
+                  <span className="text-foreground/60 text-sm block mb-2">Gallery Photos</span>
+                  <div className="grid grid-cols-4 gap-2">
+                    {submission.gallery_photo_urls.map((url, index) => (
+                      <img
+                        key={index}
+                        src={url}
+                        alt={`Gallery ${index + 1}`}
+                        className="w-full h-24 object-cover rounded-lg border border-border"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -509,13 +694,45 @@ const AdminSubmissionDetail = () => {
               <CardTitle className="text-lg">Advanced Options</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-wrap gap-3">
-                <OptionBadge label="Custom Domain" active={submission.wants_custom_domain} />
-                <OptionBadge label="SMS Automations" active={submission.wants_sms_automations} />
-                <OptionBadge label="AI Assistant" active={submission.wants_ai_assistant} />
-                <OptionBadge label="Courses" active={submission.wants_courses} />
-                <OptionBadge label="Client App" active={submission.wants_client_app} />
-              </div>
+              {isEditMode ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="wants_website_enhancements"
+                      checked={editData.wants_website_enhancements || false}
+                      onCheckedChange={(checked) => setEditData({ ...editData, wants_website_enhancements: checked as boolean })}
+                    />
+                    <Label htmlFor="wants_website_enhancements">Website Enhancements</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="wants_social_media_management"
+                      checked={editData.wants_social_media_management || false}
+                      onCheckedChange={(checked) => setEditData({ ...editData, wants_social_media_management: checked as boolean })}
+                    />
+                    <Label htmlFor="wants_social_media_management">Social Media Mgmt</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="wants_done_for_you"
+                      checked={editData.wants_done_for_you || false}
+                      onCheckedChange={(checked) => setEditData({ ...editData, wants_done_for_you: checked as boolean })}
+                    />
+                    <Label htmlFor="wants_done_for_you">Done For You</Label>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-wrap gap-3">
+                  <OptionBadge label="Custom Domain" active={submission.wants_custom_domain} />
+                  <OptionBadge label="SMS Automations" active={submission.wants_sms_automations} />
+                  <OptionBadge label="AI Assistant" active={submission.wants_ai_assistant} />
+                  <OptionBadge label="Courses" active={submission.wants_courses} />
+                  <OptionBadge label="Client App" active={submission.wants_client_app} />
+                  <OptionBadge label="Website Enhancements" active={submission.wants_website_enhancements} />
+                  <OptionBadge label="Social Media Mgmt" active={submission.wants_social_media_management} />
+                  <OptionBadge label="Done For You" active={submission.wants_done_for_you} />
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
