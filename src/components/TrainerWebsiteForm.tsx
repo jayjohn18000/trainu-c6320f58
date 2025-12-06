@@ -390,13 +390,13 @@ const TrainerWebsiteForm: React.FC = () => {
             {/* Primary Color Selection */}
             <div className="mb-4">
               <span className="text-xs text-foreground/60 uppercase tracking-wide">Primary Color</span>
-              <div className="flex flex-wrap gap-2 mt-2">
+              <div className="flex flex-wrap gap-3 mt-2">
                 {(Object.entries(primaryColors) as [PrimaryColorKey, typeof primaryColors[PrimaryColorKey]][]).map(([key, color]) => (
                   <button
                     key={key}
                     type="button"
                     onClick={() => setForm(prev => ({ ...prev, primaryColor: key }))}
-                    className={`w-10 h-10 rounded-full border-2 transition-all flex items-center justify-center ${
+                    className={`w-11 h-11 sm:w-10 sm:h-10 rounded-full border-2 transition-all flex items-center justify-center ${
                       form.primaryColor === key 
                         ? "border-foreground scale-110 ring-2 ring-foreground/20" 
                         : "border-transparent hover:scale-105"
@@ -412,7 +412,7 @@ const TrainerWebsiteForm: React.FC = () => {
                   </button>
                 ))}
               </div>
-              <p className="text-xs text-foreground/50 mt-1">
+              <p className="text-xs text-foreground/50 mt-2">
                 Selected: {primaryColors[form.primaryColor].name}
               </p>
             </div>

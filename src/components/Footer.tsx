@@ -17,18 +17,18 @@ const Footer = ({ trainer, isDemo = false }: FooterProps) => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative bg-background border-t border-border pb-20 sm:pb-0">
+    <footer className="relative bg-background border-t border-border pb-24 sm:pb-0">
       {/* Glow line */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       
-      <div className="container py-12">
+      <div className="container px-4 sm:px-6 py-8 sm:py-12">
         {/* Demo: Add CTA banner above footer content */}
         {isDemo && (
-          <div className="mb-10 p-6 rounded-2xl bg-card/50 border border-border/30 text-center">
-            <p className="text-foreground/70 mb-3">Like what you see?</p>
+          <div className="mb-8 sm:mb-10 p-4 sm:p-6 rounded-2xl bg-card/50 border border-border/30 text-center">
+            <p className="text-foreground/70 mb-2 sm:mb-3 text-sm sm:text-base">Like what you see?</p>
             <Link
               to="/claim"
-              className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-semibold transition-colors"
+              className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-semibold transition-colors text-sm sm:text-base"
             >
               Get Your Own Free Trainer Website
               <ArrowRight className="w-4 h-4" />
@@ -36,108 +36,111 @@ const Footer = ({ trainer, isDemo = false }: FooterProps) => {
           </div>
         )}
 
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Brand */}
-          <div className="text-center md:text-left">
-            <p className="text-lg font-semibold text-foreground mb-1">
-              {trainer?.trainer.businessName || "TrainU Website Factory"}
-            </p>
-            <p className="text-sm text-foreground/60">
-              {trainer
-                ? `© ${currentYear} ${trainer.trainer.fullName}. All rights reserved.`
-                : `© ${currentYear} TrainU. All rights reserved.`}
-            </p>
-          </div>
-
-          {/* Contact & Social */}
-          {trainer ? (
-            <div className="flex items-center gap-4">
-              <a
-                href={`mailto:${trainer.contact.email}`}
-                className="flex items-center gap-2 text-sm text-foreground/60 hover:text-primary transition-colors"
-              >
-                <Mail className="w-4 h-4" />
-                <span className="hidden sm:inline">{trainer.contact.email}</span>
-              </a>
-              {trainer.social.instagram && (
-                <button
-                  onClick={() => window.open(trainer.social.instagram, '_blank', 'noopener,noreferrer')}
-                  className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-muted-hover transition-all"
-                >
-                  <Instagram className="w-5 h-5" />
-                </button>
-              )}
-              {trainer.social.youtube && (
-                <button
-                  onClick={() => window.open(trainer.social.youtube, '_blank', 'noopener,noreferrer')}
-                  className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-muted-hover transition-all"
-                >
-                  <Youtube className="w-5 h-5" />
-                </button>
-              )}
+        <div className="flex flex-col gap-6 sm:gap-8">
+          {/* Main footer content - stacks on mobile */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
+            {/* Brand */}
+            <div className="text-center md:text-left">
+              <p className="text-base sm:text-lg font-semibold text-foreground mb-1">
+                {trainer?.trainer.businessName || "TrainU Website Factory"}
+              </p>
+              <p className="text-xs sm:text-sm text-foreground/60">
+                {trainer
+                  ? `© ${currentYear} ${trainer.trainer.fullName}. All rights reserved.`
+                  : `© ${currentYear} TrainU. All rights reserved.`}
+              </p>
             </div>
-          ) : (
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              {/* TrainU Contact Info */}
-              <div className="flex items-center gap-4 text-sm text-foreground/60">
+
+            {/* Contact & Social */}
+            {trainer ? (
+              <div className="flex items-center gap-3 sm:gap-4">
                 <a
-                  href="mailto:hello@trainu.us"
-                  className="flex items-center gap-2 hover:text-primary transition-colors"
+                  href={`mailto:${trainer.contact.email}`}
+                  className="flex items-center gap-2 text-xs sm:text-sm text-foreground/60 hover:text-primary transition-colors"
                 >
                   <Mail className="w-4 h-4" />
-                  <span className="hidden sm:inline">hello@trainu.us</span>
+                  <span className="hidden sm:inline">{trainer.contact.email}</span>
                 </a>
-                <a
-                  href="tel:+18474570782"
-                  className="flex items-center gap-2 hover:text-primary transition-colors"
-                >
-                  <Phone className="w-4 h-4" />
-                  <span className="hidden sm:inline">+1 847-457-0782</span>
-                </a>
+                {trainer.social.instagram && (
+                  <button
+                    onClick={() => window.open(trainer.social.instagram, '_blank', 'noopener,noreferrer')}
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-muted-hover transition-all"
+                  >
+                    <Instagram className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
+                )}
+                {trainer.social.youtube && (
+                  <button
+                    onClick={() => window.open(trainer.social.youtube, '_blank', 'noopener,noreferrer')}
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-muted-hover transition-all"
+                  >
+                    <Youtube className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
+                )}
               </div>
-              {/* TrainU Social Icons */}
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => window.open('https://instagram.com/official.trainu', '_blank', 'noopener,noreferrer')}
-                  className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-muted-hover transition-all"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => window.open('https://twitter.com/official_trainu', '_blank', 'noopener,noreferrer')}
-                  className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-muted-hover transition-all"
-                  aria-label="X (Twitter)"
-                >
-                  <Twitter className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => window.open('https://tiktok.com/@trainu8', '_blank', 'noopener,noreferrer')}
-                  className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-muted-hover transition-all"
-                  aria-label="TikTok"
-                >
-                  <TikTokIcon className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => window.open('https://facebook.com/TrainU', '_blank', 'noopener,noreferrer')}
-                  className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-muted-hover transition-all"
-                  aria-label="Facebook"
-                >
-                  <Facebook className="w-5 h-5" />
-                </button>
+            ) : (
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                {/* TrainU Contact Info - Icons only on mobile */}
+                <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-foreground/60">
+                  <a
+                    href="mailto:hello@trainu.us"
+                    className="flex items-center gap-2 hover:text-primary transition-colors"
+                  >
+                    <Mail className="w-4 h-4" />
+                    <span className="hidden sm:inline">hello@trainu.us</span>
+                  </a>
+                  <a
+                    href="tel:+18474570782"
+                    className="flex items-center gap-2 hover:text-primary transition-colors"
+                  >
+                    <Phone className="w-4 h-4" />
+                    <span className="hidden sm:inline">+1 847-457-0782</span>
+                  </a>
+                </div>
+                {/* TrainU Social Icons */}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => window.open('https://instagram.com/official.trainu', '_blank', 'noopener,noreferrer')}
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-muted-hover transition-all"
+                    aria-label="Instagram"
+                  >
+                    <Instagram className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
+                  <button
+                    onClick={() => window.open('https://twitter.com/official_trainu', '_blank', 'noopener,noreferrer')}
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-muted-hover transition-all"
+                    aria-label="X (Twitter)"
+                  >
+                    <Twitter className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
+                  <button
+                    onClick={() => window.open('https://tiktok.com/@trainu8', '_blank', 'noopener,noreferrer')}
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-muted-hover transition-all"
+                    aria-label="TikTok"
+                  >
+                    <TikTokIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
+                  <button
+                    onClick={() => window.open('https://facebook.com/TrainU', '_blank', 'noopener,noreferrer')}
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/60 hover:text-primary hover:bg-muted-hover transition-all"
+                    aria-label="Facebook"
+                  >
+                    <Facebook className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Powered By - Links to landing page */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-foreground/50">Powered by</span>
-            <Link
-              to="/"
-              className="text-sm font-semibold text-primary hover:text-primary-glow transition-colors"
-            >
-              TrainU
-            </Link>
+            {/* Powered By - Links to landing page */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs sm:text-sm text-foreground/50">Powered by</span>
+              <Link
+                to="/"
+                className="text-xs sm:text-sm font-semibold text-primary hover:text-primary-glow transition-colors"
+              >
+                TrainU
+              </Link>
+            </div>
           </div>
         </div>
       </div>

@@ -12,6 +12,7 @@ import { ArrowLeft, Check, X, FileJson, Loader2, ExternalLink, Copy, CheckCheck,
 import { useToast } from "@/hooks/use-toast";
 import AdminPasswordGate from "@/components/admin/AdminPasswordGate";
 import DomainManager from "@/components/admin/DomainManager";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type Program = {
   title: string;
@@ -68,6 +69,7 @@ const AdminSubmissionDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [adminPasscode, setAdminPasscode] = useState<string | null>(null);
   const [submission, setSubmission] = useState<Submission | null>(null);
@@ -288,57 +290,64 @@ const AdminSubmissionDetail = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="max-w-5xl mx-auto px-4 py-8">
+      <div className="max-w-5xl mx-auto px-4 py-6 sm:py-8">
         <Button
           variant="ghost"
           onClick={() => navigate("/admin/submissions")}
-          className="mb-6"
+          className="mb-4 sm:mb-6"
+          size={isMobile ? "sm" : "default"}
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Submissions
+          Back
         </Button>
 
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">{submission.full_name}</h1>
-            <p className="text-foreground/60">{submission.business_name}</p>
-          </div>
-          <div className="flex items-center gap-3">
+        {/* Header - Stacks vertically on mobile */}
+        <div className="flex flex-col gap-4 mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold">{submission.full_name}</h1>
+              <p className="text-foreground/60 text-sm sm:text-base">{submission.business_name}</p>
+            </div>
             <Badge
               variant="outline"
-              className={`text-sm px-4 py-2 ${statusColors[submission.status || "pending"]}`}
+              className={`text-sm px-3 py-1.5 sm:px-4 sm:py-2 w-fit ${statusColors[submission.status || "pending"]}`}
             >
               {submission.status || "pending"}
             </Badge>
+          </div>
+          
+          {/* Edit buttons - Full width on mobile */}
+          <div className="flex gap-2">
             {!isEditMode ? (
-              <Button variant="outline" size="sm" onClick={enterEditMode}>
+              <Button variant="outline" size="sm" onClick={enterEditMode} className="w-full sm:w-auto">
                 <Pencil className="mr-2 h-4 w-4" />
                 Edit
               </Button>
             ) : (
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={cancelEdit} disabled={saving}>
+              <>
+                <Button variant="outline" size="sm" onClick={cancelEdit} disabled={saving} className="flex-1 sm:flex-none">
                   Cancel
                 </Button>
-                <Button size="sm" onClick={saveChanges} disabled={saving}>
+                <Button size="sm" onClick={saveChanges} disabled={saving} className="flex-1 sm:flex-none">
                   {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
                   Save
                 </Button>
-              </div>
+              </>
             )}
           </div>
         </div>
 
-        {/* Action Buttons */}
+        {/* Action Buttons - Stack and full width on mobile */}
         <Card className="mb-6 bg-card border-border">
-          <CardHeader>
-            <CardTitle className="text-lg">Actions</CardTitle>
+          <CardHeader className="pb-3 sm:pb-6">
+            <CardTitle className="text-base sm:text-lg">Actions</CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-wrap gap-3">
+          <CardContent className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <Button
               onClick={() => updateStatus("approved")}
               disabled={updating || submission.status === "approved"}
-              className="bg-green-600 hover:bg-green-700"
+              className="bg-green-600 hover:bg-green-700 w-full sm:w-auto"
+              size={isMobile ? "sm" : "default"}
             >
               <Check className="mr-2 h-4 w-4" />
               Approve
@@ -347,6 +356,8 @@ const AdminSubmissionDetail = () => {
               onClick={() => updateStatus("rejected")}
               disabled={updating || submission.status === "rejected"}
               variant="destructive"
+              className="w-full sm:w-auto"
+              size={isMobile ? "sm" : "default"}
             >
               <X className="mr-2 h-4 w-4" />
               Reject
@@ -355,35 +366,36 @@ const AdminSubmissionDetail = () => {
               onClick={generateJson}
               disabled={generating}
               variant="outline"
-              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground w-full sm:w-auto"
+              size={isMobile ? "sm" : "default"}
             >
               {generating ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : (
                 <FileJson className="mr-2 h-4 w-4" />
               )}
-              Generate Website JSON
+              Generate JSON
             </Button>
           </CardContent>
         </Card>
 
-        {/* Live Site URL Card - Show for generated trainers */}
+        {/* Live Site URL Card - Stacks content on mobile */}
         {submission.status === "generated" && (
           <Card className="mb-6 bg-gradient-to-br from-green-500/10 to-emerald-500/5 border-green-500/30">
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center gap-2 text-green-400">
-                <span className="text-xl">🌐</span>
+              <CardTitle className="text-base sm:text-lg flex items-center gap-2 text-green-400">
+                <span className="text-lg sm:text-xl">🌐</span>
                 Live Site URL
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="p-4 rounded-lg bg-background/50 border border-border">
+              <div className="p-3 sm:p-4 rounded-lg bg-background/50 border border-border">
                 <p className="text-xs text-foreground/50 mb-1">Your trainer's website is live at:</p>
-                <p className="text-lg font-mono text-foreground break-all">
+                <p className="text-sm sm:text-lg font-mono text-foreground break-all">
                   {window.location.origin}/trainers/{trainerSlug}
                 </p>
               </div>
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <Button
                   variant="outline"
                   size="sm"
@@ -391,7 +403,7 @@ const AdminSubmissionDetail = () => {
                     await navigator.clipboard.writeText(`${window.location.origin}/trainers/${trainerSlug}`);
                     toast({ title: "URL copied to clipboard!" });
                   }}
-                  className="border-green-500/50 text-green-400 hover:bg-green-500/10"
+                  className="border-green-500/50 text-green-400 hover:bg-green-500/10 w-full sm:w-auto"
                 >
                   <Copy className="mr-2 h-4 w-4" />
                   Copy URL
@@ -400,7 +412,7 @@ const AdminSubmissionDetail = () => {
                   asChild
                   variant="outline"
                   size="sm"
-                  className="border-green-500/50 text-green-400 hover:bg-green-500/10"
+                  className="border-green-500/50 text-green-400 hover:bg-green-500/10 w-full sm:w-auto"
                 >
                   <a
                     href={`/trainers/${trainerSlug}`}
@@ -416,17 +428,17 @@ const AdminSubmissionDetail = () => {
           </Card>
         )}
 
-        {/* Generated JSON Display */}
+        {/* Generated JSON Display - Scrollable on mobile */}
         {generatedJson && (
           <Card className="mb-6 bg-card border-border border-primary/30">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-lg text-primary">Generated JSON</CardTitle>
+            <CardHeader className="pb-3 sm:pb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <CardTitle className="text-base sm:text-lg text-primary">Generated JSON</CardTitle>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={copyJson}
-                  className="border-primary/50"
+                  className="border-primary/50 w-full sm:w-auto"
                 >
                   {copied ? (
                     <CheckCheck className="mr-2 h-4 w-4 text-green-400" />
@@ -439,32 +451,33 @@ const AdminSubmissionDetail = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="p-3 rounded-lg bg-muted/30 border border-border">
-                <p className="text-sm text-foreground/70 mb-2">
-                  To add this trainer to the codebase for editing in Lovable:
+                <p className="text-xs sm:text-sm text-foreground/70 mb-2">
+                  Paste into Lovable:
                 </p>
-                <code className="text-primary text-sm">
+                <code className="text-primary text-xs sm:text-sm break-all">
                   src/data/trainers/{generatedSlug}.json
                 </code>
               </div>
-              <pre className="p-4 rounded-lg bg-muted/20 border border-border overflow-auto max-h-96 text-xs">
+              <pre className="p-3 sm:p-4 rounded-lg bg-muted/20 border border-border overflow-x-auto max-h-64 sm:max-h-96 text-xs">
                 <code className="text-foreground/80">{generatedJson}</code>
               </pre>
             </CardContent>
           </Card>
         )}
 
-        {/* Domain Manager - show for generated trainers */}
+        {/* Domain Manager */}
         {submission.status === "generated" && generatedSlug && (
           <div className="mb-6">
             <DomainManager trainerSlug={generatedSlug} />
           </div>
         )}
 
-        <div className="grid md:grid-cols-2 gap-6">
+        {/* Grid - Single column on mobile */}
+        <div className="grid gap-4 sm:gap-6">
           {/* Contact Info */}
           <Card className="bg-card border-border">
-            <CardHeader>
-              <CardTitle className="text-lg">Contact Information</CardTitle>
+            <CardHeader className="pb-3 sm:pb-6">
+              <CardTitle className="text-base sm:text-lg">Contact Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <InfoRow label="Email" value={submission.email} />
@@ -479,8 +492,8 @@ const AdminSubmissionDetail = () => {
 
           {/* Branding */}
           <Card className="bg-card border-border">
-            <CardHeader>
-              <CardTitle className="text-lg">Branding</CardTitle>
+            <CardHeader className="pb-3 sm:pb-6">
+              <CardTitle className="text-base sm:text-lg">Branding</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {/* Custom Hero Title - Editable */}
@@ -524,7 +537,7 @@ const AdminSubmissionDetail = () => {
                 <InfoRow label="Coaching Style" value={submission.coaching_style} />
               )}
               
-              <div className="flex gap-4">
+              <div className="flex gap-4 flex-wrap">
                 <div>
                   <span className="text-foreground/60 text-sm">Primary Color</span>
                   <div className="flex items-center gap-2 mt-1">
@@ -541,12 +554,12 @@ const AdminSubmissionDetail = () => {
                           submission.primary_color === 'cyan' ? '#22d3ee' : '#ff5f26'
                       }}
                     />
-                    <span className="text-foreground capitalize">{submission.primary_color || 'orange'}</span>
+                    <span className="text-foreground capitalize text-sm">{submission.primary_color || 'orange'}</span>
                   </div>
                 </div>
                 <div>
                   <span className="text-foreground/60 text-sm">Background</span>
-                  <p className="text-foreground mt-1 capitalize">{submission.background_style || 'dark'}</p>
+                  <p className="text-foreground mt-1 capitalize text-sm">{submission.background_style || 'dark'}</p>
                 </div>
               </div>
               
@@ -563,30 +576,30 @@ const AdminSubmissionDetail = () => {
               ) : (
                 <div>
                   <span className="text-foreground/60 text-sm">Bio</span>
-                  <p className="text-foreground mt-1">{submission.bio}</p>
+                  <p className="text-foreground mt-1 text-sm">{submission.bio}</p>
                 </div>
               )}
             </CardContent>
           </Card>
 
           {/* Programs */}
-          <Card className="bg-card border-border md:col-span-2">
-            <CardHeader>
-              <CardTitle className="text-lg">Programs</CardTitle>
+          <Card className="bg-card border-border">
+            <CardHeader className="pb-3 sm:pb-6">
+              <CardTitle className="text-base sm:text-lg">Programs</CardTitle>
             </CardHeader>
             <CardContent>
               {programs.length === 0 ? (
                 <p className="text-foreground/60">No programs added</p>
               ) : (
-                <div className="grid md:grid-cols-3 gap-4">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                   {programs.map((program, index) => (
                     <div
                       key={index}
-                      className="p-4 rounded-lg bg-muted/30 border border-border"
+                      className="p-3 sm:p-4 rounded-lg bg-muted/30 border border-border"
                     >
-                      <h4 className="font-semibold">{program.title || `Program ${index + 1}`}</h4>
-                      <p className="text-primary font-medium">{program.price}</p>
-                      <p className="text-sm text-foreground/70 mt-2">
+                      <h4 className="font-semibold text-sm sm:text-base">{program.title || `Program ${index + 1}`}</h4>
+                      <p className="text-primary font-medium text-sm">{program.price}</p>
+                      <p className="text-xs sm:text-sm text-foreground/70 mt-2">
                         {program.description}
                       </p>
                     </div>
@@ -598,8 +611,8 @@ const AdminSubmissionDetail = () => {
 
           {/* Social Links */}
           <Card className="bg-card border-border">
-            <CardHeader>
-              <CardTitle className="text-lg">Social Links</CardTitle>
+            <CardHeader className="pb-3 sm:pb-6">
+              <CardTitle className="text-base sm:text-lg">Social Links</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <InfoRow label="Instagram" value={submission.instagram_url} isLink />
@@ -640,16 +653,16 @@ const AdminSubmissionDetail = () => {
 
           {/* Testimonial */}
           <Card className="bg-card border-border">
-            <CardHeader>
-              <CardTitle className="text-lg">Testimonial</CardTitle>
+            <CardHeader className="pb-3 sm:pb-6">
+              <CardTitle className="text-base sm:text-lg">Testimonial</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {submission.testimonial_quote ? (
                 <>
-                  <p className="italic text-foreground/80">
+                  <p className="italic text-foreground/80 text-sm sm:text-base">
                     "{submission.testimonial_quote}"
                   </p>
-                  <p className="text-sm text-foreground/60">
+                  <p className="text-xs sm:text-sm text-foreground/60">
                     — {submission.testimonial_name || "Anonymous"}
                   </p>
                 </>
@@ -659,27 +672,27 @@ const AdminSubmissionDetail = () => {
             </CardContent>
           </Card>
 
-          {/* Images */}
-          <Card className="bg-card border-border md:col-span-2">
-            <CardHeader>
-              <CardTitle className="text-lg">Images</CardTitle>
+          {/* Images - Responsive grid */}
+          <Card className="bg-card border-border">
+            <CardHeader className="pb-3 sm:pb-6">
+              <CardTitle className="text-base sm:text-lg">Images</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-3 gap-4 mb-4">
-                <ImagePreview label="Profile Photo" url={submission.profile_photo_url} />
-                <ImagePreview label="Before Photo" url={submission.before_photo_url} />
-                <ImagePreview label="After Photo" url={submission.after_photo_url} />
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-4">
+                <ImagePreview label="Profile" url={submission.profile_photo_url} />
+                <ImagePreview label="Before" url={submission.before_photo_url} />
+                <ImagePreview label="After" url={submission.after_photo_url} />
               </div>
               {submission.gallery_photo_urls && submission.gallery_photo_urls.length > 0 && (
                 <div>
                   <span className="text-foreground/60 text-sm block mb-2">Gallery Photos</span>
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                     {submission.gallery_photo_urls.map((url, index) => (
                       <img
                         key={index}
                         src={url}
                         alt={`Gallery ${index + 1}`}
-                        className="w-full h-24 object-cover rounded-lg border border-border"
+                        className="w-full h-20 sm:h-24 object-cover rounded-lg border border-border"
                       />
                     ))}
                   </div>
@@ -689,20 +702,20 @@ const AdminSubmissionDetail = () => {
           </Card>
 
           {/* Advanced Options */}
-          <Card className="bg-card border-border md:col-span-2">
-            <CardHeader>
-              <CardTitle className="text-lg">Advanced Options</CardTitle>
+          <Card className="bg-card border-border">
+            <CardHeader className="pb-3 sm:pb-6">
+              <CardTitle className="text-base sm:text-lg">Advanced Options</CardTitle>
             </CardHeader>
             <CardContent>
               {isEditMode ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                   <div className="flex items-center space-x-2">
                     <Checkbox 
                       id="wants_website_enhancements"
                       checked={editData.wants_website_enhancements || false}
                       onCheckedChange={(checked) => setEditData({ ...editData, wants_website_enhancements: checked as boolean })}
                     />
-                    <Label htmlFor="wants_website_enhancements">Website Enhancements</Label>
+                    <Label htmlFor="wants_website_enhancements" className="text-sm">Website Enhancements</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Checkbox 
@@ -710,7 +723,7 @@ const AdminSubmissionDetail = () => {
                       checked={editData.wants_social_media_management || false}
                       onCheckedChange={(checked) => setEditData({ ...editData, wants_social_media_management: checked as boolean })}
                     />
-                    <Label htmlFor="wants_social_media_management">Social Media Mgmt</Label>
+                    <Label htmlFor="wants_social_media_management" className="text-sm">Social Media Mgmt</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Checkbox 
@@ -718,11 +731,11 @@ const AdminSubmissionDetail = () => {
                       checked={editData.wants_done_for_you || false}
                       onCheckedChange={(checked) => setEditData({ ...editData, wants_done_for_you: checked as boolean })}
                     />
-                    <Label htmlFor="wants_done_for_you">Done For You</Label>
+                    <Label htmlFor="wants_done_for_you" className="text-sm">Done For You</Label>
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2 sm:gap-3">
                   <OptionBadge label="Custom Domain" active={submission.wants_custom_domain} />
                   <OptionBadge label="SMS Automations" active={submission.wants_sms_automations} />
                   <OptionBadge label="AI Assistant" active={submission.wants_ai_assistant} />
@@ -758,30 +771,30 @@ const InfoRow = ({
           href={value}
           target="_blank"
           rel="noopener noreferrer"
-          className="block text-primary hover:underline truncate"
+          className="block text-primary hover:underline text-sm truncate"
         >
           {value}
         </a>
       ) : (
-        <p className="text-foreground">{value}</p>
+        <p className="text-foreground text-sm">{value}</p>
       )
     ) : (
-      <p className="text-foreground/40">Not provided</p>
+      <p className="text-foreground/40 text-sm">Not provided</p>
     )}
   </div>
 );
 
 const ImagePreview = ({ label, url }: { label: string; url: string | null }) => (
   <div>
-    <span className="text-foreground/60 text-sm block mb-2">{label}</span>
+    <span className="text-foreground/60 text-xs sm:text-sm block mb-2">{label}</span>
     {url ? (
       <img
         src={url}
         alt={label}
-        className="w-full h-40 object-cover rounded-lg border border-border"
+        className="w-full h-28 sm:h-40 object-cover rounded-lg border border-border"
       />
     ) : (
-      <div className="w-full h-40 bg-muted/30 rounded-lg border border-border flex items-center justify-center text-foreground/40">
+      <div className="w-full h-28 sm:h-40 bg-muted/30 rounded-lg border border-border flex items-center justify-center text-foreground/40 text-xs sm:text-sm">
         No image
       </div>
     )}
@@ -791,11 +804,11 @@ const ImagePreview = ({ label, url }: { label: string; url: string | null }) => 
 const OptionBadge = ({ label, active }: { label: string; active: boolean | null }) => (
   <Badge
     variant="outline"
-    className={
+    className={`text-xs ${
       active
         ? "bg-primary/20 text-primary border-primary/30"
         : "bg-muted/30 text-foreground/40 border-border"
-    }
+    }`}
   >
     {label}: {active ? "Yes" : "No"}
   </Badge>

@@ -11,9 +11,9 @@ const AboutSection = ({ trainer }: AboutSectionProps) => {
   const heroImage = galleryImages[2] || galleryImages[0] || trainer.trainer.profilePhotoUrl;
 
   return (
-    <section id="about" className="py-20 md:py-32 bg-background-elevated">
-      <div className="container">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+    <section id="about" className="py-16 sm:py-20 md:py-32 bg-background-elevated">
+      <div className="container px-4 sm:px-6">
+        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-20 items-center">
           {/* Single Hero Image with Floating Stats */}
           <div className="order-2 lg:order-1 relative">
             <div className="relative overflow-hidden rounded-2xl aspect-[4/5]">
@@ -26,39 +26,39 @@ const AboutSection = ({ trainer }: AboutSectionProps) => {
               <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
             </div>
 
-            {/* Floating Stats Cards */}
-            <div className="absolute -bottom-4 -right-4 md:bottom-8 md:-right-8 bg-card/90 backdrop-blur-md border border-border rounded-xl p-4 shadow-xl">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                  <Users className="w-5 h-5 text-primary" />
+            {/* Floating Stats Cards - Adjusted positioning for mobile */}
+            <div className="absolute -bottom-3 -right-2 sm:-bottom-4 sm:-right-4 md:bottom-8 md:-right-8 bg-card/90 backdrop-blur-md border border-border rounded-xl p-3 sm:p-4 shadow-xl max-w-[140px] sm:max-w-none">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+                  <Users className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                 </div>
                 <div>
-                  <p className="text-xl font-bold text-foreground">200+</p>
-                  <p className="text-xs text-foreground/60">Clients Transformed</p>
+                  <p className="text-lg sm:text-xl font-bold text-foreground">200+</p>
+                  <p className="text-[10px] sm:text-xs text-foreground/60">Clients Transformed</p>
                 </div>
               </div>
             </div>
 
-            <div className="absolute top-4 -left-4 md:top-8 md:-left-8 bg-card/90 backdrop-blur-md border border-border rounded-xl p-4 shadow-xl">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                  <Star className="w-5 h-5 text-primary fill-primary" />
+            <div className="absolute top-3 -left-2 sm:top-4 sm:-left-4 md:top-8 md:-left-8 bg-card/90 backdrop-blur-md border border-border rounded-xl p-3 sm:p-4 shadow-xl max-w-[120px] sm:max-w-none">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+                  <Star className="w-4 h-4 sm:w-5 sm:h-5 text-primary fill-primary" />
                 </div>
                 <div>
-                  <p className="text-xl font-bold text-foreground">5.0</p>
-                  <p className="text-xs text-foreground/60">Client Rating</p>
+                  <p className="text-lg sm:text-xl font-bold text-foreground">5.0</p>
+                  <p className="text-[10px] sm:text-xs text-foreground/60">Client Rating</p>
                 </div>
               </div>
             </div>
 
-            <div className="absolute top-1/2 -right-4 md:-right-8 -translate-y-1/2 bg-card/90 backdrop-blur-md border border-border rounded-xl p-4 shadow-xl">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                  <Award className="w-5 h-5 text-primary" />
+            <div className="absolute top-1/2 -right-2 sm:-right-4 md:-right-8 -translate-y-1/2 bg-card/90 backdrop-blur-md border border-border rounded-xl p-3 sm:p-4 shadow-xl max-w-[130px] sm:max-w-none">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+                  <Award className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                 </div>
                 <div>
-                  <p className="text-xl font-bold text-foreground">5+</p>
-                  <p className="text-xs text-foreground/60">Years Experience</p>
+                  <p className="text-lg sm:text-xl font-bold text-foreground">5+</p>
+                  <p className="text-[10px] sm:text-xs text-foreground/60">Years Experience</p>
                 </div>
               </div>
             </div>
@@ -66,36 +66,36 @@ const AboutSection = ({ trainer }: AboutSectionProps) => {
 
           {/* Content */}
           <div className="order-1 lg:order-2">
-            <span className="inline-block text-primary text-sm font-semibold tracking-wider uppercase mb-4">
+            <span className="inline-block text-primary text-sm font-semibold tracking-wider uppercase mb-3 sm:mb-4">
               About
             </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-2">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-2">
               Meet {trainer.trainer.fullName}
             </h2>
-            <div className="flex items-center gap-2 text-foreground/60 mb-6">
-              <MapPin className="w-4 h-4" />
+            <div className="flex items-center gap-2 text-foreground/60 mb-4 sm:mb-6">
+              <MapPin className="w-4 h-4 shrink-0" />
               <span className="text-sm">{trainer.trainer.specialty} • {trainer.trainer.location}</span>
             </div>
             
-            <div className="space-y-4 mb-8">
-              <p className="text-lg text-foreground/70 leading-relaxed max-w-xl">
+            <div className="space-y-4 mb-6 sm:mb-8">
+              <p className="text-base sm:text-lg text-foreground/70 leading-relaxed max-w-xl">
                 {trainer.trainer.bio}
               </p>
             </div>
 
             {/* Connect Section */}
-            <div className="border-t border-border/30 pt-6">
-              <p className="text-xs text-foreground/50 uppercase tracking-wider mb-4">Connect with {trainer.trainer.fullName.split(" ")[0]}</p>
-              <div className="flex flex-wrap gap-3">
+            <div className="border-t border-border/30 pt-4 sm:pt-6">
+              <p className="text-xs text-foreground/50 uppercase tracking-wider mb-3 sm:mb-4">Connect with {trainer.trainer.fullName.split(" ")[0]}</p>
+              <div className="flex flex-wrap gap-2 sm:gap-3">
                 {trainer.social.instagram && (
                   <a
                     href={trainer.social.instagram}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-card border border-border hover:border-primary/30 hover:bg-card-hover transition-all"
+                    className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-card border border-border hover:border-primary/30 hover:bg-card-hover transition-all"
                   >
                     <Instagram className="w-4 h-4 text-primary" />
-                    <span className="text-sm text-foreground/80">Instagram</span>
+                    <span className="text-xs sm:text-sm text-foreground/80">Instagram</span>
                   </a>
                 )}
                 {trainer.social.youtube && (
@@ -103,18 +103,18 @@ const AboutSection = ({ trainer }: AboutSectionProps) => {
                     href={trainer.social.youtube}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-card border border-border hover:border-primary/30 hover:bg-card-hover transition-all"
+                    className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-card border border-border hover:border-primary/30 hover:bg-card-hover transition-all"
                   >
                     <Youtube className="w-4 h-4 text-primary" />
-                    <span className="text-sm text-foreground/80">YouTube</span>
+                    <span className="text-xs sm:text-sm text-foreground/80">YouTube</span>
                   </a>
                 )}
                 <a
                   href={`mailto:${trainer.contact.email}`}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-card border border-border hover:border-primary/30 hover:bg-card-hover transition-all"
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-card border border-border hover:border-primary/30 hover:bg-card-hover transition-all"
                 >
                   <Mail className="w-4 h-4 text-primary" />
-                  <span className="text-sm text-foreground/80">Email</span>
+                  <span className="text-xs sm:text-sm text-foreground/80">Email</span>
                 </a>
               </div>
             </div>
