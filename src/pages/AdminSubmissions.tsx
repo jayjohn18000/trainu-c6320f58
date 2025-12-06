@@ -11,8 +11,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, ChevronDown, ChevronUp, Loader2 } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Search, ChevronDown, ChevronUp, Loader2, ChevronRight } from "lucide-react";
 import AdminPasswordGate from "@/components/admin/AdminPasswordGate";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type Submission = {
   id: string;
@@ -45,6 +47,7 @@ const AdminSubmissions = () => {
   const [sortField, setSortField] = useState<SortField>("created_at");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const fetchSubmissions = useCallback(async (passcode: string) => {
     setLoading(true);
@@ -58,7 +61,6 @@ const AdminSubmissions = () => {
 
       if (response.error) {
         console.error("Error fetching submissions:", response.error);
-        // If unauthorized, clear session and show login
         if (response.error.message?.includes("Unauthorized")) {
           sessionStorage.removeItem("admin_passcode");
           setIsAuthenticated(false);
@@ -123,18 +125,53 @@ const AdminSubmissions = () => {
     return <AdminPasswordGate onSuccess={handleAuthSuccess} />;
   }
 
+  // Mobile Card View Component
+  const MobileSubmissionCard = ({ submission }: { submission: Submission }) => (
+    <Card 
+      className="bg-card border-border cursor-pointer hover:bg-muted/50 transition-colors"
+      onClick={() => navigate(`/admin/submissions/${submission.id}`)}
+    >
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-foreground truncate">{submission.full_name}</h3>
+            <p className="text-sm text-foreground/70 truncate">{submission.business_name}</p>
+            <p className="text-xs text-foreground/50 mt-1">{submission.specialty}</p>
+          </div>
+          <div className="flex flex-col items-end gap-2 shrink-0">
+            <Badge
+              variant="outline"
+              className={`text-xs ${statusColors[submission.status || "pending"]}`}
+            >
+              {submission.status || "pending"}
+            </Badge>
+            <ChevronRight className="w-4 h-4 text-foreground/40" />
+          </div>
+        </div>
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/50">
+          <span className="text-xs text-foreground/50">
+            {new Date(submission.created_at).toLocaleDateString()}
+          </span>
+          <span className="text-xs text-foreground/50 truncate max-w-[150px]">
+            {submission.location}
+          </span>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Trainer Submissions</h1>
-          <p className="text-foreground/60">
+      <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">Trainer Submissions</h1>
+          <p className="text-sm sm:text-base text-foreground/60">
             Manage and review trainer website requests
           </p>
         </div>
 
-        <div className="mb-6">
-          <div className="relative max-w-md">
+        <div className="mb-4 sm:mb-6">
+          <div className="relative w-full sm:max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground/40" />
             <Input
               placeholder="Search by name, business, or email..."
@@ -145,16 +182,24 @@ const AdminSubmissions = () => {
           </div>
         </div>
 
-        <div className="rounded-lg border border-border bg-card overflow-hidden">
-          {loading ? (
-            <div className="p-8 text-center text-foreground/60">
-              <Loader2 className="w-6 h-6 animate-spin mx-auto" />
-            </div>
-          ) : filteredSubmissions.length === 0 ? (
-            <div className="p-8 text-center text-foreground/60">
-              No submissions found
-            </div>
-          ) : (
+        {loading ? (
+          <div className="p-8 text-center text-foreground/60">
+            <Loader2 className="w-6 h-6 animate-spin mx-auto" />
+          </div>
+        ) : filteredSubmissions.length === 0 ? (
+          <div className="p-8 text-center text-foreground/60 rounded-lg border border-border bg-card">
+            No submissions found
+          </div>
+        ) : isMobile ? (
+          // Mobile: Card-based layout
+          <div className="space-y-3">
+            {filteredSubmissions.map((submission) => (
+              <MobileSubmissionCard key={submission.id} submission={submission} />
+            ))}
+          </div>
+        ) : (
+          // Desktop: Table layout
+          <div className="rounded-lg border border-border bg-card overflow-hidden">
             <Table>
               <TableHeader>
                 <TableRow className="border-border hover:bg-muted/50">
@@ -218,8 +263,8 @@ const AdminSubmissions = () => {
                 ))}
               </TableBody>
             </Table>
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="mt-4 text-sm text-foreground/50">
           {filteredSubmissions.length} submission(s)
