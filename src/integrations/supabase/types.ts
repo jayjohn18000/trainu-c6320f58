@@ -41,11 +41,16 @@ export type Database = {
       trainer_submissions: {
         Row: {
           after_photo_url: string | null
+          ai_bio: string | null
+          ai_enhanced: boolean | null
+          ai_headline: string | null
+          ai_subheadline: string | null
           background_style: string | null
           before_photo_url: string | null
           bio: string
           booking_link: string | null
           business_name: string
+          client_count: string | null
           coaching_style: string | null
           created_at: string
           custom_hero_title: string | null
@@ -60,6 +65,7 @@ export type Database = {
           primary_color: string | null
           profile_photo_url: string | null
           programs: Json | null
+          rating: string | null
           specialty: string
           status: string | null
           testimonial_name: string | null
@@ -74,15 +80,21 @@ export type Database = {
           wants_social_media_management: boolean | null
           wants_website_enhancements: boolean | null
           x_url: string | null
+          years_experience: string | null
           youtube_url: string | null
         }
         Insert: {
           after_photo_url?: string | null
+          ai_bio?: string | null
+          ai_enhanced?: boolean | null
+          ai_headline?: string | null
+          ai_subheadline?: string | null
           background_style?: string | null
           before_photo_url?: string | null
           bio: string
           booking_link?: string | null
           business_name: string
+          client_count?: string | null
           coaching_style?: string | null
           created_at?: string
           custom_hero_title?: string | null
@@ -97,6 +109,7 @@ export type Database = {
           primary_color?: string | null
           profile_photo_url?: string | null
           programs?: Json | null
+          rating?: string | null
           specialty: string
           status?: string | null
           testimonial_name?: string | null
@@ -111,15 +124,21 @@ export type Database = {
           wants_social_media_management?: boolean | null
           wants_website_enhancements?: boolean | null
           x_url?: string | null
+          years_experience?: string | null
           youtube_url?: string | null
         }
         Update: {
           after_photo_url?: string | null
+          ai_bio?: string | null
+          ai_enhanced?: boolean | null
+          ai_headline?: string | null
+          ai_subheadline?: string | null
           background_style?: string | null
           before_photo_url?: string | null
           bio?: string
           booking_link?: string | null
           business_name?: string
+          client_count?: string | null
           coaching_style?: string | null
           created_at?: string
           custom_hero_title?: string | null
@@ -134,6 +153,7 @@ export type Database = {
           primary_color?: string | null
           profile_photo_url?: string | null
           programs?: Json | null
+          rating?: string | null
           specialty?: string
           status?: string | null
           testimonial_name?: string | null
@@ -148,6 +168,7 @@ export type Database = {
           wants_social_media_management?: boolean | null
           wants_website_enhancements?: boolean | null
           x_url?: string | null
+          years_experience?: string | null
           youtube_url?: string | null
         }
         Relationships: []

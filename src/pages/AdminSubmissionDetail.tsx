@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Check, X, FileJson, Loader2, ExternalLink, Copy, CheckCheck, Pencil, Save } from "lucide-react";
+import { ArrowLeft, Check, X, FileJson, Loader2, ExternalLink, Copy, CheckCheck, Pencil, Save, Sparkles, Wand2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import AdminPasswordGate from "@/components/admin/AdminPasswordGate";
 import DomainManager from "@/components/admin/DomainManager";
@@ -56,6 +56,27 @@ type Submission = {
   background_style: string | null;
   status: string | null;
   created_at: string;
+  // New AI enhancement fields
+  client_count: string | null;
+  rating: string | null;
+  years_experience: string | null;
+  ai_enhanced: boolean | null;
+  ai_headline: string | null;
+  ai_subheadline: string | null;
+  ai_bio: string | null;
+};
+
+type EnhancedContent = {
+  headline: string;
+  subheadline: string;
+  bio: string;
+  stats: {
+    clientCount: string;
+    rating: string;
+    yearsExperience: string;
+  };
+  suggestedTheme: string;
+  programDescriptions: string[];
 };
 
 const statusColors: Record<string, string> = {
@@ -84,6 +105,11 @@ const AdminSubmissionDetail = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editData, setEditData] = useState<Partial<Submission>>({});
   const [saving, setSaving] = useState(false);
+  
+  // AI Enhancement state
+  const [enhancing, setEnhancing] = useState(false);
+  const [enhancedContent, setEnhancedContent] = useState<EnhancedContent | null>(null);
+  const [showEnhancedPreview, setShowEnhancedPreview] = useState(false);
 
   const fetchSubmission = useCallback(async (passcode: string) => {
     setLoading(true);
@@ -168,6 +194,85 @@ const AdminSubmissionDetail = () => {
     setUpdating(false);
   };
 
+  const enhanceWithAI = async () => {
+    if (!submission || !adminPasscode) return;
+    setEnhancing(true);
+
+    try {
+      const response = await supabase.functions.invoke("enhance-trainer-content", {
+        body: { submissionId: submission.id },
+        headers: {
+          "x-admin-passcode": adminPasscode,
+        },
+      });
+
+      if (response.error) {
+        throw new Error(response.error.message);
+      }
+
+      if (response.data?.enhanced) {
+        setEnhancedContent(response.data.enhanced);
+        setShowEnhancedPreview(true);
+        toast({ title: "AI enhancement ready! Review and apply below." });
+      }
+    } catch (error: any) {
+      console.error("Error enhancing content:", error);
+      if (error.message?.includes("429")) {
+        toast({ title: "Rate limit exceeded. Try again in a moment.", variant: "destructive" });
+      } else if (error.message?.includes("402")) {
+        toast({ title: "AI credits exhausted. Add credits to continue.", variant: "destructive" });
+      } else {
+        toast({ title: "Error enhancing content", variant: "destructive" });
+      }
+    }
+    setEnhancing(false);
+  };
+
+  const applyEnhancedContent = async () => {
+    if (!submission || !adminPasscode || !enhancedContent) return;
+    setSaving(true);
+
+    try {
+      const updates = {
+        ai_headline: enhancedContent.headline,
+        ai_subheadline: enhancedContent.subheadline,
+        ai_bio: enhancedContent.bio,
+        client_count: enhancedContent.stats.clientCount,
+        rating: enhancedContent.stats.rating,
+        years_experience: enhancedContent.stats.yearsExperience,
+        primary_color: enhancedContent.suggestedTheme,
+        ai_enhanced: true,
+      };
+
+      const response = await supabase.functions.invoke("admin-update-submission", {
+        body: { 
+          submissionId: submission.id,
+          updates
+        },
+        headers: {
+          "x-admin-passcode": adminPasscode,
+        },
+      });
+
+      if (response.error) {
+        throw new Error(response.error.message);
+      }
+
+      // Update local state
+      setSubmission({ 
+        ...submission, 
+        ...updates
+      });
+      setShowEnhancedPreview(false);
+      setEnhancedContent(null);
+      toast({ title: "AI enhancements applied successfully!" });
+    } catch (error) {
+      console.error("Error applying enhancements:", error);
+      toast({ title: "Error applying enhancements", variant: "destructive" });
+    }
+    setSaving(false);
+  };
+
   const generateJson = async () => {
     if (!submission || !adminPasscode) return;
     setGenerating(true);
@@ -229,6 +334,9 @@ const AdminSubmissionDetail = () => {
       bio: submission.bio || "",
       specialty: submission.specialty || "",
       coaching_style: submission.coaching_style || "",
+      client_count: submission.client_count || "",
+      rating: submission.rating || "",
+      years_experience: submission.years_experience || "",
     });
     setIsEditMode(true);
   };
@@ -305,7 +413,15 @@ const AdminSubmissionDetail = () => {
         <div className="flex flex-col gap-4 mb-6 sm:mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold">{submission.full_name}</h1>
+              <div className="flex items-center gap-2">
+                <h1 className="text-2xl sm:text-3xl font-bold">{submission.full_name}</h1>
+                {submission.ai_enhanced && (
+                  <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
+                    <Sparkles className="w-3 h-3 mr-1" />
+                    AI Enhanced
+                  </Badge>
+                )}
+              </div>
               <p className="text-foreground/60 text-sm sm:text-base">{submission.business_name}</p>
             </div>
             <Badge
@@ -342,7 +458,7 @@ const AdminSubmissionDetail = () => {
           <CardHeader className="pb-3 sm:pb-6">
             <CardTitle className="text-base sm:text-lg">Actions</CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+          <CardContent className="flex flex-col sm:flex-row gap-2 sm:gap-3 flex-wrap">
             <Button
               onClick={() => updateStatus("approved")}
               disabled={updating || submission.status === "approved"}
@@ -363,6 +479,19 @@ const AdminSubmissionDetail = () => {
               Reject
             </Button>
             <Button
+              onClick={enhanceWithAI}
+              disabled={enhancing}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 w-full sm:w-auto"
+              size={isMobile ? "sm" : "default"}
+            >
+              {enhancing ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Wand2 className="mr-2 h-4 w-4" />
+              )}
+              Enhance with AI
+            </Button>
+            <Button
               onClick={generateJson}
               disabled={generating}
               variant="outline"
@@ -378,6 +507,74 @@ const AdminSubmissionDetail = () => {
             </Button>
           </CardContent>
         </Card>
+
+        {/* AI Enhancement Preview */}
+        {showEnhancedPreview && enhancedContent && (
+          <Card className="mb-6 bg-gradient-to-br from-purple-500/10 to-pink-500/5 border-purple-500/30">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-base sm:text-lg flex items-center gap-2 text-purple-400">
+                  <Sparkles className="w-5 h-5" />
+                  AI Enhancement Preview
+                </CardTitle>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowEnhancedPreview(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={applyEnhancedContent}
+                    disabled={saving}
+                    className="bg-purple-600 hover:bg-purple-700"
+                  >
+                    {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Check className="mr-2 h-4 w-4" />}
+                    Apply Changes
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="p-4 rounded-lg bg-background/50 border border-border">
+                  <p className="text-xs text-foreground/50 uppercase mb-1">Headline</p>
+                  <p className="text-lg font-bold text-foreground">{enhancedContent.headline}</p>
+                </div>
+                <div className="p-4 rounded-lg bg-background/50 border border-border">
+                  <p className="text-xs text-foreground/50 uppercase mb-1">Subheadline</p>
+                  <p className="text-sm text-foreground/80">{enhancedContent.subheadline}</p>
+                </div>
+              </div>
+              
+              <div className="p-4 rounded-lg bg-background/50 border border-border">
+                <p className="text-xs text-foreground/50 uppercase mb-1">Enhanced Bio</p>
+                <p className="text-sm text-foreground/80">{enhancedContent.bio}</p>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="p-3 rounded-lg bg-background/50 border border-border text-center">
+                  <p className="text-xs text-foreground/50 uppercase mb-1">Clients</p>
+                  <p className="text-xl font-bold text-primary">{enhancedContent.stats.clientCount}</p>
+                </div>
+                <div className="p-3 rounded-lg bg-background/50 border border-border text-center">
+                  <p className="text-xs text-foreground/50 uppercase mb-1">Rating</p>
+                  <p className="text-xl font-bold text-primary">{enhancedContent.stats.rating}</p>
+                </div>
+                <div className="p-3 rounded-lg bg-background/50 border border-border text-center">
+                  <p className="text-xs text-foreground/50 uppercase mb-1">Experience</p>
+                  <p className="text-xl font-bold text-primary">{enhancedContent.stats.yearsExperience}</p>
+                </div>
+                <div className="p-3 rounded-lg bg-background/50 border border-border text-center">
+                  <p className="text-xs text-foreground/50 uppercase mb-1">Theme</p>
+                  <p className="text-xl font-bold capitalize text-primary">{enhancedContent.suggestedTheme}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Live Site URL Card - Stacks content on mobile */}
         {submission.status === "generated" && (
@@ -490,6 +687,69 @@ const AdminSubmissionDetail = () => {
             </CardContent>
           </Card>
 
+          {/* Stats - NEW */}
+          <Card className="bg-card border-border">
+            <CardHeader className="pb-3 sm:pb-6">
+              <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+                Stats
+                {submission.ai_enhanced && (
+                  <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs">
+                    <Sparkles className="w-3 h-3 mr-1" />
+                    AI Generated
+                  </Badge>
+                )}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {isEditMode ? (
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="client_count">Clients</Label>
+                    <Input
+                      id="client_count"
+                      value={editData.client_count || ""}
+                      onChange={(e) => setEditData({ ...editData, client_count: e.target.value })}
+                      placeholder="200+"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="rating">Rating</Label>
+                    <Input
+                      id="rating"
+                      value={editData.rating || ""}
+                      onChange={(e) => setEditData({ ...editData, rating: e.target.value })}
+                      placeholder="5.0"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="years_experience">Years</Label>
+                    <Input
+                      id="years_experience"
+                      value={editData.years_experience || ""}
+                      onChange={(e) => setEditData({ ...editData, years_experience: e.target.value })}
+                      placeholder="5+"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="p-3 rounded-lg bg-muted/30 border border-border text-center">
+                    <p className="text-xs text-foreground/50 uppercase mb-1">Clients</p>
+                    <p className="text-xl font-bold text-foreground">{submission.client_count || "—"}</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-muted/30 border border-border text-center">
+                    <p className="text-xs text-foreground/50 uppercase mb-1">Rating</p>
+                    <p className="text-xl font-bold text-foreground">{submission.rating || "—"}</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-muted/30 border border-border text-center">
+                    <p className="text-xs text-foreground/50 uppercase mb-1">Experience</p>
+                    <p className="text-xl font-bold text-foreground">{submission.years_experience || "—"}</p>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
           {/* Branding */}
           <Card className="bg-card border-border">
             <CardHeader className="pb-3 sm:pb-6">
@@ -508,7 +768,21 @@ const AdminSubmissionDetail = () => {
                   />
                 </div>
               ) : (
-                <InfoRow label="Custom Hero Title" value={submission.custom_hero_title} />
+                <>
+                  <InfoRow label="Custom Hero Title" value={submission.custom_hero_title} />
+                  {submission.ai_headline && (
+                    <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/30">
+                      <p className="text-xs text-purple-400 uppercase mb-1">AI Headline</p>
+                      <p className="text-foreground">{submission.ai_headline}</p>
+                    </div>
+                  )}
+                  {submission.ai_subheadline && (
+                    <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/30">
+                      <p className="text-xs text-purple-400 uppercase mb-1">AI Subheadline</p>
+                      <p className="text-foreground text-sm">{submission.ai_subheadline}</p>
+                    </div>
+                  )}
+                </>
               )}
               
               {isEditMode ? (
@@ -574,10 +848,18 @@ const AdminSubmissionDetail = () => {
                   />
                 </div>
               ) : (
-                <div>
-                  <span className="text-foreground/60 text-sm">Bio</span>
-                  <p className="text-foreground mt-1 text-sm">{submission.bio}</p>
-                </div>
+                <>
+                  <div>
+                    <span className="text-foreground/60 text-sm">Bio</span>
+                    <p className="text-foreground mt-1 text-sm">{submission.bio}</p>
+                  </div>
+                  {submission.ai_bio && submission.ai_bio !== submission.bio && (
+                    <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/30">
+                      <p className="text-xs text-purple-400 uppercase mb-1">AI Enhanced Bio</p>
+                      <p className="text-foreground text-sm">{submission.ai_bio}</p>
+                    </div>
+                  )}
+                </>
               )}
             </CardContent>
           </Card>

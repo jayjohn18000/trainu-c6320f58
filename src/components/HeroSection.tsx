@@ -8,6 +8,12 @@ interface HeroSectionProps {
 }
 
 const HeroSection = ({ trainer, isDemo = false }: HeroSectionProps) => {
+  // Use dynamic stats from trainer profile or fallback to defaults
+  const stats = trainer.stats || {};
+  const clientCount = stats.clientCount || "200+";
+  const rating = stats.rating || "5.0";
+  const yearsExperience = stats.yearsExperience || "5+";
+
   return (
     <section className={`relative min-h-[90vh] md:min-h-screen flex items-center overflow-hidden ${isDemo ? 'pt-[52px]' : ''}`}>
       {/* Background Image with Overlay */}
@@ -15,7 +21,7 @@ const HeroSection = ({ trainer, isDemo = false }: HeroSectionProps) => {
         <img
           src={trainer.hero.backgroundImageUrl}
           alt={trainer.trainer.businessName}
-          className="w-full h-full object-cover object-center"
+          className="w-full h-full object-cover object-top scale-[1.02]"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/30" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
@@ -49,22 +55,22 @@ const HeroSection = ({ trainer, isDemo = false }: HeroSectionProps) => {
             </p>
           </div>
 
-          {/* Trust indicators */}
+          {/* Trust indicators - Now using dynamic stats */}
           <div 
             className="flex flex-wrap items-center gap-4 mb-8 animate-fade-up opacity-0" 
             style={{ animationDelay: "0.1s", animationFillMode: "forwards" }}
           >
             <div className="flex items-center gap-2 bg-card/60 backdrop-blur-sm border border-border/50 rounded-full px-4 py-2">
               <Users className="w-4 h-4 text-primary" />
-              <span className="text-sm text-foreground/80">200+ clients</span>
+              <span className="text-sm text-foreground/80">{clientCount} clients</span>
             </div>
             <div className="flex items-center gap-2 bg-card/60 backdrop-blur-sm border border-border/50 rounded-full px-4 py-2">
               <Star className="w-4 h-4 text-primary fill-primary" />
-              <span className="text-sm text-foreground/80">5.0 rated</span>
+              <span className="text-sm text-foreground/80">{rating} rated</span>
             </div>
             <div className="flex items-center gap-2 bg-card/60 backdrop-blur-sm border border-border/50 rounded-full px-4 py-2">
               <Award className="w-4 h-4 text-primary" />
-              <span className="text-sm text-foreground/80">5+ years</span>
+              <span className="text-sm text-foreground/80">{yearsExperience} years</span>
             </div>
           </div>
 
