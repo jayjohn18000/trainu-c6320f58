@@ -21,6 +21,12 @@ export type TrainerResult = {
   label: string;
 };
 
+export type TrainerStats = {
+  clientCount?: string;      // e.g., "200+", "500+", "50+"
+  rating?: string;           // e.g., "5.0", "4.9"
+  yearsExperience?: string;  // e.g., "5+", "10+"
+};
+
 export type TrainerProfile = {
   slug: string;
   status: "pending" | "approved" | "generated" | "archived";
@@ -70,6 +76,9 @@ export type TrainerProfile = {
 
   testimonials: TrainerTestimonial[];
 
+  // NEW: Dynamic stats for trust indicators
+  stats?: TrainerStats;
+
   preferences: {
     coachingStyle?: string;
     wantsCustomDomain: boolean;
@@ -89,5 +98,6 @@ export type TrainerProfile = {
     updatedAt: string;
     sourceSubmissionId?: string;
     notes?: string;
+    aiEnhanced?: boolean;
   };
 };

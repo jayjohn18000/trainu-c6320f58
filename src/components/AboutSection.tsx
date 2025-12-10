@@ -10,6 +10,12 @@ const AboutSection = ({ trainer }: AboutSectionProps) => {
   const galleryImages = trainer.trainer.galleryImageUrls || [];
   const heroImage = galleryImages[2] || galleryImages[0] || trainer.trainer.profilePhotoUrl;
 
+  // Use dynamic stats from trainer profile or fallback to defaults
+  const stats = trainer.stats || {};
+  const clientCount = stats.clientCount || "200+";
+  const rating = stats.rating || "5.0";
+  const yearsExperience = stats.yearsExperience || "5+";
+
   return (
     <section id="about" className="py-16 sm:py-20 md:py-32 bg-background-elevated">
       <div className="container px-4 sm:px-6">
@@ -20,20 +26,20 @@ const AboutSection = ({ trainer }: AboutSectionProps) => {
               <img
                 src={heroImage}
                 alt={`${trainer.trainer.fullName} - Strength in Action`}
-                className="w-full h-full object-cover brightness-110"
+                className="w-full h-full object-cover object-top scale-[1.02] brightness-110"
               />
               {/* Subtle gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
             </div>
 
-            {/* Floating Stats Cards - Adjusted positioning for mobile */}
+            {/* Floating Stats Cards - Using dynamic stats */}
             <div className="absolute -bottom-3 -right-2 sm:-bottom-4 sm:-right-4 md:bottom-8 md:-right-8 bg-card/90 backdrop-blur-md border border-border rounded-xl p-3 sm:p-4 shadow-xl max-w-[140px] sm:max-w-none">
               <div className="flex items-center gap-2 sm:gap-3">
                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
                   <Users className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                 </div>
                 <div>
-                  <p className="text-lg sm:text-xl font-bold text-foreground">200+</p>
+                  <p className="text-lg sm:text-xl font-bold text-foreground">{clientCount}</p>
                   <p className="text-[10px] sm:text-xs text-foreground/60">Clients Transformed</p>
                 </div>
               </div>
@@ -45,7 +51,7 @@ const AboutSection = ({ trainer }: AboutSectionProps) => {
                   <Star className="w-4 h-4 sm:w-5 sm:h-5 text-primary fill-primary" />
                 </div>
                 <div>
-                  <p className="text-lg sm:text-xl font-bold text-foreground">5.0</p>
+                  <p className="text-lg sm:text-xl font-bold text-foreground">{rating}</p>
                   <p className="text-[10px] sm:text-xs text-foreground/60">Client Rating</p>
                 </div>
               </div>
@@ -57,7 +63,7 @@ const AboutSection = ({ trainer }: AboutSectionProps) => {
                   <Award className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                 </div>
                 <div>
-                  <p className="text-lg sm:text-xl font-bold text-foreground">5+</p>
+                  <p className="text-lg sm:text-xl font-bold text-foreground">{yearsExperience}</p>
                   <p className="text-[10px] sm:text-xs text-foreground/60">Years Experience</p>
                 </div>
               </div>

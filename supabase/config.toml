@@ -14,3 +14,6 @@ verify_jwt = false
 
 [functions.admin-update-submission]
 verify_jwt = false
+
+[functions.enhance-trainer-content]
+verify_jwt = false

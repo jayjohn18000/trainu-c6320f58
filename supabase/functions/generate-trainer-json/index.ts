@@ -69,7 +69,12 @@ serve(async (req) => {
 
     const now = new Date().toISOString();
 
-    // Build trainer JSON following the new nested schema
+    // Use AI-enhanced content if available, otherwise use original
+    const headline = submission.ai_headline || submission.custom_hero_title || `Transform Your Life with ${submission.full_name.split(" ")[0]}`;
+    const subheadline = submission.ai_subheadline || submission.bio || `Expert ${submission.specialty} coaching to help you reach your goals.`;
+    const bio = submission.ai_bio || submission.bio;
+
+    // Build trainer JSON following the new nested schema with stats
     const trainerJson = {
       slug,
       status: "generated",
@@ -79,7 +84,7 @@ serve(async (req) => {
         businessName: submission.business_name,
         location: submission.location,
         specialty: submission.specialty,
-        bio: submission.bio,
+        bio: bio,
         profilePhotoUrl: submission.profile_photo_url || "/images/demo-hero.png",
         galleryImageUrls: submission.gallery_photo_urls || [
           submission.profile_photo_url || "/images/gallery1.webp",
@@ -93,8 +98,8 @@ serve(async (req) => {
       },
 
       hero: {
-        headline: submission.custom_hero_title || `Transform Your Life with ${submission.full_name.split(" ")[0]}`,
-        subheadline: submission.bio || `Expert ${submission.specialty} coaching to help you reach your goals.`,
+        headline: headline,
+        subheadline: subheadline,
         ctaPrimaryLabel: "Book Consultation",
         ctaPrimaryLink: submission.booking_link || "#contact",
         ctaSecondaryLabel: "View Programs",
@@ -140,6 +145,13 @@ serve(async (req) => {
           }]
         : [],
 
+      // NEW: Include stats from submission (AI-generated or manual)
+      stats: {
+        clientCount: submission.client_count || "200+",
+        rating: submission.rating || "5.0",
+        yearsExperience: submission.years_experience || "5+",
+      },
+
       preferences: {
         coachingStyle: submission.coaching_style || undefined,
         wantsCustomDomain: submission.wants_custom_domain || false,
@@ -162,6 +174,7 @@ serve(async (req) => {
         updatedAt: now,
         sourceSubmissionId: submission.id,
         notes: null,
+        aiEnhanced: submission.ai_enhanced || false,
       },
     };
 
