@@ -217,6 +217,60 @@ serve(async (req) => {
 
     console.log("Submission saved successfully:", data.id);
 
+    // ========== GHL Integration ==========
+    // Push new lead to GoHighLevel (LeadConnector API) for CRM tracking
+    const ghlPat = Deno.env.get('GHL_SUB_ACCOUNT_PAT');
+    const ghlLocationId = Deno.env.get('GHL_LOCATION_ID');
+    
+    if (ghlPat && ghlLocationId) {
+      try {
+        // Split full_name into firstName and lastName
+        const nameParts = body.fullName.trim().split(/\s+/);
+        const firstName = nameParts[0] || '';
+        const lastName = nameParts.slice(1).join(' ') || '';
+
+        const ghlContactPayload = {
+          locationId: ghlLocationId,
+          firstName,
+          lastName,
+          email: body.email,
+          phone: body.phone,
+          tags: ["TrainU Website Lead", "Free Website Funnel", "my.trainu.us"],
+        };
+
+        console.log("Sending contact to GHL:", { email: body.email, firstName, lastName });
+
+        const ghlResponse = await fetch('https://services.leadconnectorhq.com/contacts/', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${ghlPat}`,
+            'Version': '2021-07-28',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(ghlContactPayload),
+        });
+
+        const ghlResponseText = await ghlResponse.text();
+        
+        if (ghlResponse.ok) {
+          console.log("GHL contact created successfully:", ghlResponseText);
+        } else {
+          // Log error but don't fail the submission
+          console.error("GHL API error:", {
+            status: ghlResponse.status,
+            statusText: ghlResponse.statusText,
+            body: ghlResponseText,
+          });
+        }
+      } catch (ghlError) {
+        // Log error but don't fail the submission
+        console.error("GHL integration failed:", ghlError);
+      }
+    } else {
+      console.warn("GHL credentials not configured, skipping CRM integration");
+    }
+
     // Send confirmation email
     const resendApiKey = Deno.env.get('RESEND_API_KEY');
     if (resendApiKey) {
