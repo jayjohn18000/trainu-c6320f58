@@ -7,6 +7,74 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// ========== Rate Limiting ==========
+// Simple in-memory rate limiter (resets on cold start, which is acceptable for edge functions)
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+const MAX_SUBMISSIONS_PER_IP = 3; // Max 3 submissions per IP per hour
+
+interface RateLimitEntry {
+  count: number;
+  firstRequest: number;
+}
+
+const rateLimitStore = new Map<string, RateLimitEntry>();
+
+function getClientIP(req: Request): string {
+  // Try common headers for client IP (in order of reliability)
+  const cfConnectingIP = req.headers.get('cf-connecting-ip');
+  if (cfConnectingIP) return cfConnectingIP;
+  
+  const xForwardedFor = req.headers.get('x-forwarded-for');
+  if (xForwardedFor) {
+    // x-forwarded-for can contain multiple IPs, take the first (original client)
+    return xForwardedFor.split(',')[0].trim();
+  }
+  
+  const xRealIP = req.headers.get('x-real-ip');
+  if (xRealIP) return xRealIP;
+  
+  // Fallback - not ideal but prevents null
+  return 'unknown';
+}
+
+function checkRateLimit(ip: string): { allowed: boolean; retryAfterSeconds?: number } {
+  const now = Date.now();
+  const entry = rateLimitStore.get(ip);
+  
+  // Clean up old entries periodically (simple cleanup on each request)
+  if (rateLimitStore.size > 10000) {
+    for (const [key, value] of rateLimitStore.entries()) {
+      if (now - value.firstRequest > RATE_LIMIT_WINDOW_MS) {
+        rateLimitStore.delete(key);
+      }
+    }
+  }
+  
+  if (!entry) {
+    // First request from this IP
+    rateLimitStore.set(ip, { count: 1, firstRequest: now });
+    return { allowed: true };
+  }
+  
+  // Check if window has expired
+  if (now - entry.firstRequest > RATE_LIMIT_WINDOW_MS) {
+    // Reset the window
+    rateLimitStore.set(ip, { count: 1, firstRequest: now });
+    return { allowed: true };
+  }
+  
+  // Within window - check count
+  if (entry.count >= MAX_SUBMISSIONS_PER_IP) {
+    const retryAfterSeconds = Math.ceil((entry.firstRequest + RATE_LIMIT_WINDOW_MS - now) / 1000);
+    return { allowed: false, retryAfterSeconds };
+  }
+  
+  // Increment count
+  entry.count++;
+  rateLimitStore.set(ip, entry);
+  return { allowed: true };
+}
+
 // Validation constants
 const MAX_LENGTHS = {
   fullName: 100,
@@ -22,6 +90,7 @@ const MAX_LENGTHS = {
   programTitle: 100,
   programPrice: 50,
   programDescription: 500,
+  customHeroTitle: 200,
 };
 
 // URL validation pattern (must start with http:// or https://)
@@ -47,7 +116,29 @@ serve(async (req) => {
   }
 
   try {
-    console.log("Received trainer intake submission");
+    // ========== Rate Limiting Check ==========
+    const clientIP = getClientIP(req);
+    const rateLimitResult = checkRateLimit(clientIP);
+    
+    if (!rateLimitResult.allowed) {
+      console.warn(`Rate limit exceeded for IP: ${clientIP}`);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Too many submissions. Please try again later.',
+          retryAfterSeconds: rateLimitResult.retryAfterSeconds 
+        }),
+        { 
+          status: 429, 
+          headers: { 
+            ...corsHeaders, 
+            'Content-Type': 'application/json',
+            'Retry-After': String(rateLimitResult.retryAfterSeconds)
+          } 
+        }
+      );
+    }
+    
+    console.log("Received trainer intake submission from IP:", clientIP);
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -93,6 +184,7 @@ serve(async (req) => {
       validateLength(body.testimonialQuote, 'Testimonial quote', MAX_LENGTHS.testimonialQuote),
       validateLength(body.testimonialName, 'Testimonial name', MAX_LENGTHS.testimonialName),
       validateLength(body.coachingStyle, 'Coaching style', MAX_LENGTHS.coachingStyle),
+      validateLength(body.customHeroTitle, 'Custom hero title', MAX_LENGTHS.customHeroTitle),
       validateLength(body.program1Title, 'Program 1 title', MAX_LENGTHS.programTitle),
       validateLength(body.program1Price, 'Program 1 price', MAX_LENGTHS.programPrice),
       validateLength(body.program1Description, 'Program 1 description', MAX_LENGTHS.programDescription),
