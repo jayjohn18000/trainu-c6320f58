@@ -17,3 +17,6 @@ verify_jwt = false
 
 [functions.enhance-trainer-content]
 verify_jwt = false
+
+[functions.scrape-linktree]
+verify_jwt = false
