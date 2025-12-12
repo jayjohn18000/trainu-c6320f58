@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link2, Loader2, Check, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { primaryColors, backgroundStyles, PrimaryColorKey, BackgroundStyleKey } from "@/theme/presetThemes";
+import { scrapeLinktree, LinktreeData } from "@/lib/api/linktree";
+import { useToast } from "@/hooks/use-toast";
 
 type SpecialtyOption =
   | "Strength Training"
@@ -125,6 +128,12 @@ const TrainerWebsiteForm: React.FC = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
+  // Linktree import state
+  const [linktreeUrl, setLinktreeUrl] = useState("");
+  const [isImportingLinktree, setIsImportingLinktree] = useState(false);
+  const [linktreeImportStatus, setLinktreeImportStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const { toast } = useToast();
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -155,6 +164,95 @@ const TrainerWebsiteForm: React.FC = () => {
       ...prev,
       galleryPhotos: Array.from(fileList).slice(0, 5), // Max 5 gallery images
     }));
+  };
+
+  const handleLinktreeImport = async () => {
+    if (!linktreeUrl.trim()) {
+      toast({
+        title: "Missing URL",
+        description: "Please enter your Linktree URL",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsImportingLinktree(true);
+    setLinktreeImportStatus('idle');
+
+    try {
+      const result = await scrapeLinktree(linktreeUrl);
+
+      if (!result.success || !result.data) {
+        throw new Error(result.error || 'Failed to import from Linktree');
+      }
+
+      const data = result.data;
+      let importedCount = 0;
+
+      // Auto-fill form fields with imported data
+      setForm((prev) => {
+        const updates: Partial<FormState> = {};
+
+        // Set business name from display name
+        if (data.displayName && !prev.businessName) {
+          updates.businessName = data.displayName;
+          importedCount++;
+        }
+
+        // Set bio
+        if (data.bio && !prev.bio) {
+          updates.bio = data.bio;
+          importedCount++;
+        }
+
+        // Set social links
+        if (data.links.instagram && !prev.instagramUrl) {
+          updates.instagramUrl = data.links.instagram;
+          importedCount++;
+        }
+        if (data.links.tiktok && !prev.tiktokUrl) {
+          updates.tiktokUrl = data.links.tiktok;
+          importedCount++;
+        }
+        if (data.links.youtube && !prev.youtubeUrl) {
+          updates.youtubeUrl = data.links.youtube;
+          importedCount++;
+        }
+        if (data.links.twitter && !prev.xUrl) {
+          updates.xUrl = data.links.twitter;
+          importedCount++;
+        }
+        if (data.links.facebook && !prev.facebookUrl) {
+          updates.facebookUrl = data.links.facebook;
+          importedCount++;
+        }
+
+        // Set booking link
+        if (data.links.booking && !prev.bookingLink) {
+          updates.bookingLink = data.links.booking;
+          importedCount++;
+        }
+
+        return { ...prev, ...updates };
+      });
+
+      setLinktreeImportStatus('success');
+      toast({
+        title: "Import successful!",
+        description: `Imported ${importedCount} field${importedCount !== 1 ? 's' : ''} from your Linktree. Review and complete the remaining fields.`,
+      });
+
+    } catch (error) {
+      console.error('Linktree import error:', error);
+      setLinktreeImportStatus('error');
+      toast({
+        title: "Import failed",
+        description: error instanceof Error ? error.message : "Could not import from Linktree. Please fill in the form manually.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsImportingLinktree(false);
+    }
   };
 
   const validate = (): boolean => {
@@ -294,6 +392,66 @@ const TrainerWebsiteForm: React.FC = () => {
           {submitError}
         </div>
       )}
+
+      {/* Linktree Import Section */}
+      <div className="mb-8 rounded-xl border border-primary/30 bg-primary/5 p-4 sm:p-5">
+        <div className="flex items-start gap-3">
+          <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+            <Link2 className="w-5 h-5 text-primary" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-base font-semibold text-foreground mb-1">
+              Have a Linktree? Import your info
+            </h3>
+            <p className="text-sm text-foreground/60 mb-3">
+              We'll grab your bio, social links, and booking URL to pre-fill the form.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <input
+                type="text"
+                value={linktreeUrl}
+                onChange={(e) => setLinktreeUrl(e.target.value)}
+                placeholder="linktr.ee/yourname"
+                className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary"
+                disabled={isImportingLinktree}
+              />
+              <button
+                type="button"
+                onClick={handleLinktreeImport}
+                disabled={isImportingLinktree || !linktreeUrl.trim()}
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isImportingLinktree ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Importing...
+                  </>
+                ) : linktreeImportStatus === 'success' ? (
+                  <>
+                    <Check className="w-4 h-4" />
+                    Imported!
+                  </>
+                ) : linktreeImportStatus === 'error' ? (
+                  <>
+                    <AlertCircle className="w-4 h-4" />
+                    Try Again
+                  </>
+                ) : (
+                  <>
+                    <Link2 className="w-4 h-4" />
+                    Import
+                  </>
+                )}
+              </button>
+            </div>
+            {linktreeImportStatus === 'success' && (
+              <p className="mt-2 text-xs text-emerald-400">
+                Data imported! Review the fields below and complete any missing info.
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Trainer Identity */}
