@@ -7,7 +7,7 @@
     "businessName": "AvaFit Coaching",
     "location": "Chicago, IL",
     "specialty": "Women's Strength & Conditioning",
-    "bio": "I'm Ava, a strength and conditioning coach specializing in helping women build confidence in and out of the gym. My coaching blends structured progressive overload, habit development, and mindset training so you can unlock your strongest self. Whether you're a beginner or ready to advance, we'll build a clear, sustainable plan together.",
+    "bio": "I coach women who want to feel strong and confident — without extremes or burnout. You'll get a plan that's clear, flexible, and built around your lifestyle, plus accountability that keeps you showing up even when motivation disappears.",
     "profilePhotoUrl": "/images/demo-hero.png",
     "galleryImageUrls": [
       "/images/gallery1.webp",
@@ -21,9 +21,10 @@
   },
 
   "hero": {
-    "headline": "Build Strength. Gain Confidence.",
-    "subheadline": "Online strength coaching for women who want to look and feel incredible.",
-    "ctaPrimaryLabel": "Start Your Free Consultation",
+    "headline": "Get stronger — and stay consistent.",
+    "subheadline": "Online + in-person coaching for women who want a clear plan, accountability that sticks, and progress they can feel.",
+    "systemVibe": "Simple plan + built-in check-ins so you never feel lost.",
+    "ctaPrimaryLabel": "Book Free Consult",
     "ctaPrimaryLink": "https://api.leadconnectorhq.com/widget/booking/mtXIZ2paE6umxArw3BP1",
     "ctaSecondaryLabel": "View Programs",
     "ctaSecondaryLink": "#programs",
@@ -43,7 +44,13 @@
       "title": "12-Week Strength Transformation",
       "price": "249",
       "priceLabel": "$249 / month",
-      "description": "Build lean muscle & develop unstoppable confidence with customized training, weekly form checks, nutrition guidance, and habit tracking.",
+      "description": "Build lean muscle and lasting confidence with a structured plan built around your life.",
+      "bullets": [
+        "Customized training + nutrition",
+        "Weekly form checks and adjustments",
+        "Built-in accountability and check-ins"
+      ],
+      "ctaLabel": "Apply for Coaching",
       "isPrimary": true
     },
     {
@@ -51,7 +58,13 @@
       "title": "Busy Professional Program",
       "price": "199",
       "priceLabel": "$199 / month",
-      "description": "Strength coaching designed for tight schedules with 3–4 day training splits and time-efficient workouts.",
+      "description": "Strength coaching that fits tight schedules — efficient workouts, real results.",
+      "bullets": [
+        "3–4 day training splits",
+        "Time-efficient sessions",
+        "Flexible scheduling support"
+      ],
+      "ctaLabel": "Apply for Coaching",
       "isPrimary": false
     },
     {
@@ -59,7 +72,13 @@
       "title": "Online Coaching Lite",
       "price": "129",
       "priceLabel": "$129 / month",
-      "description": "A starter plan for beginners with foundational movement coaching and monthly check-ins.",
+      "description": "A starter plan for beginners ready to build a foundation with guidance.",
+      "bullets": [
+        "Foundational movement coaching",
+        "Monthly check-ins",
+        "Progress tracking"
+      ],
+      "ctaLabel": "Get Started",
       "isPrimary": false
     }
   ],
@@ -84,8 +103,14 @@
     }
   ],
 
+  "stats": {
+    "clientCount": "200+",
+    "rating": "5.0",
+    "yearsExperience": "5+"
+  },
+
   "preferences": {
-    "coachingStyle": "Online Only",
+    "coachingStyle": "Online + In-Person",
     "wantsCustomDomain": false,
     "wantsSmsAutomations": false,
     "wantsAiAssistant": false,

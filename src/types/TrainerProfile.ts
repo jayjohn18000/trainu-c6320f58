@@ -4,6 +4,8 @@ export type TrainerProgram = {
   price: string;
   priceLabel: string;
   description: string;
+  bullets?: string[];
+  ctaLabel?: string;
   isPrimary: boolean;
 };
 
@@ -53,6 +55,7 @@ export type TrainerProfile = {
   hero: {
     headline: string;
     subheadline: string;
+    systemVibe?: string;
     ctaPrimaryLabel: string;
     ctaPrimaryLink: string;
     ctaSecondaryLabel?: string;

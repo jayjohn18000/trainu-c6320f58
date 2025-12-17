@@ -1,4 +1,4 @@
-import { MessageCircle, Phone, Send } from "lucide-react";
+import { Send, Calendar, Instagram } from "lucide-react";
 import { TrainerProfile } from "@/types/TrainerProfile";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -45,58 +45,42 @@ const ContactSection = ({ trainer }: ContactSectionProps) => {
             Let's Connect
           </h2>
           <p className="text-foreground/70 text-lg max-w-2xl mx-auto">
-            Ready to start your transformation? Reach out and let's discuss how we can work together.
+            Ready to start? Book a free consult or send me a message.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {/* Chat Card */}
-          <div className="bg-card border border-border rounded-2xl p-8 text-center hover:border-primary/50 transition-colors">
-            <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-5">
-              <MessageCircle className="w-7 h-7 text-primary" />
+        <div className="grid lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {/* Book a Free Consult Card */}
+          <div className="bg-card border border-border rounded-2xl p-8 flex flex-col">
+            <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-5">
+              <Calendar className="w-7 h-7 text-primary" />
             </div>
-            <h3 className="text-xl font-semibold text-foreground mb-2">Chat</h3>
-            <p className="text-foreground/60 text-sm mb-5">
-              Send me a message on Instagram for quick questions.
-            </p>
-            {trainer.social.instagram ? (
-              <button
-                onClick={() => window.open(trainer.social.instagram, '_blank', 'noopener,noreferrer')}
-                className="text-primary hover:text-primary/80 font-medium text-sm transition-colors"
-              >
-                Message on Instagram →
-              </button>
-            ) : (
-              <a
-                href={`mailto:${trainer.contact.email}`}
-                className="text-primary hover:text-primary-glow font-medium text-sm transition-colors"
-              >
-                Send an Email →
-              </a>
-            )}
-          </div>
-
-          {/* Call Card */}
-          <div className="bg-card border border-border rounded-2xl p-8 text-center hover:border-primary/50 transition-colors">
-            <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-5">
-              <Phone className="w-7 h-7 text-primary" />
-            </div>
-            <h3 className="text-xl font-semibold text-foreground mb-2">Call</h3>
-            <p className="text-foreground/60 text-sm mb-5">
-              Book a free consultation call to discuss your goals.
+            <h3 className="text-xl font-semibold text-foreground mb-2">Book a Free Consult</h3>
+            <p className="text-foreground/60 text-sm mb-6 flex-1">
+              Schedule a quick call to discuss your goals and see if we're a good fit. No pressure, no commitment.
             </p>
             <a
               href={bookingLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary hover:text-primary-glow font-medium text-sm transition-colors"
+              className="w-full flex items-center justify-center gap-2 bg-gradient-primary text-primary-foreground py-4 rounded-xl font-semibold transition-all duration-300 shadow-button hover:shadow-glow hover:scale-[1.02]"
             >
-              Book a Call →
+              <Calendar className="w-4 h-4" />
+              Book Free Consult
             </a>
+            {trainer.social.instagram && (
+              <button
+                onClick={() => window.open(trainer.social.instagram, '_blank', 'noopener,noreferrer')}
+                className="flex items-center justify-center gap-2 text-foreground/50 hover:text-primary text-sm mt-4 transition-colors"
+              >
+                <Instagram className="w-4 h-4" />
+                Quick question? Message me on Instagram →
+              </button>
+            )}
           </div>
 
           {/* Send Message Form */}
-          <div className="bg-card border border-border rounded-2xl p-8 lg:row-span-1">
+          <div className="bg-card border border-border rounded-2xl p-8">
             <h3 className="text-xl font-semibold text-foreground mb-5">Send a Message</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -137,7 +121,8 @@ const ContactSection = ({ trainer }: ContactSectionProps) => {
               </div>
               <Button
                 type="submit"
-                className="w-full bg-primary hover:bg-primary-glow text-primary-foreground"
+                variant="outline"
+                className="w-full border-border hover:border-primary/30"
               >
                 <Send className="w-4 h-4 mr-2" />
                 Send Message

@@ -1,5 +1,5 @@
 import { TrainerProfile } from "@/types/TrainerProfile";
-import { Instagram, Youtube, Mail, MapPin, Users, Award, Star } from "lucide-react";
+import { Instagram, Youtube, Mail, MapPin, Users, Award, Star, Check } from "lucide-react";
 
 interface AboutSectionProps {
   trainer: TrainerProfile;
@@ -15,6 +15,12 @@ const AboutSection = ({ trainer }: AboutSectionProps) => {
   const clientCount = stats.clientCount || "200+";
   const rating = stats.rating || "5.0";
   const yearsExperience = stats.yearsExperience || "5+";
+
+  const expectations = [
+    "A plan you can follow (even on busy weeks)",
+    "Clear weekly targets, not vague advice",
+    "Regular progress reviews + adjustments",
+  ];
 
   return (
     <section id="about" className="py-16 sm:py-20 md:py-32 bg-background-elevated">
@@ -73,7 +79,7 @@ const AboutSection = ({ trainer }: AboutSectionProps) => {
           {/* Content */}
           <div className="order-1 lg:order-2">
             <span className="inline-block text-primary text-sm font-semibold tracking-wider uppercase mb-3 sm:mb-4">
-              About
+              Your Coach
             </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-2">
               Meet {trainer.trainer.fullName}
@@ -87,6 +93,19 @@ const AboutSection = ({ trainer }: AboutSectionProps) => {
               <p className="text-base sm:text-lg text-foreground/70 leading-relaxed max-w-xl">
                 {trainer.trainer.bio}
               </p>
+            </div>
+
+            {/* What you can expect */}
+            <div className="bg-card/50 border border-border/50 rounded-xl p-5 mb-6">
+              <p className="text-sm font-semibold text-foreground mb-3">What you can expect:</p>
+              <ul className="space-y-2">
+                {expectations.map((item, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-foreground/70">
+                    <Check className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             {/* Connect Section */}
