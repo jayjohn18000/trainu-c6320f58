@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import HeroSection from "@/components/HeroSection";
 import ProgramsSection from "@/components/ProgramsSection";
+import CoachingEngineSection from "@/components/CoachingEngineSection";
 import AboutSection from "@/components/AboutSection";
 import ResultsSection from "@/components/ResultsSection";
 import TestimonialSection from "@/components/TestimonialSection";
@@ -62,6 +63,7 @@ const TrainerPage = ({ customSlug }: TrainerPageProps) => {
       <Layout trainer={trainer} isDemo={isDemo}>
         <HeroSection trainer={trainer} isDemo={isDemo} />
         <ProgramsSection programs={trainer.programs} />
+        {isDemo && <CoachingEngineSection trainer={trainer} />}
         <AboutSection trainer={trainer} />
         <ResultsSection trainer={trainer} />
         <TestimonialSection trainer={trainer} />

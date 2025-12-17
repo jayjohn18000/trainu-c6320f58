@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { TrainerProfile } from "@/types/TrainerProfile";
-import { ArrowRight, Mail, Phone, Calendar } from "lucide-react";
+import { ArrowRight, Mail, Phone, Calendar, Check } from "lucide-react";
 
 interface CTASectionProps {
   trainer: TrainerProfile;
@@ -8,6 +8,13 @@ interface CTASectionProps {
 }
 
 const CTASection = ({ trainer, isDemo = false }: CTASectionProps) => {
+  const trainerBenefits = [
+    "Done-for-you setup (no coding)",
+    "Booking + follow-up built in",
+    "Client check-ins + retention support",
+    "One-time setup, low maintenance",
+  ];
+
   return (
     <section className="py-20 md:py-32 bg-background-elevated relative overflow-hidden">
       {/* Background Glow */}
@@ -17,41 +24,62 @@ const CTASection = ({ trainer, isDemo = false }: CTASectionProps) => {
         <div className="max-w-3xl mx-auto text-center">
           {/* Badge */}
           <span className="inline-block text-primary text-sm font-semibold tracking-wider uppercase mb-4">
-            {isDemo ? "Your Turn" : "Get Started Today"}
+            {isDemo ? "For Trainers" : "Get Started Today"}
           </span>
 
           {/* Headline */}
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
-            {isDemo ? "Want a Site Just Like This?" : "Ready to Look Like a Pro?"}
+            {isDemo 
+              ? "Trainer? This site can be yours — built to book clients."
+              : "Ready to Look Like a Pro?"
+            }
           </h2>
 
           {/* Subheadline */}
-          <p className="text-lg md:text-xl text-foreground/70 mb-10 max-w-xl mx-auto">
+          <p className="text-lg md:text-xl text-foreground/70 mb-8 max-w-xl mx-auto">
             {isDemo 
-              ? "Get your own professional trainer website for free. No coding, no hassle — we build it for you in 24 hours."
+              ? "Get a free trainer website that acts as your lead magnet for in-person + online coaching — plus a co-pilot setup that follows up, books calls, and supports client consistency."
               : "One consultation. A clear roadmap. A stronger, more confident you."
             }
           </p>
 
           {/* CTAs - Different for demo vs regular */}
           {isDemo ? (
-            <div className="flex flex-col items-center gap-4">
+            <div className="flex flex-col items-center gap-6">
+              {/* Benefits list */}
+              <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-4">
+                {trainerBenefits.map((benefit, i) => (
+                  <li key={i} className="flex items-center gap-2 text-sm text-foreground/70">
+                    <Check className="w-4 h-4 text-primary" />
+                    <span>{benefit}</span>
+                  </li>
+                ))}
+              </ul>
+
               {/* Demo: Primary CTA to claim form */}
-              <Link
-                to="/claim"
+              <a
+                href="https://my.trainu.us/claim"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group inline-flex items-center justify-center gap-3 bg-gradient-primary text-primary-foreground px-10 py-5 rounded-xl font-semibold text-lg shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
               >
                 Claim Your Free Trainer Site
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              {/* Demo: Secondary option for consultation */}
+              </a>
+              
+              {/* Demo: Secondary option for setup call */}
               <a
                 href={trainer.hero.ctaPrimaryLink}
                 className="inline-flex items-center gap-2 text-foreground/60 hover:text-primary transition-colors font-medium"
               >
                 <Calendar className="w-4 h-4" />
-                Or book a consultation first →
+                Book a 10-Min Setup Call →
               </a>
+
+              {/* Footer note */}
+              <p className="text-xs text-foreground/40 mt-4">
+                Limited free builds available each week.
+              </p>
             </div>
           ) : (
             <>

@@ -3,9 +3,10 @@ import { Check, Sparkles, ArrowRight } from "lucide-react";
 
 interface ProgramsSectionProps {
   programs: TrainerProgram[];
+  bookingLink?: string;
 }
 
-const ProgramsSection = ({ programs }: ProgramsSectionProps) => {
+const ProgramsSection = ({ programs, bookingLink }: ProgramsSectionProps) => {
   return (
     <section id="programs" className="py-20 md:py-32 bg-background">
       <div className="container">
@@ -18,7 +19,7 @@ const ProgramsSection = ({ programs }: ProgramsSectionProps) => {
             Choose Your Path
           </h2>
           <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
-            Every program includes personalized coaching, accountability, and a tailored roadmap to your goals.
+            Choose the level of support you want. Everything is designed to fit real life — even busy weeks.
           </p>
         </div>
 
@@ -47,12 +48,24 @@ const ProgramsSection = ({ programs }: ProgramsSectionProps) => {
                 <h3 className="text-xl md:text-2xl font-bold text-foreground mb-2">
                   {program.title}
                 </h3>
-                <p className="text-foreground/60 mb-6">
+                <p className="text-foreground/60 mb-4">
                   {program.description}
                 </p>
 
+                {/* Bullet Points */}
+                {program.bullets && program.bullets.length > 0 && (
+                  <ul className="space-y-2 mb-6">
+                    {program.bullets.map((bullet, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-foreground/70">
+                        <Check className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
                 {/* Price */}
-                <div className="mb-6">
+                <div className="mb-6 mt-auto">
                   <span className="text-3xl md:text-4xl font-bold text-foreground">
                     ${program.price}
                   </span>
@@ -64,19 +77,24 @@ const ProgramsSection = ({ programs }: ProgramsSectionProps) => {
                 {/* CTA Button - Full Width */}
                 <a
                   href="#contact"
-                  className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl font-semibold transition-all duration-300 mt-auto ${
+                  className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl font-semibold transition-all duration-300 ${
                     program.isPrimary
                       ? "bg-gradient-primary text-primary-foreground shadow-button hover:shadow-glow hover:scale-[1.02]"
                       : "bg-accent text-foreground border border-border hover:border-primary/30 hover:bg-accent/80"
                   }`}
                 >
-                  Get Started
+                  {program.ctaLabel || "Get Started"}
                   <ArrowRight className="w-4 h-4" />
                 </a>
               </div>
             </div>
           ))}
         </div>
+
+        {/* Footer Note */}
+        <p className="text-center text-sm text-foreground/50 mt-10">
+          Not sure? Book a free consult and I'll recommend the best fit.
+        </p>
       </div>
     </section>
   );

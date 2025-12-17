@@ -32,16 +32,26 @@ const OverlayNav = ({ trainer, isDemo = false }: OverlayNavProps) => {
     };
   }, [isOpen]);
 
-  // Navigation links based on context
+  const bookingLink = trainer?.social?.bookingLink || trainer?.hero?.ctaPrimaryLink;
+
+  // Navigation links based on context - Updated for demo
   const navLinks = trainer
-    ? [
-        { label: "Home", href: `/trainers/${trainer.slug}` },
-        { label: "About", href: "#about" },
-        { label: "Programs", href: "#programs" },
-        { label: "Results", href: "#testimonials" },
-        { label: "Contact", href: "#contact" },
-        ...(isDemo ? [{ label: "Back to TrainU", href: "/", isInternal: true }] : []),
-      ]
+    ? isDemo
+      ? [
+          { label: "Home", href: `/trainers/${trainer.slug}` },
+          { label: "Programs", href: "#programs" },
+          { label: "Results", href: "#testimonials" },
+          { label: "How It Works", href: "#how-it-works" },
+          { label: "Contact", href: "#contact" },
+          { label: "Back to TrainU", href: "/", isInternal: true },
+        ]
+      : [
+          { label: "Home", href: `/trainers/${trainer.slug}` },
+          { label: "About", href: "#about" },
+          { label: "Programs", href: "#programs" },
+          { label: "Results", href: "#testimonials" },
+          { label: "Contact", href: "#contact" },
+        ]
     : [
         { label: "Home", href: "/" },
         { label: "How It Works", href: "#how-it-works" },
@@ -50,9 +60,9 @@ const OverlayNav = ({ trainer, isDemo = false }: OverlayNavProps) => {
         { label: "Get My Free Site", href: "/claim", isInternal: true },
       ];
 
-  // CTA configuration based on context
+  // CTA configuration based on context - Demo shows Book Free Consult
   const headerCta = isDemo
-    ? { label: "Get My Free Site", href: "/claim", isInternal: true }
+    ? { label: "Book Free Consult", href: bookingLink || "#contact", isInternal: false }
     : trainer
     ? { label: "Book Consultation", href: trainer.hero.ctaPrimaryLink, isInternal: false }
     : { label: "View Demo", href: "/trainers/coach-demo", isInternal: true };
@@ -203,27 +213,24 @@ const OverlayNav = ({ trainer, isDemo = false }: OverlayNavProps) => {
 
           {/* CTA Buttons */}
           <div className="px-6 mt-4 space-y-3">
-            {/* Primary CTA */}
-            {isDemo ? (
+            {/* Primary CTA - For demo, show Book Free Consult */}
+            {isDemo && trainer ? (
               <>
-                <Link
-                  to="/claim"
+                <a
+                  href={bookingLink}
                   onClick={() => setIsOpen(false)}
                   className="block w-full text-center bg-gradient-primary text-primary-foreground px-6 py-4 rounded-xl font-semibold text-lg shadow-button hover:scale-[1.02] transition-transform"
                 >
-                  Get My Free Site
+                  Book Free Consult
+                </a>
+                {/* Secondary: Get My Free Site */}
+                <Link
+                  to="/claim"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center justify-center gap-2 w-full text-foreground/60 hover:text-foreground py-2 transition-colors"
+                >
+                  Trainer? Get your own site free →
                 </Link>
-                {/* Secondary: Consultation */}
-                {trainer && (
-                  <a
-                    href={trainer.hero.ctaPrimaryLink}
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-2 w-full text-foreground/60 hover:text-foreground py-2 transition-colors"
-                  >
-                    <Calendar className="w-4 h-4" />
-                    Or book a demo consultation
-                  </a>
-                )}
               </>
             ) : trainer ? (
               <a

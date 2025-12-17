@@ -8,28 +8,28 @@ interface ResultsSectionProps {
 const steps = [
   {
     number: "01",
-    title: "Discovery Call",
-    description: "We'll explore your goals, challenges, and lifestyle to create the right approach."
+    title: "Quick consult",
+    description: "We map your goal, schedule, and starting point."
   },
   {
     number: "02", 
-    title: "Personalized Plan",
-    description: "Training and nutrition tailored to your lifestyle — realistic, flexible, and sustainable."
+    title: "Your plan is built",
+    description: "Training + nutrition targets tailored to you."
   },
   {
     number: "03",
-    title: "Weekly Coaching",
-    description: "Consistent check-ins to track progress, adjust, and keep you accountable."
+    title: "Weekly accountability",
+    description: "Check-ins and adjustments as you progress."
   },
   {
     number: "04",
-    title: "Lifestyle Integration",
-    description: "We adapt your plan as your schedule, cycle, and needs shift."
+    title: "Consistency support",
+    description: "Reminders so you stay on track without overthinking."
   },
   {
     number: "05",
-    title: "Long-Term Balance",
-    description: "Progress doesn't end here — we'll refine, celebrate, and keep building together."
+    title: "Progress reviews",
+    description: "We measure what works and keep momentum."
   }
 ];
 
@@ -40,19 +40,19 @@ const ResultsSection = ({ trainer }: ResultsSectionProps) => {
   const bookingLink = trainer.social.bookingLink || trainer.hero.ctaPrimaryLink;
 
   return (
-    <section id="results" className="py-20 md:py-32 bg-background">
+    <section id="how-it-works" className="py-20 md:py-32 bg-background">
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
           {/* Left Content */}
           <div>
             <span className="inline-block text-primary text-sm font-semibold tracking-wider uppercase mb-4">
-              Process
+              How It Works
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-              Your path to<br />lasting results
+              How coaching works
             </h2>
             <p className="text-lg text-foreground/70 leading-relaxed mb-8 max-w-md">
-              Every transformation starts with structure. Here's how we turn goals into real progress — one step at a time.
+              Simple steps. Clear expectations. Consistency built in.
             </p>
 
             {/* CTA Button */}
@@ -60,7 +60,7 @@ const ResultsSection = ({ trainer }: ResultsSectionProps) => {
               href={bookingLink}
               className="group inline-flex items-center gap-3 border-2 border-primary text-primary px-6 py-3 rounded-xl font-semibold hover:bg-primary hover:text-primary-foreground transition-all duration-300 mb-12"
             >
-              Book Your Free Call
+              Book Free Consult
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
 

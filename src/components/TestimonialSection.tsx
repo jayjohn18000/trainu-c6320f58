@@ -28,12 +28,19 @@ const TestimonialSection = ({ trainer }: TestimonialSectionProps) => {
             </span>
 
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
-              Progress you can see
+              Results that last
             </h2>
 
             <p className="text-lg text-foreground/60 leading-relaxed mb-10 max-w-lg">
-              Every transformation tells a story. These programs are built to help you move better, feel stronger, and see steady progress, without extremes, burnout, or quick fixes.
+              The goal isn't a perfect week — it's steady progress you can keep.
             </p>
+
+            {/* Transformation label */}
+            <div className="mb-6">
+              <span className="inline-block text-xs text-foreground/50 uppercase tracking-wider bg-card/50 border border-border/50 px-3 py-1.5 rounded-full">
+                12-week transformation (strength + consistency)
+              </span>
+            </div>
 
             {/* Client testimonial card */}
             <div className="space-y-6">
