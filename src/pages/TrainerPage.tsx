@@ -7,7 +7,7 @@ import AboutSection from "@/components/AboutSection";
 import ResultsSection from "@/components/ResultsSection";
 import TestimonialSection from "@/components/TestimonialSection";
 import ContactSection from "@/components/ContactSection";
-import CTASection from "@/components/CTASection";
+
 import MobileBottomBar from "@/components/MobileBottomBar";
 import DemoBanner from "@/components/DemoBanner";
 import TrainerThemeProvider from "@/components/TrainerThemeProvider";
@@ -63,12 +63,11 @@ const TrainerPage = ({ customSlug }: TrainerPageProps) => {
       <Layout trainer={trainer} isDemo={isDemo}>
         <HeroSection trainer={trainer} isDemo={isDemo} />
         <ProgramsSection programs={trainer.programs} />
-        {isDemo && <CoachingEngineSection trainer={trainer} />}
         <AboutSection trainer={trainer} />
         <ResultsSection trainer={trainer} />
         <TestimonialSection trainer={trainer} />
         <ContactSection trainer={trainer} />
-        <CTASection trainer={trainer} isDemo={isDemo} />
+        <CoachingEngineSection trainer={trainer} />
       </Layout>
       <MobileBottomBar trainer={trainer} isDemo={isDemo} />
     </TrainerThemeProvider>
