@@ -43,7 +43,8 @@
       "id": "p1",
       "title": "12-Week Strength Transformation",
       "price": "249",
-      "priceLabel": "$249 / month",
+      "priceDisplay": "$249 / month",
+      "billingPeriod": "month",
       "description": "Build lean muscle and lasting confidence with a structured plan built around your life.",
       "bullets": [
         "Customized training + nutrition",
@@ -57,7 +58,8 @@
       "id": "p2",
       "title": "Busy Professional Program",
       "price": "199",
-      "priceLabel": "$199 / month",
+      "priceDisplay": "$199 / month",
+      "billingPeriod": "month",
       "description": "Strength coaching that fits tight schedules — efficient workouts, real results.",
       "bullets": [
         "3–4 day training splits",
@@ -71,7 +73,8 @@
       "id": "p3",
       "title": "Online Coaching Lite",
       "price": "129",
-      "priceLabel": "$129 / month",
+      "priceDisplay": "$129 / month",
+      "billingPeriod": "month",
       "description": "A starter plan for beginners ready to build a foundation with guidance.",
       "bullets": [
         "Foundational movement coaching",

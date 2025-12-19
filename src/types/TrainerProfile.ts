@@ -2,7 +2,10 @@ export type TrainerProgram = {
   id: string;
   title: string;
   price: string;
-  priceLabel: string;
+  priceLabel?: string;
+  priceDisplay?: string;
+  billingPeriod?: string;
+  frequency?: string;
   description: string;
   bullets?: string[];
   ctaLabel?: string;

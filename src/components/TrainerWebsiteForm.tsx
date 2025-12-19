@@ -29,12 +29,18 @@ interface FormState {
   customHeroTitle: string;
   program1Title: string;
   program1Price: string;
+  program1PriceDisplay: string;
+  program1BillingPeriod: string;
   program1Description: string;
   program2Title: string;
   program2Price: string;
+  program2PriceDisplay: string;
+  program2BillingPeriod: string;
   program2Description: string;
   program3Title: string;
   program3Price: string;
+  program3PriceDisplay: string;
+  program3BillingPeriod: string;
   program3Description: string;
   instagramUrl: string;
   tiktokUrl: string;
@@ -88,12 +94,18 @@ const TrainerWebsiteForm: React.FC = () => {
     customHeroTitle: "",
     program1Title: "",
     program1Price: "",
+    program1PriceDisplay: "",
+    program1BillingPeriod: "",
     program1Description: "",
     program2Title: "",
     program2Price: "",
+    program2PriceDisplay: "",
+    program2BillingPeriod: "",
     program2Description: "",
     program3Title: "",
     program3Price: "",
+    program3PriceDisplay: "",
+    program3BillingPeriod: "",
     program3Description: "",
     instagramUrl: "",
     tiktokUrl: "",
@@ -267,7 +279,8 @@ const TrainerWebsiteForm: React.FC = () => {
     if (!form.bio.trim()) newErrors.bio = "Short bio is required.";
     if (!form.specialty) newErrors.specialty = "Please select a specialty.";
     if (!form.program1Title.trim()) newErrors.program1Title = "Program 1 title is required.";
-    if (!form.program1Price.trim()) newErrors.program1Price = "Program 1 price is required.";
+    if (!form.program1Price.trim() && !form.program1PriceDisplay.trim())
+      newErrors.program1Price = "Program 1 price or label is required.";
     if (!form.program1Description.trim())
       newErrors.program1Description = "Program 1 description is required.";
     if (!form.instagramUrl.trim()) newErrors.instagramUrl = "Instagram URL is required.";
@@ -766,6 +779,30 @@ const TrainerWebsiteForm: React.FC = () => {
                 {renderError("program1Price")}
               </div>
             </div>
+            <div className="grid gap-4 sm:grid-cols-2 mt-3">
+              <div>
+                <label className="block text-sm font-medium text-foreground/90">Custom price label</label>
+                <input
+                  type="text"
+                  name="program1PriceDisplay"
+                  value={form.program1PriceDisplay}
+                  onChange={handleChange}
+                  className={`${inputBaseClass} ${inputNormalClass}`}
+                  placeholder="$249/month, $80/session, Free consultation"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground/90">Billing period</label>
+                <input
+                  type="text"
+                  name="program1BillingPeriod"
+                  value={form.program1BillingPeriod}
+                  onChange={handleChange}
+                  className={`${inputBaseClass} ${inputNormalClass}`}
+                  placeholder="month, session, week"
+                />
+              </div>
+            </div>
             <div className="mt-3">
               <label className="block text-sm font-medium text-foreground/90">
                 Short Description <span className="text-red-400">*</span>
@@ -809,6 +846,30 @@ const TrainerWebsiteForm: React.FC = () => {
                 />
               </div>
             </div>
+            <div className="grid gap-4 sm:grid-cols-2 mt-3">
+              <div>
+                <label className="block text-sm font-medium text-foreground/90">Custom price label</label>
+                <input
+                  type="text"
+                  name="program2PriceDisplay"
+                  value={form.program2PriceDisplay}
+                  onChange={handleChange}
+                  className={`${inputBaseClass} ${inputNormalClass}`}
+                  placeholder="$199/month, $75/session, Free call"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground/90">Billing period</label>
+                <input
+                  type="text"
+                  name="program2BillingPeriod"
+                  value={form.program2BillingPeriod}
+                  onChange={handleChange}
+                  className={`${inputBaseClass} ${inputNormalClass}`}
+                  placeholder="month, session, week"
+                />
+              </div>
+            </div>
             <div className="mt-3">
               <label className="block text-sm font-medium text-foreground/90">Short Description</label>
               <textarea
@@ -846,6 +907,30 @@ const TrainerWebsiteForm: React.FC = () => {
                   onChange={handleChange}
                   className={`${inputBaseClass} ${inputNormalClass}`}
                   placeholder="129"
+                />
+              </div>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2 mt-3">
+              <div>
+                <label className="block text-sm font-medium text-foreground/90">Custom price label</label>
+                <input
+                  type="text"
+                  name="program3PriceDisplay"
+                  value={form.program3PriceDisplay}
+                  onChange={handleChange}
+                  className={`${inputBaseClass} ${inputNormalClass}`}
+                  placeholder="$129/month, $60/session"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground/90">Billing period</label>
+                <input
+                  type="text"
+                  name="program3BillingPeriod"
+                  value={form.program3BillingPeriod}
+                  onChange={handleChange}
+                  className={`${inputBaseClass} ${inputNormalClass}`}
+                  placeholder="month, session, week"
                 />
               </div>
             </div>
