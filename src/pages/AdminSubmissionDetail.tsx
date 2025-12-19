@@ -17,7 +17,24 @@ import { useIsMobile } from "@/hooks/use-mobile";
 type Program = {
   title: string;
   price: string;
+  priceDisplay?: string;
+  billingPeriod?: string;
+  frequency?: string;
   description: string;
+};
+
+const getProgramPriceDisplay = (program: Program) => {
+  const custom = program.priceDisplay?.trim();
+  if (custom) return custom;
+
+  const numericPrice = program.price && !isNaN(parseFloat(program.price));
+  if (numericPrice) {
+    const formatted = `$${program.price}`;
+    const duration = program.billingPeriod || program.frequency;
+    return duration ? `${formatted} / ${duration}` : formatted;
+  }
+
+  return "Contact for pricing";
 };
 
 type Submission = {
@@ -880,7 +897,7 @@ const AdminSubmissionDetail = () => {
                       className="p-3 sm:p-4 rounded-lg bg-muted/30 border border-border"
                     >
                       <h4 className="font-semibold text-sm sm:text-base">{program.title || `Program ${index + 1}`}</h4>
-                      <p className="text-primary font-medium text-sm">{program.price}</p>
+                      <p className="text-primary font-medium text-sm">{getProgramPriceDisplay(program)}</p>
                       <p className="text-xs sm:text-sm text-foreground/70 mt-2">
                         {program.description}
                       </p>

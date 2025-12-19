@@ -6,6 +6,24 @@ interface ProgramsSectionProps {
   bookingLink?: string;
 }
 
+const formatProgramPrice = (program: TrainerProgram) => {
+  const custom = program.priceDisplay?.trim();
+  if (custom) return custom;
+
+  const numericPrice = program.price && !isNaN(parseFloat(program.price));
+  if (numericPrice) {
+    const formatted = `$${program.price}`;
+    const duration = program.billingPeriod || program.frequency;
+    return duration ? `${formatted} / ${duration}` : formatted;
+  }
+
+  if (program.priceLabel?.trim()) {
+    return program.priceLabel.trim();
+  }
+
+  return "Contact for pricing";
+};
+
 const ProgramsSection = ({ programs, bookingLink }: ProgramsSectionProps) => {
   return (
     <section id="programs" className="py-20 md:py-32 bg-background">
@@ -66,12 +84,24 @@ const ProgramsSection = ({ programs, bookingLink }: ProgramsSectionProps) => {
 
                 {/* Price */}
                 <div className="mb-6 mt-auto">
-                  <span className="text-3xl md:text-4xl font-bold text-foreground">
-                    ${program.price}
-                  </span>
-                  <span className="text-foreground/60">
-                    /{program.priceLabel.split("/")[1] || "month"}
-                  </span>
+                  {(() => {
+                    const displayPrice = formatProgramPrice(program);
+                    const [basePrice, ...rest] = displayPrice.split("/");
+                    const duration = rest.join("/").trim();
+
+                    return duration ? (
+                      <>
+                        <span className="text-3xl md:text-4xl font-bold text-foreground">
+                          {basePrice.trim()}
+                        </span>
+                        <span className="text-foreground/60">/{duration}</span>
+                      </>
+                    ) : (
+                      <span className="text-3xl md:text-4xl font-bold text-foreground">
+                        {displayPrice}
+                      </span>
+                    );
+                  })()}
                 </div>
 
                 {/* CTA Button - Full Width */}

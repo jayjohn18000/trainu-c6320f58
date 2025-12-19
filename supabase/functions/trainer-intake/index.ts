@@ -89,6 +89,9 @@ const MAX_LENGTHS = {
   coachingStyle: 500,
   programTitle: 100,
   programPrice: 50,
+  programPriceDisplay: 100,
+  programBillingPeriod: 50,
+  programFrequency: 50,
   programDescription: 500,
   customHeroTitle: 200,
 };
@@ -187,12 +190,21 @@ serve(async (req) => {
       validateLength(body.customHeroTitle, 'Custom hero title', MAX_LENGTHS.customHeroTitle),
       validateLength(body.program1Title, 'Program 1 title', MAX_LENGTHS.programTitle),
       validateLength(body.program1Price, 'Program 1 price', MAX_LENGTHS.programPrice),
+      validateLength(body.program1PriceDisplay, 'Program 1 price display', MAX_LENGTHS.programPriceDisplay),
+      validateLength(body.program1BillingPeriod, 'Program 1 billing period', MAX_LENGTHS.programBillingPeriod),
+      validateLength(body.program1Frequency, 'Program 1 frequency', MAX_LENGTHS.programFrequency),
       validateLength(body.program1Description, 'Program 1 description', MAX_LENGTHS.programDescription),
       validateLength(body.program2Title, 'Program 2 title', MAX_LENGTHS.programTitle),
       validateLength(body.program2Price, 'Program 2 price', MAX_LENGTHS.programPrice),
+      validateLength(body.program2PriceDisplay, 'Program 2 price display', MAX_LENGTHS.programPriceDisplay),
+      validateLength(body.program2BillingPeriod, 'Program 2 billing period', MAX_LENGTHS.programBillingPeriod),
+      validateLength(body.program2Frequency, 'Program 2 frequency', MAX_LENGTHS.programFrequency),
       validateLength(body.program2Description, 'Program 2 description', MAX_LENGTHS.programDescription),
       validateLength(body.program3Title, 'Program 3 title', MAX_LENGTHS.programTitle),
       validateLength(body.program3Price, 'Program 3 price', MAX_LENGTHS.programPrice),
+      validateLength(body.program3PriceDisplay, 'Program 3 price display', MAX_LENGTHS.programPriceDisplay),
+      validateLength(body.program3BillingPeriod, 'Program 3 billing period', MAX_LENGTHS.programBillingPeriod),
+      validateLength(body.program3Frequency, 'Program 3 frequency', MAX_LENGTHS.programFrequency),
       validateLength(body.program3Description, 'Program 3 description', MAX_LENGTHS.programDescription),
     ];
 
@@ -234,6 +246,9 @@ serve(async (req) => {
       programs.push({
         title: body.program1Title,
         price: body.program1Price || '',
+        priceDisplay: body.program1PriceDisplay || '',
+        billingPeriod: body.program1BillingPeriod || '',
+        frequency: body.program1Frequency || '',
         description: body.program1Description || ''
       });
     }
@@ -241,6 +256,9 @@ serve(async (req) => {
       programs.push({
         title: body.program2Title,
         price: body.program2Price || '',
+        priceDisplay: body.program2PriceDisplay || '',
+        billingPeriod: body.program2BillingPeriod || '',
+        frequency: body.program2Frequency || '',
         description: body.program2Description || ''
       });
     }
@@ -248,6 +266,9 @@ serve(async (req) => {
       programs.push({
         title: body.program3Title,
         price: body.program3Price || '',
+        priceDisplay: body.program3PriceDisplay || '',
+        billingPeriod: body.program3BillingPeriod || '',
+        frequency: body.program3Frequency || '',
         description: body.program3Description || ''
       });
     }

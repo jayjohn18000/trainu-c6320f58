@@ -57,9 +57,30 @@ serve(async (req) => {
     }
 
     // Parse programs if it's a string
-    const programs = typeof submission.programs === 'string' 
-      ? JSON.parse(submission.programs) 
+    const programs = typeof submission.programs === 'string'
+      ? JSON.parse(submission.programs)
       : submission.programs || [];
+
+    const getPriceDisplay = (program: any) => {
+      const customLabel = program.priceDisplay || program.price_label;
+      if (customLabel && String(customLabel).trim()) {
+        return String(customLabel).trim();
+      }
+
+      const numericPrice = program.price && !isNaN(parseFloat(program.price));
+      if (numericPrice) {
+        const formattedPrice = `$${program.price}`;
+        const duration = program.billingPeriod || program.frequency;
+        return duration ? `${formattedPrice} / ${duration}` : formattedPrice;
+      }
+
+      const legacyLabel = program.priceLabel;
+      if (legacyLabel && String(legacyLabel).trim()) {
+        return String(legacyLabel).trim();
+      }
+
+      return "Contact for pricing";
+    };
 
     // Generate slug from business name
     const slug = submission.business_name
@@ -119,8 +140,11 @@ serve(async (req) => {
       programs: programs.map((p: any, index: number) => ({
         id: `program-${index + 1}`,
         title: p.title || `Program ${index + 1}`,
-        price: p.price || "Contact",
-        priceLabel: p.price ? `$${p.price} / month` : "Contact for pricing",
+        price: p.price || p.priceDisplay || "Contact",
+        priceDisplay: getPriceDisplay(p),
+        priceLabel: getPriceDisplay(p),
+        billingPeriod: p.billingPeriod || p.frequency || undefined,
+        frequency: p.frequency || undefined,
         description: p.description || "",
         isPrimary: index === 0,
       })),
