@@ -56,8 +56,8 @@ export type TrainerProfile = {
     headline: string;
     subheadline: string;
     systemVibe?: string;
-    ctaPrimaryLabel: string;
-    ctaPrimaryLink: string;
+    ctaPrimaryLabel?: string;
+    ctaPrimaryLink?: string;
     ctaSecondaryLabel?: string;
     ctaSecondaryLink?: string;
     backgroundImageUrl: string;

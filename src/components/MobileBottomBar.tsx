@@ -30,13 +30,15 @@ const MobileBottomBar = ({ trainer, isDemo = false }: MobileBottomBarProps) => {
           {isDemo ? (
             <>
               {/* Demo: Calendar as secondary icon button */}
-              <a
-                href={bookingLink}
-                className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/70 hover:text-primary transition-colors"
-                aria-label="Book consultation"
-              >
-                <Calendar className="w-5 h-5" />
-              </a>
+              {bookingLink && (
+                <a
+                  href={bookingLink}
+                  className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center text-foreground/70 hover:text-primary transition-colors"
+                  aria-label="Book consultation"
+                >
+                  <Calendar className="w-5 h-5" />
+                </a>
+              )}
               {/* Demo: Primary CTA to claim form */}
               <Link
                 to="/claim"
@@ -58,13 +60,15 @@ const MobileBottomBar = ({ trainer, isDemo = false }: MobileBottomBarProps) => {
                   <Instagram className="w-5 h-5" />
                 </button>
               )}
-              <a
-                href={bookingLink}
-                className="flex items-center gap-2 bg-gradient-primary text-primary-foreground px-4 py-2.5 rounded-xl font-semibold text-sm shadow-button"
-              >
-                <Calendar className="w-4 h-4" />
-                Book
-              </a>
+              {bookingLink && (
+                <a
+                  href={bookingLink}
+                  className="flex items-center gap-2 bg-gradient-primary text-primary-foreground px-4 py-2.5 rounded-xl font-semibold text-sm shadow-button"
+                >
+                  <Calendar className="w-4 h-4" />
+                  Book
+                </a>
+              )}
             </>
           )}
         </div>

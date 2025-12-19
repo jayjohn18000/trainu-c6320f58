@@ -16,6 +16,22 @@ const HeroSection = ({ trainer, isDemo = false }: HeroSectionProps) => {
 
   const bookingLink = trainer.social.bookingLink || trainer.hero.ctaPrimaryLink;
 
+  const primaryCta = isDemo
+    ? bookingLink
+      ? { label: "Book Free Consult", href: bookingLink }
+      : null
+    : trainer.hero.ctaPrimaryLabel && trainer.hero.ctaPrimaryLink
+    ? { label: trainer.hero.ctaPrimaryLabel, href: trainer.hero.ctaPrimaryLink }
+    : null;
+
+  const secondaryCta =
+    trainer.hero.ctaSecondaryLabel && trainer.hero.ctaSecondaryLink
+      ? {
+          label: trainer.hero.ctaSecondaryLabel,
+          href: trainer.hero.ctaSecondaryLink,
+        }
+      : null;
+
   return (
     <section className={`relative min-h-[90vh] md:min-h-screen flex items-center overflow-hidden ${isDemo ? 'pt-[52px]' : ''}`}>
       {/* Background Image with Overlay */}
@@ -85,26 +101,30 @@ const HeroSection = ({ trainer, isDemo = false }: HeroSectionProps) => {
           </p>
 
           {/* CTA */}
-          <div 
-            className="flex flex-col sm:flex-row items-start sm:items-center gap-4 animate-fade-up opacity-0" 
-            style={{ animationDelay: "0.25s", animationFillMode: "forwards" }}
-          >
-            {/* Primary CTA - Always Book Free Consult for demo */}
-            <a
-              href={bookingLink}
-              className="group inline-flex items-center justify-center gap-3 bg-gradient-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
+          {(primaryCta || secondaryCta) && (
+            <div
+              className="flex flex-col sm:flex-row items-start sm:items-center gap-4 animate-fade-up opacity-0"
+              style={{ animationDelay: "0.25s", animationFillMode: "forwards" }}
             >
-              {isDemo ? "Book Free Consult" : trainer.hero.ctaPrimaryLabel}
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
-            {/* Secondary CTA */}
-            <a 
-              href="#programs" 
-              className="text-foreground/60 hover:text-primary transition-colors font-medium"
-            >
-              View Programs →
-            </a>
-          </div>
+              {primaryCta && (
+                <a
+                  href={primaryCta.href}
+                  className="group inline-flex items-center justify-center gap-3 bg-gradient-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
+                >
+                  {primaryCta.label}
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </a>
+              )}
+              {secondaryCta && (
+                <a
+                  href={secondaryCta.href}
+                  className="text-foreground/60 hover:text-primary transition-colors font-medium"
+                >
+                  {secondaryCta.label} →
+                </a>
+              )}
+            </div>
+          )}
 
           {/* System Vibe - Demo only */}
           {isDemo && trainer.hero.systemVibe && (

@@ -62,15 +62,17 @@ const CoachingEngineSection = ({ trainer }: CoachingEngineSectionProps) => {
         </div>
 
         {/* CTA */}
-        <div className="text-center">
-          <a
-            href={bookingLink}
-            className="group inline-flex items-center justify-center gap-3 bg-gradient-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
-          >
-            Book Free Consult
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </a>
-        </div>
+        {bookingLink && (
+          <div className="text-center">
+            <a
+              href={bookingLink}
+              className="group inline-flex items-center justify-center gap-3 bg-gradient-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
+            >
+              Book Free Consult
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+          </div>
+        )}
       </div>
     </section>
   );

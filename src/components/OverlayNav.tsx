@@ -33,6 +33,9 @@ const OverlayNav = ({ trainer, isDemo = false }: OverlayNavProps) => {
   }, [isOpen]);
 
   const bookingLink = trainer?.social?.bookingLink || trainer?.hero?.ctaPrimaryLink;
+  const hasPrograms = Boolean(trainer?.programs?.length);
+  const hasContact = Boolean(trainer?.contact?.email || trainer?.contact?.phone);
+  const hasPrimaryCta = Boolean(trainer?.hero?.ctaPrimaryLabel && trainer?.hero?.ctaPrimaryLink);
 
   // Navigation links based on context - Updated for demo
   const navLinks = trainer
@@ -60,11 +63,21 @@ const OverlayNav = ({ trainer, isDemo = false }: OverlayNavProps) => {
         { label: "Get My Free Site", href: "/claim", isInternal: true },
       ];
 
+  const filteredNavLinks = navLinks.filter((link) => {
+    if (link.href === "#programs" && !hasPrograms) return false;
+    if (link.href === "#contact" && !hasContact) return false;
+    return true;
+  });
+
   // CTA configuration based on context - Demo shows Book Free Consult
   const headerCta = isDemo
-    ? { label: "Book Free Consult", href: bookingLink || "#contact", isInternal: false }
+    ? bookingLink
+      ? { label: "Book Free Consult", href: bookingLink, isInternal: false }
+      : null
     : trainer
-    ? { label: "Book Consultation", href: trainer.hero.ctaPrimaryLink, isInternal: false }
+    ? hasPrimaryCta
+      ? { label: trainer.hero.ctaPrimaryLabel!, href: trainer.hero.ctaPrimaryLink!, isInternal: false }
+      : null
     : { label: "View Demo", href: "/trainers/coach-demo", isInternal: true };
 
   return (
@@ -97,20 +110,22 @@ const OverlayNav = ({ trainer, isDemo = false }: OverlayNavProps) => {
           </div>
 
           {/* Right: Primary CTA */}
-          {headerCta.isInternal ? (
-            <Link
-              to={headerCta.href}
-              className="hidden sm:inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-5 py-2.5 rounded-xl font-semibold text-sm shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
-            >
-              {headerCta.label}
-            </Link>
-          ) : (
-            <a
-              href={headerCta.href}
-              className="hidden sm:inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-5 py-2.5 rounded-xl font-semibold text-sm shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
-            >
-              {headerCta.label}
-            </a>
+          {headerCta && (
+            headerCta.isInternal ? (
+              <Link
+                to={headerCta.href}
+                className="hidden sm:inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-5 py-2.5 rounded-xl font-semibold text-sm shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
+              >
+                {headerCta.label}
+              </Link>
+            ) : (
+              <a
+                href={headerCta.href}
+                className="hidden sm:inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-5 py-2.5 rounded-xl font-semibold text-sm shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300"
+              >
+                {headerCta.label}
+              </a>
+            )
           )}
         </div>
       </header>
@@ -171,7 +186,7 @@ const OverlayNav = ({ trainer, isDemo = false }: OverlayNavProps) => {
 
           {/* Nav Links */}
           <nav className="flex flex-col p-6 gap-1" aria-label="Main navigation">
-            {navLinks.map((link, index) => (
+            {filteredNavLinks.map((link, index) => (
               link.isInternal ? (
                 <Link
                   key={link.label}
@@ -216,13 +231,15 @@ const OverlayNav = ({ trainer, isDemo = false }: OverlayNavProps) => {
             {/* Primary CTA - For demo, show Book Free Consult */}
             {isDemo && trainer ? (
               <>
-                <a
-                  href={bookingLink}
-                  onClick={() => setIsOpen(false)}
-                  className="block w-full text-center bg-gradient-primary text-primary-foreground px-6 py-4 rounded-xl font-semibold text-lg shadow-button hover:scale-[1.02] transition-transform"
-                >
-                  Book Free Consult
-                </a>
+                {bookingLink && (
+                  <a
+                    href={bookingLink}
+                    onClick={() => setIsOpen(false)}
+                    className="block w-full text-center bg-gradient-primary text-primary-foreground px-6 py-4 rounded-xl font-semibold text-lg shadow-button hover:scale-[1.02] transition-transform"
+                  >
+                    Book Free Consult
+                  </a>
+                )}
                 {/* Secondary: Get My Free Site */}
                 <Link
                   to="/claim"
@@ -233,13 +250,15 @@ const OverlayNav = ({ trainer, isDemo = false }: OverlayNavProps) => {
                 </Link>
               </>
             ) : trainer ? (
-              <a
-                href={trainer.hero.ctaPrimaryLink}
-                onClick={() => setIsOpen(false)}
-                className="block w-full text-center bg-gradient-primary text-primary-foreground px-6 py-4 rounded-xl font-semibold text-lg shadow-button hover:scale-[1.02] transition-transform"
-              >
-                {trainer.hero.ctaPrimaryLabel}
-              </a>
+              hasPrimaryCta && (
+                <a
+                  href={trainer.hero.ctaPrimaryLink}
+                  onClick={() => setIsOpen(false)}
+                  className="block w-full text-center bg-gradient-primary text-primary-foreground px-6 py-4 rounded-xl font-semibold text-lg shadow-button hover:scale-[1.02] transition-transform"
+                >
+                  {trainer.hero.ctaPrimaryLabel}
+                </a>
+              )
             ) : (
               <Link
                 to="/claim"

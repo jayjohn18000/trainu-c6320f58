@@ -56,13 +56,15 @@ const ResultsSection = ({ trainer }: ResultsSectionProps) => {
             </p>
 
             {/* CTA Button */}
-            <a
-              href={bookingLink}
-              className="group inline-flex items-center gap-3 border-2 border-primary text-primary px-6 py-3 rounded-xl font-semibold hover:bg-primary hover:text-primary-foreground transition-all duration-300 mb-12"
-            >
-              Book Free Consult
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
+            {bookingLink && (
+              <a
+                href={bookingLink}
+                className="group inline-flex items-center gap-3 border-2 border-primary text-primary px-6 py-3 rounded-xl font-semibold hover:bg-primary hover:text-primary-foreground transition-all duration-300 mb-12"
+              >
+                Book Free Consult
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </a>
+            )}
 
             {/* Results Image */}
             <div className="relative overflow-hidden rounded-2xl aspect-[4/5] max-w-sm">
