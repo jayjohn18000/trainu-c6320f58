@@ -15,6 +15,14 @@ const CTASection = ({ trainer, isDemo = false }: CTASectionProps) => {
     "One-time setup, low maintenance",
   ];
 
+  const primaryCta =
+    trainer.hero.ctaPrimaryLabel && trainer.hero.ctaPrimaryLink
+      ? {
+          label: trainer.hero.ctaPrimaryLabel,
+          href: trainer.hero.ctaPrimaryLink,
+        }
+      : null;
+
   return (
     <section className="py-20 md:py-32 bg-background-elevated relative overflow-hidden">
       {/* Background Glow */}
@@ -68,13 +76,15 @@ const CTASection = ({ trainer, isDemo = false }: CTASectionProps) => {
               </a>
               
               {/* Demo: Secondary option for setup call */}
-              <a
-                href={trainer.hero.ctaPrimaryLink}
-                className="inline-flex items-center gap-2 text-foreground/60 hover:text-primary transition-colors font-medium"
-              >
-                <Calendar className="w-4 h-4" />
-                Book a 10-Min Setup Call →
-              </a>
+              {trainer.hero.ctaPrimaryLink && (
+                <a
+                  href={trainer.hero.ctaPrimaryLink}
+                  className="inline-flex items-center gap-2 text-foreground/60 hover:text-primary transition-colors font-medium"
+                >
+                  <Calendar className="w-4 h-4" />
+                  Book a 10-Min Setup Call →
+                </a>
+              )}
 
               {/* Footer note */}
               <p className="text-xs text-foreground/40 mt-4">
@@ -84,13 +94,15 @@ const CTASection = ({ trainer, isDemo = false }: CTASectionProps) => {
           ) : (
             <>
               {/* Regular trainer site: Original CTA behavior */}
-              <a
-                href={trainer.hero.ctaPrimaryLink}
-                className="group inline-flex items-center justify-center gap-3 bg-gradient-primary text-primary-foreground px-10 py-5 rounded-xl font-semibold text-lg shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300 mb-10"
-              >
-                {trainer.hero.ctaPrimaryLabel}
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </a>
+              {primaryCta && (
+                <a
+                  href={primaryCta.href}
+                  className="group inline-flex items-center justify-center gap-3 bg-gradient-primary text-primary-foreground px-10 py-5 rounded-xl font-semibold text-lg shadow-button hover:shadow-glow hover:scale-[1.02] transition-all duration-300 mb-10"
+                >
+                  {primaryCta.label}
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </a>
+              )}
 
               {/* Contact Info */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6">

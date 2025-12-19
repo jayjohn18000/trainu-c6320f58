@@ -74,6 +74,40 @@ serve(async (req) => {
     const subheadline = submission.ai_subheadline || submission.bio || `Expert ${submission.specialty} coaching to help you reach your goals.`;
     const bio = submission.ai_bio || submission.bio;
 
+    const hasContactSection = Boolean(submission.email || submission.phone);
+    const hasBookingLink = Boolean(submission.booking_link);
+    const hasPrograms = Array.isArray(programs) && programs.length > 0;
+    const hasResults = Boolean(submission.before_photo_url && submission.after_photo_url);
+
+    const primaryCta = hasBookingLink
+      ? {
+          label: "Book Consultation",
+          href: submission.booking_link,
+        }
+      : hasContactSection
+      ? {
+          label: "Contact Me",
+          href: "#contact",
+        }
+      : submission.email
+      ? {
+          label: "Request Info",
+          href: `mailto:${submission.email}?subject=${encodeURIComponent("Request Information")}`,
+        }
+      : { label: undefined, href: undefined };
+
+    const secondaryCta = hasPrograms
+      ? {
+          label: "View Programs",
+          href: "#programs",
+        }
+      : hasResults
+      ? {
+          label: "See Results",
+          href: "#how-it-works",
+        }
+      : { label: undefined, href: undefined };
+
     // Build trainer JSON following the new nested schema with stats
     const trainerJson = {
       slug,
@@ -100,10 +134,10 @@ serve(async (req) => {
       hero: {
         headline: headline,
         subheadline: subheadline,
-        ctaPrimaryLabel: "Book Consultation",
-        ctaPrimaryLink: submission.booking_link || "#contact",
-        ctaSecondaryLabel: "View Programs",
-        ctaSecondaryLink: "#programs",
+        ctaPrimaryLabel: primaryCta.label,
+        ctaPrimaryLink: primaryCta.href,
+        ctaSecondaryLabel: secondaryCta.label,
+        ctaSecondaryLink: secondaryCta.href,
         backgroundImageUrl: submission.profile_photo_url || "/images/demo-hero.png",
       },
 

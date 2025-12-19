@@ -75,26 +75,30 @@ const ProgramsSection = ({ programs, bookingLink }: ProgramsSectionProps) => {
                 </div>
 
                 {/* CTA Button - Full Width */}
-                <a
-                  href="#contact"
-                  className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl font-semibold transition-all duration-300 ${
-                    program.isPrimary
-                      ? "bg-gradient-primary text-primary-foreground shadow-button hover:shadow-glow hover:scale-[1.02]"
-                      : "bg-accent text-foreground border border-border hover:border-primary/30 hover:bg-accent/80"
-                  }`}
-                >
-                  {program.ctaLabel || "Get Started"}
-                  <ArrowRight className="w-4 h-4" />
-                </a>
+                {bookingLink && (
+                  <a
+                    href={bookingLink}
+                    className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl font-semibold transition-all duration-300 ${
+                      program.isPrimary
+                        ? "bg-gradient-primary text-primary-foreground shadow-button hover:shadow-glow hover:scale-[1.02]"
+                        : "bg-accent text-foreground border border-border hover:border-primary/30 hover:bg-accent/80"
+                    }`}
+                  >
+                    {program.ctaLabel || "Get Started"}
+                    <ArrowRight className="w-4 h-4" />
+                  </a>
+                )}
               </div>
             </div>
           ))}
         </div>
 
         {/* Footer Note */}
-        <p className="text-center text-sm text-foreground/50 mt-10">
-          Not sure? Book a free consult and I'll recommend the best fit.
-        </p>
+        {bookingLink && (
+          <p className="text-center text-sm text-foreground/50 mt-10">
+            Not sure? Book a free consult and I'll recommend the best fit.
+          </p>
+        )}
       </div>
     </section>
   );

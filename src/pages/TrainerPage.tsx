@@ -57,16 +57,20 @@ const TrainerPage = ({ customSlug }: TrainerPageProps) => {
   const primaryColor = trainer.branding?.primaryColor || "orange";
   const backgroundStyle = trainer.branding?.backgroundStyle || "dark";
 
+  const bookingLink = trainer.social.bookingLink || trainer.hero.ctaPrimaryLink;
+  const hasPrograms = trainer.programs && trainer.programs.length > 0;
+  const hasContact = Boolean(trainer.contact?.email || trainer.contact?.phone);
+
   return (
     <TrainerThemeProvider primaryColor={primaryColor} backgroundStyle={backgroundStyle}>
       {isDemo && <DemoBanner />}
       <Layout trainer={trainer} isDemo={isDemo}>
         <HeroSection trainer={trainer} isDemo={isDemo} />
-        <ProgramsSection programs={trainer.programs} />
+        {hasPrograms && <ProgramsSection programs={trainer.programs} bookingLink={bookingLink} />}
         <AboutSection trainer={trainer} />
         <ResultsSection trainer={trainer} />
         <TestimonialSection trainer={trainer} />
-        <ContactSection trainer={trainer} />
+        {hasContact && <ContactSection trainer={trainer} />}
         <CoachingEngineSection trainer={trainer} />
       </Layout>
       <MobileBottomBar trainer={trainer} isDemo={isDemo} />

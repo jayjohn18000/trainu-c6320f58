@@ -59,15 +59,17 @@ const ContactSection = ({ trainer }: ContactSectionProps) => {
             <p className="text-foreground/60 text-sm mb-6 flex-1">
               Schedule a quick call to discuss your goals and see if we're a good fit. No pressure, no commitment.
             </p>
-            <a
-              href={bookingLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 bg-gradient-primary text-primary-foreground py-4 rounded-xl font-semibold transition-all duration-300 shadow-button hover:shadow-glow hover:scale-[1.02]"
-            >
-              <Calendar className="w-4 h-4" />
-              Book Free Consult
-            </a>
+            {bookingLink && (
+              <a
+                href={bookingLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 bg-gradient-primary text-primary-foreground py-4 rounded-xl font-semibold transition-all duration-300 shadow-button hover:shadow-glow hover:scale-[1.02]"
+              >
+                <Calendar className="w-4 h-4" />
+                Book Free Consult
+              </a>
+            )}
             {trainer.social.instagram && (
               <button
                 onClick={() => window.open(trainer.social.instagram, '_blank', 'noopener,noreferrer')}
